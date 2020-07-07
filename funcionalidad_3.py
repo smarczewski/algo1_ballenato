@@ -93,7 +93,7 @@ def crear_tabla_inv(archivo, ar_tabla):
     columnas = len(funcs)
     n_columnas = ""
     for n in range(1,columnas+1): n_columnas += "{:^3}|".format(n)
-    ar_tabla.write("┌" + "-"*40 + "----"*columnas + "┐\n")
+    ar_tabla.write("-"*42 + "----"*columnas + "n")
     ar_tabla.write("|{:<40}|".format("FUNCIONES") + n_columnas + "\n")
     ar_tabla.write("|" + "-"*40 + "|---"*columnas + "|\n")
     total_inv = {}
@@ -108,7 +108,7 @@ def crear_tabla_inv(archivo, ar_tabla):
     total = ""
     for tot in total_inv: total += "{:^3}|".format(total_inv[tot])
     ar_tabla.write("|{:<40}|".format("Total Invocaciones") + total + "\n")
-    ar_tabla.write("└" + "-"*40 + "----"*columnas + "┘\n")
+    ar_tabla.write("-"*42 + "----"*columnas + "\n")
 
 
 def imprimir_tabla_inv():
