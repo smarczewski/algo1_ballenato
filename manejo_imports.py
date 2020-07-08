@@ -9,43 +9,47 @@ en Python.
 
 import os
 import generar_archivos_csv
+PATH_IMPORTS = "imports.csv"
 
-def generar_lista_modulos(arch_programas):
+def generar_lista_modulos(programas):
   """[Autor: Elian Foppiano]"""
-  linea = arch_programas.readline()
+  linea = programas.readline()
   l_modulos = []
   while linea:
     modulo = os.path.basename(linea.rstrip())
     l_modulos.append(modulo.replace(".py", ""))
-    linea = arch_programas.readline()
-  arch_programas.seek(0)
+    linea = programas.readline()
+  programas.seek(0)
   return l_modulos
 
-def guardar_imports_modulo(dir_programa, arch_imports, l_modulos):
+def guardar_imports_modulo(dir_programa, imports, l_modulos):
   """[Autor: Elian Foppiano]"""
   arch_modulo = open(dir_programa)
   dir_programa = os.path.basename(dir_programa)
-  arch_imports.write(dir_programa.replace(".py", ""))
+  imports.write(dir_programa.replace(".py", ""))
 
   linea_modulo = arch_modulo.readline()
   while linea_modulo:
     if linea_modulo.startswith("import "):
       modulo_importado = linea_modulo[7:].rstrip()
       if modulo_importado in l_modulos:
-        generar_archivos_csv.guardar_campo(modulo_importado, arch_imports, formateado = False)
+        generar_archivos_csv.guardar_campo(modulo_importado, imports, formateado = False)
     linea_modulo = arch_modulo.readline()
 
-  arch_imports.write("\n")
+  imports.write("\n")
   arch_modulo.close()
 
-def generar_lista_imports(arch_programas):
+def generar_lista_imports(programas):
   """[Autor: Elian Foppiano]"""
-  arch_programas.seek(0)
-  l_modulos = generar_lista_modulos(arch_programas)
-  arch_imports = open("imports.csv", "w")
-  dir_programa_original = arch_programas.readline().rstrip()
-  while dir_programa_original:
-    guardar_imports_modulo(dir_programa_original, arch_imports, l_modulos)
-    dir_programa_original = arch_programas.readline().rstrip()
+  if os.path.exists(PATH_IMPORTS):
+    os.remove(PATH_IMPORTS)
+  programas.seek(0)
+  l_modulos = generar_lista_modulos(programas)
+  imports = open(PATH_IMPORTS, "w")
+  dir_programa_original = programas.readline().rstrip()
 
-  arch_imports.close()
+  while dir_programa_original:
+    guardar_imports_modulo(dir_programa_original, imports, l_modulos)
+    dir_programa_original = programas.readline().rstrip()
+
+  imports.close()

@@ -5,6 +5,8 @@ trabajo consensuadas por el equipo.
 """
 
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
+PATH_FUENTE_UNICO = "fuente_unico.csv"
+PATH_COMENTARIOS = "comentarios.csv"
 MARCADOR_PRINC = "$"
 CENTINELA = chr(255)
 COMA = "/c/"
@@ -150,7 +152,7 @@ def termina_comentario(linea):
     devolver = False
   return devolver
 
-def guardar_instrucciones(arch_entrada, arch_fuente_unico):
+def guardar_instrucciones(arch_entrada, fuente_unico):
   """[Autor: Elian Foppiano]
   [Ayuda: Guarda las instrucciones de la funcion
   (campos adicionales de fuente_unico.csv)]"""
@@ -161,21 +163,21 @@ def guardar_instrucciones(arch_entrada, arch_fuente_unico):
       saltear_comentario_multilinea(linea, arch_entrada)
     elif es_instruccion(linea):
       linea = eliminar_comentario_linea(linea)
-      guardar_campo(linea, arch_fuente_unico, formateado = True, nro_linea = nro_linea)
+      guardar_campo(linea, fuente_unico, formateado = True, nro_linea = nro_linea)
     linea = leer_centinela(arch_entrada)
     nro_linea += 1
   return linea
 
-def guardar_fuente_unico(firma_funcion, arch_entrada, arch_fuente_unico):
+def guardar_fuente_unico(firma_funcion, arch_entrada, fuente_unico):
   """[Autor: Elian Foppiano]
   [Ayuda: Guarda todo lo referido al codigo fuente de la funcion
   en fuente_unico.csv]"""
-  nombre_funcion = guardar_nombre_funcion(firma_funcion, arch_fuente_unico)
+  nombre_funcion = guardar_nombre_funcion(firma_funcion, fuente_unico)
   parametros = obtener_parametros(firma_funcion)
-  guardar_campo(parametros, arch_fuente_unico, formateado = False)
+  guardar_campo(parametros, fuente_unico, formateado = False)
   nombre_modulo = obtener_nombre_arch(arch_entrada)
-  guardar_campo(nombre_modulo, arch_fuente_unico, formateado = False)
-  linea = guardar_instrucciones(arch_entrada, arch_fuente_unico)
+  guardar_campo(nombre_modulo, fuente_unico, formateado = False)
+  linea = guardar_instrucciones(arch_entrada, fuente_unico)
 
   return linea
 
@@ -305,9 +307,9 @@ def merge(l_archivos, modo):
   reiniciar_pos_archivos(l_archivos)
   
   if modo == "fuente_unico":
-    arch_salida = open("fuente_unico.csv", "w")
+    arch_salida = open(PATH_FUENTE_UNICO, "w")
   else: #modo == "comentarios"
-    arch_salida = open("comentarios.csv", "w")
+    arch_salida = open(PATH_COMENTARIOS, "w")
   
   #Lee por primera vez las firmas de las funciones
   firmas = leer_firmas(l_archivos)
@@ -336,3 +338,23 @@ def merge(l_archivos, modo):
     #Calcula la firma con el menor nombre para repetir el proceso
     menor = nombre_menor(firmas)
   arch_salida.close()
+
+def generar_csv():
+  """[Autor: Elian Foppiano]"""
+  if os.path.exists(PATH_FUENTE_UNICO):
+    os.remove(PATH_FUENTE_UNICO)
+  if os.path.exists(PATH_COMENTARIOS):
+    os.remove(PATH_COMENTARIOS)
+
+  l_archivos = []
+  l_modulos = os.listdir(CARPETA_FUNCIONES_ORDENADAS)
+  for modulo in l_modulos:
+    dir_modulo = os.path.join(CARPETA_FUNCIONES_ORDENADAS, modulo)
+    arch = open(dir_modulo)
+    l_archivos.append(arch)
+    
+  merge(l_archivos, "fuente_unico")
+  merge(l_archivos, "comentarios")
+
+  for arch in l_archivos:
+    arch.close()

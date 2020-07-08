@@ -12,6 +12,7 @@ import lista_funciones
 import generar_archivos_csv
 import ordenar
 import os
+import arbol_invocacion
 
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
 menu = ["1. Panel general de funciones",
@@ -22,22 +23,10 @@ menu = ["1. Panel general de funciones",
 
 def preprocesamiento(programas):
   """[Autor: Elian Foppiano]"""
-  ordenar.generar_ordenado(programas)
-  l_archivos = []
-  l_modulos = os.listdir(CARPETA_FUNCIONES_ORDENADAS)
-  
-  for modulo in l_modulos:
-    dir_modulo = os.path.join(CARPETA_FUNCIONES_ORDENADAS, modulo)
-    arch = open(dir_modulo)
-    l_archivos.append(arch)
-    
-  generar_archivos_csv.merge(l_archivos, "fuente_unico")
-  generar_archivos_csv.merge(l_archivos, "comentarios")
+  ordenar.ordenar(programas)
+  generar_archivos_csv.generar_csv()  
   manejo_imports.generar_lista_imports(programas)
   lista_funciones.generar_lista_funciones(programas)
-
-  for arch in l_archivos:
-    arch.close()
   
 def mostrar_menu():
   """[Autor: Elian Foppiano]"""
@@ -50,10 +39,13 @@ def mostrar_menu():
 
   return opcion
 
-def main():
+def funcion_principal():
   programas = open("programas.txt")
   preprocesamiento(programas)
+  programas.close()
   opcion = mostrar_menu()
-  #Las funcionalidades todavia no estan implementadas
-  
-main()
+  if opcion == "4":
+    arbol_invocacion.generar_arbol()
+
+#-------Invocacion de la funcion principal-------#
+funcion_principal()

@@ -22,7 +22,7 @@ COMILLAS_DOBLES = chr(34) * 3
 
 import os
 #Importo este modulo para reutilizar algunas funcionalidades
-import generar_archivos_csv
+#import generar_archivos_csv
 
 def es_invocacion_principal(linea):
   """[Autor: Elian Foppiano]"""
@@ -76,7 +76,8 @@ def guardar_linea(linea, arch):
 
 def copiar_funcion(funcion, arch, arch_salida, es_main = False):
   """[Autor: Elian Foppiano]
-  [Ayuda: busca la funcion dentro del archivo y la copia en el csv cuando la encuentra]"""
+  [Ayuda: busca la funcion dentro del archivo y la copia
+  en el csv cuando la encuentra]"""
   linea = arch.readline()
   #Leo las lineas hasta que encuentro la funcion que busco
   while linea != funcion:
@@ -117,18 +118,11 @@ def generar_lista_funciones_ordenada(arch):
   arch.seek(0)
   return l_funciones
 
-def generar_ordenado(programas):
+def generar_ordenado(l_archivos_entrada):
   """[Autor: Elian Foppiano]"""
   es_principal = True
-
-  l_archivos_entrada = []
-  nombre_modulo = programas.readline().rstrip()
-  while nombre_modulo:
-    arch_original = open(nombre_modulo)
-    l_archivos_entrada.append(arch_original)
-    nombre_modulo = programas.readline().rstrip()
-
-  funcion_principal = buscar_principal(l_archivos_entrada[0])
+  programa_principal = l_archivos_entrada[0]
+  funcion_principal = buscar_principal(programa_principal)
   for arch_entrada in l_archivos_entrada:
     dir_arch_salida = generar_dir(arch_entrada.name)
     with open(dir_arch_salida, "w") as arch_salida:
@@ -139,5 +133,22 @@ def generar_ordenado(programas):
       else:
         guardar_funciones_modulo(l_funciones, arch_entrada, arch_salida)
 
+def eliminar_archivos_viejos(carpeta):
+  path_arch_viejos = os.listdir(carpeta)
+  for path in path_arch_viejos:
+    path_abs = os.path.join(carpeta, path)
+    os.remove(path_abs)
+
+def ordenar(programas):
+  """[Autor: Elian Foppiano]"""
+  eliminar_archivos_viejos(CARPETA_FUNCIONES_ORDENADAS)
+  l_archivos_entrada = []
+  dir_modulo = programas.readline().rstrip()
+  while dir_modulo:
+    arch = open(dir_modulo)
+    l_archivos_entrada.append(arch)
+    dir_modulo = programas.readline().rstrip()
+
+  generar_ordenado(l_archivos_entrada)
   for arch in l_archivos_entrada:
     arch.close()
