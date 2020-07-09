@@ -91,11 +91,11 @@ def generar_participacion(arFuente, arComentarios, arParticipacion):
         arParticipacion.write("       Funcion                                Lineas\n")
         arParticipacion.write("      ------------------------------------------------\n")
         for funcion in range(len(dicc[autor])):
-            arParticipacion.write("       {:<40}  {:>2}\n".format(dicc[autor][funcion][0], dicc[autor][funcion][1]))
+            arParticipacion.write("       {:<40}  {:>2}\n".format(dicc[autor][funcion][0].replace("$", ""), dicc[autor][funcion][1]))
             if funcion == (len(dicc[autor])-1):
-                arParticipacion.write("       {:>2} Funciones - Lineas                    {:<} {:>1.0f}%\n\n".format
-                      (len(dicc[autor]), autor_lineas[autor], porcentaje[autor]))
-    arParticipacion.write("Total: {:<2} Funciones - Lineas                    {:<2}".format(funciones, total_lineas))
+                arParticipacion.write("       {:>3} Funciones - Lineas                   {:>3} {:2.0f}%\n\n".format
+                (len(dicc[autor]), autor_lineas[autor], porcentaje[autor]))
+    arParticipacion.write("Total: {:>3} Funciones - Lineas                   {:<4}".format(funciones, total_lineas))
 
 
 def imprimir_participacion():
