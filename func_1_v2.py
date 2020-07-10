@@ -1,4 +1,4 @@
-#falta funcion invocaciones y generar panel_general.csv
+#falta funcion invocaciones
 import re
 
 def leer_archivo(archivo):
@@ -286,21 +286,20 @@ def autor_funcion(archivo):
 
 #---------------------------------------------------------------------------------------------
 
-def formato_tabla(func, param, lineas, estr, coment, descr, autor):
+def formato_tabla(func, param, lineas, estr, coment, descr, autor, ar_salida):
 
     """
     [Autor: Camila Bartocci]
 
     [Ayuda: da formato de tabla a los datos.]
 
-    FALTA INVOCACIONES (FALTA PROGRAMAR LA FUNCION)
+    FALTA INVOCACIONES
     """
 
     pos = 0
-    print("|", "{:^53}".format("FUNCIONES"), "|", "{:^10}".format("PARAMETROS"), "|", "{:^6}".format("LINEAS"),
-        "|", "{:^6}".format("RETURN"), "|", "{:^2}".format("IF"), "|", "{:^3}".format("FOR"), "|",
-        "{:6}".format("WHILE"), "|", "{:^6}".format("BREAK"), "|", "{:^4}".format("EXIT"),
-        "|", "{:^11}".format("COMENTARIOS"), "|", "{:^11}".format("DESCRIPCION"), "|", "{:^15}".format("AUTOR"), "|")
+    ar_salida.write("| {:^53} | {:^10} | {:^6} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |".format("FUNCIONES", 
+        "PARAMETROS", "LINEAS", "RETURN", "IF", "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS",
+            "DESCRIPCION", "AUTOR"))
 
     
     while pos < len(func):
@@ -320,11 +319,9 @@ def formato_tabla(func, param, lineas, estr, coment, descr, autor):
         fila.append(descr[pos])
         fila.append(autor[pos])
         
-
-        print("|", "{:<53}".format(str(fila[0])), "|", "{:^10}".format(fila[1]), "|", "{:^6}".format(fila[2]),
-            "|", "|", "{:^6}".format(str(fila[0])), "|", "{:^2}".format(str(fila[1])), "|", "{:^3}".format(str(fila[2])),
-            "|", "{:^6}".format(str(fila[3])), "|", "{:^6}".format(str(fila[4])), "|", "{:^4}".format(str(fila[5])), "|",
-            "{:^11}".format(str(fila[3])), "|", "{:^11}".format(str(fila[4])), "|", "{:^15}".format(str(fila[5]), "|"))       
+        
+        ar_salida.write("\n| {:<53} | {:^10} | {:^6} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |".format(fila[0], 
+            fila[1], fila[2], fila[3], fila[4], fila[5], fila[6], fila[7], fila[8], fila[9], fila[10], fila[11]))
 
         pos += 1
 
@@ -334,6 +331,7 @@ def formato_tabla(func, param, lineas, estr, coment, descr, autor):
 #---------------------------------------------------------------------------------------------
 fuente_unico = open("fuente_unico.csv", "r")
 comentarios = open("comentarios.csv", "r")
+panel_general = open("panel_general.txt", "w")
 
 nombre_funcionv = nombre_funcion(fuente_unico)
 cant_parametrosv = cant_parametros(fuente_unico)
@@ -344,8 +342,9 @@ hay_descripcionv = hay_descripcion(comentarios)
 autor_funcionv = autor_funcion(comentarios)
 
 formato_tabla(nombre_funcionv, cant_parametrosv, cant_lineasv, cant_estructurasv, cant_comentariosv, 
-	hay_descripcionv, autor_funcionv)
+	hay_descripcionv, autor_funcionv, panel_general)
 
 
 fuente_unico.close()
 comentarios.close()
+panel_general.close()
