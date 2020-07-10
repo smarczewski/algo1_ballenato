@@ -17,7 +17,6 @@ COMILLAS_DOBLES = chr(34) * 3
 
 import os
 import exp_reg
-import re
 
 def leer_centinela(arch):
   """[Autor: Elian Foppiano]
@@ -52,15 +51,6 @@ def guardar_nombre_funcion(firma, arch):
   nombre_funcion = obtener_nombre_funcion(firma)
   arch.write(nombre_funcion)
 
-def calcular_indentacion(linea):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Calcula la cantidad de espacios que
-  hay en una linea antes del primer caracter]"""
-  i = 0
-  while linea[i] == " ":
-    i += 1
-  return i
-
 def guardar_campo(dato, arch, formateado = True, nro_linea = None):
   """[Autor: Elian Foppiano]
   [Ayuda: Guarda un dato en en archivo .csv recibido.
@@ -71,9 +61,7 @@ def guardar_campo(dato, arch, formateado = True, nro_linea = None):
   dato = dato.replace(",", COMA)
   if dato.strip() != "":
     if formateado:
-      cantidad_indentacion = calcular_indentacion(dato)
-      dato = dato.lstrip(" ")
-      arch.write(f",/{cantidad_indentacion}/{nro_linea}/{dato}")
+      arch.write(f",/{nro_linea}/{dato}")
     else:
       arch.write(f",{dato}")
 
@@ -96,13 +84,12 @@ def obtener_comentario_multilinea(linea, arch):
   [Ayuda: Recorre el archivo recibido hasta que encuentra
   el final del comentario multilinea y lo devuelve formateado.]"""
   if linea.rstrip().endswith(COMILLAS_DOBLES):
-    comentario = linea.rstrip() + SALTO_LINEA
+    comentario = linea.strip() + SALTO_LINEA
   else:
-    comentario = ""
+    comentario = linea.rstrip() + SALTO_LINEA
     while not linea.endswith(COMILLAS_DOBLES):
-      comentario += linea.strip() + SALTO_LINEA
-      linea = leer_centinela(arch)
-    comentario += linea
+      linea = arch.readline().rstrip()
+      comentario += linea + SALTO_LINEA
   return comentario
 
 def empieza_comentario_multilinea(linea):
@@ -152,7 +139,6 @@ def guardar_fuente_unico(firma_funcion, arch_entrada, fuente_unico):
   linea = leer_centinela(arch_entrada)
   if empieza_comentario_multilinea(linea):
     obtener_comentario_multilinea(linea, arch_entrada)
-    linea = leer_centinela(arch_entrada)
   linea = guardar_instrucciones(linea, arch_entrada, fuente_unico)
 
   return linea
@@ -194,7 +180,7 @@ def guardar_comentarios_adicionales(linea, arch_entrada, arch_comentarios):
     if empieza_comentario_multilinea(linea):
       comentario = obtener_comentario_multilinea(linea, arch_entrada)
     elif linea.lstrip().startswith("#"):
-      comentario = linea.lstrip()
+      comentario = linea.rstrip()
     else: #Es una instruccion, pero puede tener comentario
       comentario = exp_reg.obtener_coment_linea(linea)
     #Guardo el comentario formateado, si es que habia alguno

@@ -25,6 +25,9 @@ def guardar_unificado(linea, arch):
   reemplazando las comillas triples simples
   por comillas triples dobles, y las tabulaciones
   por espacios]"""
+  #Le agrego un salto de linea si
+  #no tiene (linea final)
+  linea = linea.rstrip() + "\n"
   linea = linea.replace(COMILLAS_SIMPLES, COMILLAS_DOBLES)
   linea = linea.replace("\t", " " * TAM_TABULACION)
   arch.write(linea)
