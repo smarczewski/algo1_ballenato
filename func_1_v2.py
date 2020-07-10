@@ -1,8 +1,15 @@
+#falta funcion invocaciones y generar panel_general.csv
+import re
+
 def leer_archivo(archivo):
 
 	"""
-	Lee linea del archivo, cada linea del archivo es una función del programa, cada campo
-	(separado por comas) es una linea de la función
+	[Autor: Camila Bartocci]
+
+	[Ayuda: lee linea del archivo csv pasado por parametro, y
+	devuelve una lista con lo que contiene la funcion, donde cada 
+	elemento de dicha lista	es una linea de la funcion.]
+
 	"""
 
 	linea = archivo.readline() #"linea" seria una funcion entera 
@@ -11,7 +18,20 @@ def leer_archivo(archivo):
 
 
 
-def nombre_funcion(archivo): #va con fuente_unico
+
+
+
+def nombre_funcion(archivo):
+	
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: extrae del fuente_unico, a traves del llamado a la funcion
+	leer_archivo, los nombres de las funciones del programa y los 
+	módulos asociados a ellas, y los guarda en una lista. Cada elemento 
+	de la lista tiene la forma nombre_funcion.modulo.]
+
+	"""
 
 
 	archivo.seek(0)
@@ -21,7 +41,7 @@ def nombre_funcion(archivo): #va con fuente_unico
 
 	while linea:
 
-		lista_nombres.append([linea[0] + "." + linea[2]]) #la lista agregada es de la forma [nombrefuncion.modulo]
+		lista_nombres.append(linea[0] + "." + linea[2]) #agrego elemento de la forma nombrefuncion.modulo
 
 		linea = leer_archivo(archivo)
 
@@ -29,7 +49,20 @@ def nombre_funcion(archivo): #va con fuente_unico
 
 
 
-def cant_parametros(archivo): #va con fuente_unico
+
+
+
+
+def cant_parametros(archivo):
+
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: lee el fuente_unico, a traves del llamado la funcion
+	leer_archivo, y cuenta la cantidad de parámetros que tiene
+	cada función del programa, y guarda el valor en una lista.]
+
+	"""
 
 	archivo.seek(0)
 
@@ -57,7 +90,16 @@ def cant_parametros(archivo): #va con fuente_unico
 
 
 
-def cant_lineas(archivo): #va con fuente_unico
+def cant_lineas(archivo):
+
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: toma fuente_unico y lo recorre con la funcion
+	leer_archivo. Cuenta la cantidad de lineas que tienen las 
+	funciones y guarda los valores en una lista.]
+
+	"""
 
 	archivo.seek(0)
 
@@ -89,46 +131,109 @@ def cuenta_invocaciones(archivo):
 
 
 
-def cuenta_estructuras(archivo):
+def cant_estructuras(archivo):
 
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: lee el archivo fuente_unico, a traves de la funcion
+	leer_archivo, y devuelve una lista, que a su vez contiene 
+	sublistas las cuales almacenan la cantidad de return, 
+	if/elif, for, while, break y exit de cada funcion.]
+
+	"""
+
+	
 	archivo.seek(0)
 
-	pass
+	linea = leer_archivo(archivo)
+
+	contadores = []
+	cont_return = 0
+	cont_if = 0 #cuenta if y elif
+	cont_for = 0
+	cont_while = 0
+	cont_break = 0
+	cont_exit = 0
+
+
+	while linea:
+
+		for elemento in linea:
+
+			cont_return += len(re.findall("\\breturn\\b", elemento))
+			cont_if += len(re.findall("\\bif\\b", elemento)) + len(re.findall("\\belif\\b", elemento))
+			cont_for += len(re.findall("\\bfor\\b", elemento))
+			cont_while += len(re.findall("\\bwhile\\b", elemento))
+			cont_break += len(re.findall("\\bbreak\\b", elemento))
+			cont_exit += len(re.findall("\\bexit\\b", elemento))
+
+
+		contadores.append([cont_return, cont_if, cont_for, cont_while, cont_break, cont_exit])
+
+		cont_return = 0
+		cont_if = 0
+		cont_for = 0
+		cont_while = 0
+		cont_break = 0
+		cont_exit = 0
+
+		linea = leer_archivo(archivo)
+
+	return contadores
 
 
 
 
 
-def cant_comentarios(archivo): #esta va con comentarios.csv
 
-    archivo.seek(0)
-    
-    linea = leer_archivo(archivo)
+def cant_comentarios(archivo):
+
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: toma el archivo comentarios, cuenta la cantidad de 
+	comentarios que hay en cada funcion, y guarda los valores 
+	en una lista.]
+
+	"""
+
+	archivo.seek(0)
         
-    cant_comentarios = []
+	linea = leer_archivo(archivo)
+        
+	cant_comentarios = []
     
 
-    while linea:
+	while linea:
         
-        if len(linea) > 3: #si hubiese comentarios, recien estarian en el cuarto campo
+		if len(linea) > 3: #si hubiese comentarios, recien estarian en el cuarto campo
             
-            cant_comentarios.append((len(linea) - 3)) #cantidad de campos menos esos tres primeros que no son comentarios
+			cant_comentarios.append((len(linea) - 3)) #cantidad de campos menos esos tres primeros que no son comentarios
 
-        else:
+		else:
 
-        	cant_comentarios.append(0)
-
-
-        linea = leer_archivo(archivo)
+			cant_comentarios.append(0)
 
 
-    return cant_comentarios
+		linea = leer_archivo(archivo)
+
+
+	return cant_comentarios
 
 	
 
 
 
-def hay_descripcion(archivo): #va con comentarios.csv
+def hay_descripcion(archivo):
+
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: toma el archivo comentarios y devuelve "Si", si las
+	funciones contienen descripcion, o "No" en caso contrario.]
+
+	"""
 
 	archivo.seek(0)
 
@@ -154,7 +259,14 @@ def hay_descripcion(archivo): #va con comentarios.csv
 
 
 
-def autor_funcion(archivo): #va con comentarios.csv
+def autor_funcion(archivo):
+
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: toma el archivo comentarios y guarda en una lista los
+	autores de cada funcion.]
+	"""
 
 	archivo.seek(0)
 
@@ -174,10 +286,47 @@ def autor_funcion(archivo): #va con comentarios.csv
 
 #---------------------------------------------------------------------------------------------
 
-def formato_tabla():
+def formato_tabla(func, param, lineas, estr, coment, descr, autor):
 
+    """
+    [Autor: Camila Bartocci]
 
-	pass
+    [Ayuda: da formato de tabla a los datos.]
+
+    FALTA INVOCACIONES (FALTA PROGRAMAR LA FUNCION)
+    """
+
+    pos = 0
+    print("|", "{:^53}".format("FUNCIONES"), "|", "{:^10}".format("PARAMETROS"), "|", "{:^6}".format("LINEAS"),
+        "|", "{:^6}".format("RETURN"), "|", "{:^2}".format("IF"), "|", "{:^3}".format("FOR"), "|",
+        "{:6}".format("WHILE"), "|", "{:^6}".format("BREAK"), "|", "{:^4}".format("EXIT"),
+        "|", "{:^11}".format("COMENTARIOS"), "|", "{:^11}".format("DESCRIPCION"), "|", "{:^15}".format("AUTOR"), "|")
+
+    
+    while pos < len(func):
+
+        fila = [] #[nombre, parametros, lineas , ...]
+
+        fila.append(func[pos])
+        fila.append(param[pos])
+        fila.append(lineas[pos])
+        fila.append(estr[pos][0])
+        fila.append(estr[pos][1])
+        fila.append(estr[pos][2])
+        fila.append(estr[pos][3])
+        fila.append(estr[pos][4])
+        fila.append(estr[pos][5])
+        fila.append(coment[pos])
+        fila.append(descr[pos])
+        fila.append(autor[pos])
+        
+
+        print("|", "{:<53}".format(str(fila[0])), "|", "{:^10}".format(fila[1]), "|", "{:^6}".format(fila[2]),
+            "|", "|", "{:^6}".format(str(fila[0])), "|", "{:^2}".format(str(fila[1])), "|", "{:^3}".format(str(fila[2])),
+            "|", "{:^6}".format(str(fila[3])), "|", "{:^6}".format(str(fila[4])), "|", "{:^4}".format(str(fila[5])), "|",
+            "{:^11}".format(str(fila[3])), "|", "{:^11}".format(str(fila[4])), "|", "{:^15}".format(str(fila[5]), "|"))       
+
+        pos += 1
 
 
 
@@ -186,13 +335,17 @@ def formato_tabla():
 fuente_unico = open("fuente_unico.csv", "r")
 comentarios = open("comentarios.csv", "r")
 
-print(nombre_funcion(fuente_unico))
-print(cant_parametros(fuente_unico))
-print(cant_lineas(fuente_unico))
-print(cant_comentarios(comentarios))
-print(hay_descripcion(comentarios))
-print(autor_funcion(comentarios))
+nombre_funcionv = nombre_funcion(fuente_unico)
+cant_parametrosv = cant_parametros(fuente_unico)
+cant_lineasv = cant_lineas(fuente_unico)
+cant_estructurasv = cant_estructuras(fuente_unico)
+cant_comentariosv = cant_comentarios(comentarios)
+hay_descripcionv = hay_descripcion(comentarios)
+autor_funcionv = autor_funcion(comentarios)
+
+formato_tabla(nombre_funcionv, cant_parametrosv, cant_lineasv, cant_estructurasv, cant_comentariosv, 
+	hay_descripcionv, autor_funcionv)
 
 
 fuente_unico.close()
-#faltan dos puntos de la funcionalidad 1 y darle formato de tabla
+comentarios.close()
