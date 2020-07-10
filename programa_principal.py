@@ -13,6 +13,8 @@ import generar_archivos_csv
 import ordenar
 import os
 import arbol_invocacion
+import funcionalidad_5
+import funcionalidad_3
 
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
 menu = ["1. Panel general de funciones",
@@ -24,9 +26,9 @@ menu = ["1. Panel general de funciones",
 def preprocesamiento(programas):
   """[Autor: Elian Foppiano]"""
   ordenar.ordenar(programas)
-  generar_archivos_csv.generar_csv()  
-  manejo_imports.generar_lista_imports(programas)
-  lista_funciones.generar_lista_funciones(programas)
+  generar_archivos_csv.generar_csv()
+  manejo_imports.crear_csv_imports(programas)
+  lista_funciones.crear_csv_funciones_por_modulo(programas)
   
 def mostrar_menu():
   """[Autor: Elian Foppiano]"""
@@ -44,8 +46,12 @@ def funcion_principal():
   preprocesamiento(programas)
   programas.close()
   opcion = mostrar_menu()
-  if opcion == "4":
+  if opcion == "3":
+    funcionalidad_3.imprimir_tabla_inv()
+  elif opcion == "4":
     arbol_invocacion.generar_arbol()
+  elif opcion == "5":
+    funcionalidad_5.funcionalidad()
 
 #-------Invocacion de la funcion principal-------#
 funcion_principal()

@@ -12,23 +12,28 @@ import os
 PATH_FUNCIONES_POR_MODULO = "funciones_por_modulo.csv"
 
 def guardar_lista_funciones(dir_programa, funciones_por_modulo):
-  """[Autor: Elian Foppiano]"""
-  arch_modulo = open(dir_programa)
+  """[Autor: Elian Foppiano]
+  [Ayuda: Guarda las funciones que se definen en
+  el programa recibido]"""
+  arch_programa = open(dir_programa)
   dir_programa = os.path.basename(dir_programa)
+  #Guardo el primer campo, que es el nombre
+  #del modulo
   funciones_por_modulo.write(dir_programa.replace(".txt", ""))
 
-  linea_modulo = arch_modulo.readline().rstrip()
-  while linea_modulo:
-    if generar_archivos_csv.empieza_funcion(linea_modulo):
-      nombre_funcion = generar_archivos_csv.obtener_nombre_funcion(linea_modulo)
-      generar_archivos_csv.guardar_campo(nombre_funcion, funciones_por_modulo, formateado = False)
-    linea_modulo = arch_modulo.readline().rstrip()
+  linea_programa = arch_programa.readline().rstrip()
+  while linea_programa:
+    if linea_programa.startswith("def "):
+      nombre_funcion = generar_archivos_csv.obtener_nombre_funcion(linea_programa)
+      funciones_por_modulo.write("," + nombre_funcion)
+    linea_programa = arch_programa.readline().rstrip()
     
   funciones_por_modulo.write("\n")
-  arch_modulo.close()
+  arch_programa.close()
 
-def generar_lista_funciones(arch_programas):
-  """[Autor: Elian Foppiano]"""
+def crear_csv_funciones_por_modulo(arch_programas):
+  """[Autor: Elian Foppiano]
+  [Ayuda: Crea el archivo funciones_por_modulo.csv]"""
   arch_programas.seek(0)
   if os.path.exists(PATH_FUNCIONES_POR_MODULO):
     os.remove(PATH_FUNCIONES_POR_MODULO)
