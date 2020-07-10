@@ -34,7 +34,7 @@ def encontrar_invocaciones(linea, funciones):
     y sus valores la cantidad de veces que es invocada]"""
     veces_llamado = {}
     for func_llamada in funciones:
-        for codigo in linea[3:-1]:
+        for codigo in linea[3:]:
             if "{}(".format(func_llamada) in codigo and\
                func_llamada not in veces_llamado:
                 veces_llamado[func_llamada] = 1
@@ -93,7 +93,7 @@ def crear_tabla_inv(archivo, ar_tabla):
     columnas = len(funcs)
     n_columnas = ""
     for n in range(1,columnas+1): n_columnas += "{:^3}|".format(n)
-    ar_tabla.write("-"*42 + "----"*columnas + "n")
+    ar_tabla.write("-"*42 + "----"*columnas + "\n")
     ar_tabla.write("|{:<40}|".format("FUNCIONES") + n_columnas + "\n")
     ar_tabla.write("|" + "-"*40 + "|---"*columnas + "|\n")
     total_inv = {}
@@ -102,7 +102,7 @@ def crear_tabla_inv(archivo, ar_tabla):
     for x in range(1,columnas+1):
         filas, total_inv = formato_filas_inv(funcs_llamadas, funcs, x, filas, total_inv)
         n_funcion = "{}-{}".format(x, funcs[x-1])
-        ar_tabla.write("|{:<40}|".format(n_funcion) + filas+"\n")
+        ar_tabla.write("|{:<40}|".format(n_funcion.replace("$","")) + filas+"\n")
         ar_tabla.write("|" + "-"*40 + "|---"*columnas + "|\n")
         filas = ""
     total = ""
@@ -130,7 +130,3 @@ def imprimir_tabla_inv():
 #------Prueba--------#
     
 imprimir_tabla_inv()
-    
-    
-    
-    
