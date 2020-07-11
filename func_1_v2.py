@@ -1,5 +1,5 @@
-#falta funcion invocaciones
 import re
+
 
 def leer_archivo(archivo):
 
@@ -38,15 +38,19 @@ def nombre_funcion(archivo):
 
 	linea = leer_archivo(archivo)
 	lista_nombres = []
+	
 
 	while linea:
 
-		lista_nombres.append(linea[0] + "." + linea[2]) #agrego elemento de la forma nombrefuncion.modulo
+		lista_nombres.append((linea[0] + "." + linea[2]).replace("$", "")) 
+		#agrego elemento de la forma nombrefuncion.modulo y le saco el marcador "$" en el caso de que exista
 
 		linea = leer_archivo(archivo)
 
+
 	return lista_nombres
 
+	
 
 
 
@@ -71,13 +75,13 @@ def cant_parametros(archivo):
 
 	while linea:
 
-		if "/c/" not in linea[1]:
+		if "/c/" not in linea[1]: #/c/ indica coma en el csv, en este caso, la separacion de los parametros
 
 			cont_parametros.append(1)
 
 		else:
 
-			cont_parametros.append(1 + linea[1].count("/c/"))
+			cont_parametros.append(1 + linea[1].count("/c/")) #par1, par2, par3 (hay dos comas + 1 elemento)
 
 
 		linea = leer_archivo(archivo)
@@ -121,9 +125,87 @@ def cant_lineas(archivo):
 
 
 
-def cuenta_invocaciones(archivo):
+def lista_nombres(archivo):
 
-	pass
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: devuelve una lista solo con el nombre de las funciones 
+	del programa, invocando a nombre_funcion y sacandole el .modulo. 
+	Esta funcion sera invocada en la funcion cant_invocaciones]
+
+	"""
+    
+
+	archivo.seek(0)
+	lista_func_modulo = nombre_funcion(archivo)
+	funciones = [] #aca se almacenan los nombres de las funciones
+    
+	for elemento in lista_func_modulo:
+        
+		modulo = elemento.index(".") #toma el indice en donde se encuentra el . ya que despues de eso viene el modulo
+        
+		funciones.append(elemento[:modulo])
+        
+	return funciones 
+
+
+
+def cant_invocaciones(archivo, funciones):
+
+	"""
+	[Autor: Camila Bartocci]
+
+	[Ayuda: recorre el archivo pasado por parametro a traves de
+	leer_archivo y genera un diccionario de la forma 
+	{nombre_funcion:llamados}, luego devuelve una lista con los 
+	valores de ese diccionario, que es la cantidad de invocaciones.]
+
+	"""
+    
+	dic_llamados = {} #tiene la forma {funcion:cant_llamados, funcion2:cant_llamados2, ...}
+	lista_llamados = []
+
+	archivo.seek(0)
+
+	linea = leer_archivo(archivo)
+
+	for func_llamada in funciones:
+
+		while linea:
+                
+			for campo in linea[3:]:
+            
+				if "{}(".format(func_llamada) in campo:
+                    
+					if func_llamada not in dic_llamados:
+
+						dic_llamados[func_llamada] = 1
+
+					else:
+
+						dic_llamados[func_llamada] += 1
+
+			if func_llamada not in dic_llamados:
+
+				dic_llamados[func_llamada] = 0
+                        
+
+			linea = leer_archivo(archivo)
+            
+		archivo.seek(0)
+		linea = leer_archivo(archivo)
+
+
+	for funcion in dic_llamados:
+
+		lista_llamados.append(dic_llamados[funcion]) #me quedo con los valores
+
+
+	return lista_llamados
+
+
+
 
 
 
@@ -259,6 +341,10 @@ def hay_descripcion(archivo):
 
 
 
+
+
+
+
 def autor_funcion(archivo):
 
 	"""
@@ -286,19 +372,18 @@ def autor_funcion(archivo):
 
 #---------------------------------------------------------------------------------------------
 
-def formato_tabla(func, param, lineas, estr, coment, descr, autor, ar_salida):
+def formato_tabla(func, param, lineas, invoc, estr, coment, descr, autor, ar_salida):
 
     """
     [Autor: Camila Bartocci]
 
     [Ayuda: da formato de tabla a los datos.]
 
-    FALTA INVOCACIONES
     """
 
     pos = 0
-    ar_salida.write("| {:^53} | {:^10} | {:^6} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |".format("FUNCIONES", 
-        "PARAMETROS", "LINEAS", "RETURN", "IF", "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS",
+    ar_salida.write("| {:^53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |".format("FUNCIONES", 
+        "PARAMETROS", "LINEAS", "INVOCACIONES", "RETURN", "IF", "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS",
             "DESCRIPCION", "AUTOR"))
 
     
@@ -309,6 +394,7 @@ def formato_tabla(func, param, lineas, estr, coment, descr, autor, ar_salida):
         fila.append(func[pos])
         fila.append(param[pos])
         fila.append(lineas[pos])
+        fila.append(invoc[pos])
         fila.append(estr[pos][0])
         fila.append(estr[pos][1])
         fila.append(estr[pos][2])
@@ -320,15 +406,17 @@ def formato_tabla(func, param, lineas, estr, coment, descr, autor, ar_salida):
         fila.append(autor[pos])
         
         
-        ar_salida.write("\n| {:<53} | {:^10} | {:^6} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |".format(fila[0], 
-            fila[1], fila[2], fila[3], fila[4], fila[5], fila[6], fila[7], fila[8], fila[9], fila[10], fila[11]))
+        ar_salida.write("\n| {:<53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |".format(fila[0], 
+            fila[1], fila[2], fila[3], fila[4], fila[5], fila[6], fila[7], fila[8], fila[9], fila[10], fila[11], fila[12]))
 
         pos += 1
 
 
 
 
+
 #---------------------------------------------------------------------------------------------
+
 fuente_unico = open("fuente_unico.csv", "r")
 comentarios = open("comentarios.csv", "r")
 panel_general = open("panel_general.txt", "w")
@@ -336,13 +424,14 @@ panel_general = open("panel_general.txt", "w")
 nombre_funcionv = nombre_funcion(fuente_unico)
 cant_parametrosv = cant_parametros(fuente_unico)
 cant_lineasv = cant_lineas(fuente_unico)
+cant_invocacionesv = cant_invocaciones(fuente_unico, lista_nombres(fuente_unico))
 cant_estructurasv = cant_estructuras(fuente_unico)
 cant_comentariosv = cant_comentarios(comentarios)
 hay_descripcionv = hay_descripcion(comentarios)
 autor_funcionv = autor_funcion(comentarios)
 
-formato_tabla(nombre_funcionv, cant_parametrosv, cant_lineasv, cant_estructurasv, cant_comentariosv, 
-	hay_descripcionv, autor_funcionv, panel_general)
+formato_tabla(nombre_funcionv, cant_parametrosv, cant_lineasv, cant_invocacionesv, cant_estructurasv, 
+	cant_comentariosv, hay_descripcionv, autor_funcionv, panel_general)
 
 
 fuente_unico.close()

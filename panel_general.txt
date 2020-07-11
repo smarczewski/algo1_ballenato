@@ -1,45 +1,45 @@
-|                       FUNCIONES                       | PARAMETROS | LINEAS | RETURN | IF | FOR | WHILE | BREAK | EXIT | COMENTARIOS | DESCRIPCION |      AUTOR      |
-| buscar_principal.ordenar                              |     1      |   11   |   1    | 1  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| calcular_indentacion.generar_archivos_csv             |     1      |   5    |   1    | 0  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| copiar_funcion.ordenar                                |     4      |   15   |   0    | 2  |  0  |   2   |   0   |  0   |      1      |     Si      | Elian Foppiano  |
-| eliminar_cadenas.generar_archivos_csv                 |     2      |   9    |   1    | 2  |  1  |   0   |   0   |  0   |      2      |     Si      | Elian Foppiano  |
-| eliminar_comentario_linea.generar_archivos_csv        |     1      |   8    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| empieza_comentario_multilinea.generar_archivos_csv    |     1      |   6    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| empieza_funcion.generar_archivos_csv                  |     1      |   6    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| es_instruccion.generar_archivos_csv                   |     1      |   7    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| es_invocacion_principal.ordenar                       |     1      |   6    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| generar_dir.ordenar                                   |     1      |   5    |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| generar_lista_funciones.lista_funciones               |     1      |   9    |   0    | 0  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| generar_lista_funciones_ordenada.ordenar              |     1      |   10   |   1    | 1  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| generar_lista_imports.manejo_imports                  |     1      |   9    |   0    | 0  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| generar_lista_modulos.manejo_imports                  |     1      |   9    |   1    | 0  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| generar_ordenado.ordenar                              |     1      |   20   |   0    | 1  |  2  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| guardar_campo.generar_archivos_csv                    |     4      |   8    |   0    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| guardar_comentario_ayuda.generar_archivos_csv         |     2      |   8    |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| guardar_comentarios.generar_archivos_csv              |     3      |   5    |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| guardar_comentarios_adicionales.generar_archivos_csv  |     3      |   17   |   1    | 3  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| guardar_fuente_unico.generar_archivos_csv             |     3      |   8    |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| guardar_funciones_modulo.ordenar                      |     4      |   8    |   0    | 2  |  2  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| guardar_imports_modulo.manejo_imports                 |     3      |   13   |   0    | 2  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| guardar_instrucciones.generar_archivos_csv            |     2      |   12   |   1    | 2  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| guardar_linea.ordenar                                 |     2      |   6    |   0    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| guardar_lista_funciones.lista_funciones               |     2      |   12   |   0    | 1  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| guardar_nombre_funcion.generar_archivos_csv           |     2      |   3    |   0    | 0  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| leer_centinela.generar_archivos_csv                   |     1      |   3    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| leer_firmas.generar_archivos_csv                      |     1      |   6    |   1    | 0  |  1  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| $main.programa_principal                              |     1      |   4    |   0    | 0  |  0  |   0   |   0   |  0   |      1      |     No      |   Desconocido   |
-| merge.generar_archivos_csv                            |     2      |   17   |   0    | 2  |  0  |   1   |   0   |  0   |     13      |     Si      | Elian Foppiano  |
-| mostrar_menu.programa_principal                       |     1      |   8    |   1    | 0  |  1  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| nombre_menor.generar_archivos_csv                     |     1      |   6    |   1    | 1  |  1  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| obtener_autor.generar_archivos_csv                    |     1      |   6    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| obtener_comentario_ayuda.generar_archivos_csv         |     2      |   14   |   1    | 2  |  0  |   1   |   0   |  0   |      1      |     Si      | Elian Foppiano  |
-| obtener_comentario_multilinea.generar_archivos_csv    |     2      |   13   |   1    | 2  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| obtener_datos_comentario_inicial.generar_archivos_csv |     1      |   12   |   1    | 2  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| obtener_nombre_arch.generar_archivos_csv              |     1      |   4    |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| obtener_nombre_funcion.generar_archivos_csv           |     1      |   3    |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| obtener_parametros.generar_archivos_csv               |     1      |   3    |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| preprocesamiento.programa_principal                   |     1      |   14   |   0    | 0  |  2  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| reiniciar_pos_archivos.generar_archivos_csv           |     1      |   3    |   0    | 0  |  1  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
-| saltear_comentario_multilinea.generar_archivos_csv    |     2      |   3    |   0    | 0  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| termina_comentario.generar_archivos_csv               |     1      |   7    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
-| termino_funcion.ordenar                               |     1      |   6    |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+|                       FUNCIONES                       | PARAMETROS | LINEAS | INVOCACIONES | RETURN | IF | FOR | WHILE | BREAK | EXIT | COMENTARIOS | DESCRIPCION |      AUTOR      |
+| buscar_principal.ordenar                              |     1      |   11   |      1       |   1    | 1  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| calcular_indentacion.generar_archivos_csv             |     1      |   5    |      1       |   1    | 0  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| copiar_funcion.ordenar                                |     4      |   15   |      2       |   0    | 2  |  0  |   2   |   0   |  0   |      1      |     Si      | Elian Foppiano  |
+| eliminar_cadenas.generar_archivos_csv                 |     2      |   9    |      2       |   1    | 2  |  1  |   0   |   0   |  0   |      2      |     Si      | Elian Foppiano  |
+| eliminar_comentario_linea.generar_archivos_csv        |     1      |   8    |      2       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| empieza_comentario_multilinea.generar_archivos_csv    |     1      |   6    |      2       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| empieza_funcion.generar_archivos_csv                  |     1      |   6    |      3       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| es_instruccion.generar_archivos_csv                   |     1      |   7    |      1       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| es_invocacion_principal.ordenar                       |     1      |   6    |      1       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| generar_dir.ordenar                                   |     1      |   5    |      2       |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| generar_lista_funciones.lista_funciones               |     1      |   9    |      1       |   0    | 0  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| generar_lista_funciones_ordenada.ordenar              |     1      |   10   |      1       |   1    | 1  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| generar_lista_imports.manejo_imports                  |     1      |   9    |      1       |   0    | 0  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| generar_lista_modulos.manejo_imports                  |     1      |   9    |      1       |   1    | 0  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| generar_ordenado.ordenar                              |     1      |   20   |      1       |   0    | 1  |  2  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| guardar_campo.generar_archivos_csv                    |     4      |   8    |      10      |   0    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| guardar_comentario_ayuda.generar_archivos_csv         |     2      |   8    |      1       |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| guardar_comentarios.generar_archivos_csv              |     3      |   5    |      1       |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| guardar_comentarios_adicionales.generar_archivos_csv  |     3      |   17   |      1       |   1    | 3  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| guardar_fuente_unico.generar_archivos_csv             |     3      |   8    |      1       |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| guardar_funciones_modulo.ordenar                      |     4      |   8    |      2       |   0    | 2  |  2  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| guardar_imports_modulo.manejo_imports                 |     3      |   13   |      1       |   0    | 2  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| guardar_instrucciones.generar_archivos_csv            |     2      |   12   |      1       |   1    | 2  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| guardar_linea.ordenar                                 |     2      |   6    |      1       |   0    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| guardar_lista_funciones.lista_funciones               |     2      |   12   |      1       |   0    | 1  |  0  |   1   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| guardar_nombre_funcion.generar_archivos_csv           |     2      |   3    |      2       |   0    | 0  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| leer_centinela.generar_archivos_csv                   |     1      |   3    |      9       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| leer_firmas.generar_archivos_csv                      |     1      |   6    |      1       |   1    | 0  |  1  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| main.programa_principal                               |     1      |   4    |      0       |   0    | 0  |  0  |   0   |   0   |  0   |      1      |     No      |   Desconocido   |
+| merge.generar_archivos_csv                            |     2      |   17   |      2       |   0    | 2  |  0  |   1   |   0   |  0   |     13      |     Si      | Elian Foppiano  |
+| mostrar_menu.programa_principal                       |     1      |   8    |      1       |   1    | 0  |  1  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| nombre_menor.generar_archivos_csv                     |     1      |   6    |      2       |   1    | 1  |  1  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| obtener_autor.generar_archivos_csv                    |     1      |   6    |      1       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| obtener_comentario_ayuda.generar_archivos_csv         |     2      |   14   |      2       |   1    | 2  |  0  |   1   |   0   |  0   |      1      |     Si      | Elian Foppiano  |
+| obtener_comentario_multilinea.generar_archivos_csv    |     2      |   13   |      1       |   1    | 2  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| obtener_datos_comentario_inicial.generar_archivos_csv |     1      |   12   |      0       |   1    | 2  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| obtener_nombre_arch.generar_archivos_csv              |     1      |   4    |      1       |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| obtener_nombre_funcion.generar_archivos_csv           |     1      |   3    |      2       |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| obtener_parametros.generar_archivos_csv               |     1      |   3    |      1       |   1    | 0  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| preprocesamiento.programa_principal                   |     1      |   14   |      1       |   0    | 0  |  2  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| reiniciar_pos_archivos.generar_archivos_csv           |     1      |   3    |      1       |   0    | 0  |  1  |   0   |   0   |  0   |      0      |     No      | Elian Foppiano  |
+| saltear_comentario_multilinea.generar_archivos_csv    |     2      |   3    |      1       |   0    | 0  |  0  |   1   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| termina_comentario.generar_archivos_csv               |     1      |   7    |      2       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
+| termino_funcion.ordenar                               |     1      |   6    |      1       |   1    | 1  |  0  |   0   |   0   |  0   |      0      |     Si      | Elian Foppiano  |
