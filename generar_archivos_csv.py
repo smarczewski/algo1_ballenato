@@ -83,13 +83,15 @@ def obtener_comentario_multilinea(linea, arch):
   """[Autor: Elian Foppiano]
   [Ayuda: Recorre el archivo recibido hasta que encuentra
   el final del comentario multilinea y lo devuelve formateado.]"""
-  if linea.rstrip().endswith(COMILLAS_DOBLES):
+  if linea.rstrip().endswith(COMILLAS_DOBLES) and linea.strip() != COMILLAS_DOBLES:
     comentario = linea.strip() + SALTO_LINEA
   else:
     comentario = linea.rstrip() + SALTO_LINEA
+    linea = arch.readline().rstrip()
     while not linea.endswith(COMILLAS_DOBLES):
-      linea = arch.readline().rstrip()
       comentario += linea + SALTO_LINEA
+      linea = arch.readline().rstrip()
+    comentario += linea + SALTO_LINEA
   return comentario
 
 def empieza_comentario_multilinea(linea):
@@ -114,7 +116,6 @@ def guardar_instrucciones(linea, arch_entrada, fuente_unico):
   """[Autor: Elian Foppiano]
   [Ayuda: Guarda las instrucciones de la funcion
   (campos adicionales de fuente_unico.csv)]"""
-  linea = leer_centinela(arch_entrada)
   nro_linea = 0
   while linea != CENTINELA and not linea.startswith("def "):
     if empieza_comentario_multilinea(linea):
@@ -139,6 +140,7 @@ def guardar_fuente_unico(firma_funcion, arch_entrada, fuente_unico):
   linea = leer_centinela(arch_entrada)
   if empieza_comentario_multilinea(linea):
     obtener_comentario_multilinea(linea, arch_entrada)
+    linea = leer_centinela(arch_entrada)
   linea = guardar_instrucciones(linea, arch_entrada, fuente_unico)
 
   return linea
@@ -275,7 +277,6 @@ def generar_csv():
   """[Autor: Elian Foppiano]
   [Ayuda: Funcion que articula el modulo para
   generar los archivos .csv]"""
-
   l_archivos = []
   l_modulos = os.listdir(CARPETA_FUNCIONES_ORDENADAS)
   #Abro todos los archivos de la carpeta "funciones"
