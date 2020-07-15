@@ -11,16 +11,6 @@ def eliminar_cadenas(texto):
   texto = re.sub("'.*?'", '', texto)
   return texto
 
-def eliminar_coment_multilinea(texto):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Elimina los comentarios multilinea de
-  un texto recibido]"""
-  #Para que el punto detecte tambien los saltos
-  #de linea, uso la flag (?s) (DOTALL)
-  texto = re.sub(r'(?s)""".*?"""', '', texto)
-  texto = re.sub(r"(?s)'''.*?'''", '', texto)
-  return texto
-
 def eliminar_coment_linea(linea):
   """[Autor: Elian Foppiano]
   [Ayuda: Elimina los comentarios que se encuentran
@@ -41,20 +31,25 @@ def obtener_coment_linea(linea):
   linea_sin_coment = eliminar_coment_linea(linea)
   return linea.replace(linea_sin_coment, "")
 
-def buscador_palabra(palabra):
+def contar_invocaciones(funcion, linea):
   """[Autor: Elian Foppiano]
-  [Ayuda: Genera una expresion regular que busca
-  una palabra determinada]"""
-  expresion = "\\b" + palabra + "\\b"
-  return expresion
+  [Ayuda: Cuenta la cantidad de veces que una funcion
+  se invoca en una linea de codigo recibida]"""
+  exp = r"\b" + funcion + r"\("
+  invocaciones = re.findall(exp, eliminar_cadenas(linea))
+  return len(invocaciones)
 
-def buscador_lista_palabras(l_palabras):
+def buscar_lista_invocaciones(l_funciones, linea):
   """[Autor: Elian Foppiano]
-  [Ayuda: Genera una expresion regular que busca
-  una lista de palabras. La expresion va a ser
-  del tipo \bPalabra1\b|\bPalabra2]"""
-  expresion_final = ""
-  for palabra in l_palabras[:-1]:
-    expresion_final += buscador_palabra(palabra) + "|"
-  expresion_final += buscador_palabra(l_palabras[-1])
-  return expresion_final
+  [Ayuda: Busca las funciones en una linea recibida
+  y devuelve una lista con las funciones que se
+  encontraron, ordenada por orden de aparicion,
+  indicando si alguna de ellas se invocara mas de
+  una vez]"""
+  l_exp = []
+  for funcion in l_funciones:
+    exp = "\b" + funcion + r"\("
+    l_exp.append(exp)
+  exp_final = "|".join(l_exp)
+  invocaciones = re.findall(exp_final, eliminar_cadenas(linea))
+  return invocaciones
