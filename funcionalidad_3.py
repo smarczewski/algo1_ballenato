@@ -6,6 +6,9 @@ Tambien crea un archivo "analizador.txt" que contiene la
 tabla.
 --------------------------------------------------------------------------------
 """
+
+import exp_reg
+
 def leer_linea_csv(archivo):
     """[Autor: Jean Paul Yatim]
     [Ayuda: A pertir de una linea de un .csv, devuelve una
@@ -35,12 +38,11 @@ def encontrar_invocaciones(linea, funciones):
     veces_llamado = {}
     for func_llamada in funciones:
         for codigo in linea[3:]:
-            if "{}(".format(func_llamada) in codigo and\
-               func_llamada not in veces_llamado:
-                veces_llamado[func_llamada] = 1
-            elif "{}(".format(func_llamada) in codigo and\
-                 func_llamada in veces_llamado:
-                veces_llamado[func_llamada] += 1
+            cant_inv = exp_reg.contar_invocaciones(func_llamada, codigo)
+            if cant_inv > 0 and func_llamada not in veces_llamado:
+                veces_llamado[func_llamada] = cant_inv
+            elif cant_inv > 0 and func_llamada in veces_llamado:
+                veces_llamado[func_llamada] += cant_inv
     return veces_llamado
 
 def reunir_invocaciones(archivo):
@@ -129,4 +131,4 @@ def imprimir_tabla_inv():
 
 #------Prueba--------#
     
-imprimir_tabla_inv()
+#imprimir_tabla_inv()
