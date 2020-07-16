@@ -48,8 +48,9 @@ def buscar_lista_invocaciones(l_funciones, linea):
   una vez]"""
   l_exp = []
   for funcion in l_funciones:
-    exp = "\b" + funcion + r"\("
+    exp = r"\b" + funcion + r"\("
     l_exp.append(exp)
   exp_final = "|".join(l_exp)
   invocaciones = re.findall(exp_final, eliminar_cadenas(linea))
-  return invocaciones
+  #Devuelvo la lista eliminando el parentesis final
+  return [invocacion[:-1] for invocacion in invocaciones]

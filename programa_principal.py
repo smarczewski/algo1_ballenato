@@ -7,14 +7,15 @@ dispone la interfaz de usuario que permitira
 acceder a cada una de las funcionalidades
 """
 
-import manejo_imports
-import lista_funciones
+import ascii_arts
 import generar_archivos_csv
 import ordenar
 import os
-import arbol_invocacion
-import funcionalidad_5
+import funcionalidad_2
 import funcionalidad_3
+import funcionalidad_4
+import funcionalidad_5
+import func_1_v2
 
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
 menu = ["1. Panel general de funciones",
@@ -23,35 +24,30 @@ menu = ["1. Panel general de funciones",
         "4. Arbol de invocacion",
         "5. Informacion por desarrollador"]
 
-def preprocesamiento(programas):
-  """[Autor: Elian Foppiano]"""
-  ordenar.ordenar(programas)
-  generar_archivos_csv.generar_csv()
-  manejo_imports.crear_csv_imports(programas)
-  lista_funciones.crear_csv_funciones_por_modulo(programas)
-  
 def mostrar_menu():
-  """[Autor: Elian Foppiano]"""
-  print("Trabajo Practico".center(100, "_"))
-  print("Algoritmos y Programacion I".center(100, "_"))
-  print("Grupo Ballenato".rjust(100, " "))
-  for linea in menu:
-    print(linea)
-  opcion = input("Opcion: ")
+    print(ascii_arts.titulo)
+    print(ascii_arts.ballena)
+    input("Presione cualquier tecla para continuar... ")
+    for linea in menu:
+        print(linea)
+    opcion = input("Opcion: ")
 
-  return opcion
+    return opcion
 
 def funcion_principal():
-  programas = open("programas.txt")
-  preprocesamiento(programas)
-  programas.close()
-  opcion = mostrar_menu()
-  if opcion == "3":
-    funcionalidad_3.imprimir_tabla_inv()
-  elif opcion == "4":
-    arbol_invocacion.generar_arbol()
-  elif opcion == "5":
-    funcionalidad_5.funcionalidad()
+    programas = open("programas.txt")
+    ordenar.generar_arch_ordenados(programas)
+    generar_archivos_csv.generar_csv()
+    programas.close()
+    opcion = mostrar_menu()
+    if opcion == "1":
+        func_1_v2.princ()
+    if opcion == "3":
+        funcionalidad_3.imprimir_tabla_inv()
+    elif opcion == "4":
+        funcionalidad_4.generar_arbol()
+    elif opcion == "5":
+        funcionalidad_5.funcionalidad()
 
 #-------Invocacion de la funcion principal-------#
 funcion_principal()

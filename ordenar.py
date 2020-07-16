@@ -14,156 +14,136 @@ import re
 #Constantes que se usan a lo largo
 #del programa
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
-MARCADOR_PRINC = "$"
 COMILLAS_DOBLES = chr(34) * 3
 COMILLAS_SIMPLES = chr(39) * 3
 TAM_TABULACION = 4
 
-def guardar_unificado(linea, arch):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Guarda la linea en el archivo
-  reemplazando las comillas triples simples
-  por comillas triples dobles, y las tabulaciones
-  por espacios]"""
-  #Le agrego un salto de linea si
-  #no tiene (linea final)
-  linea = linea.rstrip() + "\n"
-  linea = linea.replace(COMILLAS_SIMPLES, COMILLAS_DOBLES)
-  linea = linea.replace("\t", " " * TAM_TABULACION)
-  arch.write(linea)
-
-def buscar_invocacion(arch):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Devuelve la primera invocacion
-  a funcion que encuentre en el programa y
-  que se realice por fuera de cualquier bloque
-  de funcion]"""
-  arch.seek(0)
-  invocacion = None
-  while not invocacion:
+def leer_unificado(arch):
+    """[Autor: Elian Foppiano]
+    [Ayuda: Lee una linea del archivo
+    y la devuelve convirtiendo las comillas
+    triples simples en comillas triples dobles
+    y las tabulaciones por 4 espacios]"""
     linea = arch.readline()
-    #Salteo los comentarios multilinea
-    #para evitar falsos positivos
-    if generar_archivos_csv.empieza_comentario_multilinea(linea):
-      generar_archivos_csv.obtener_comentario_multilinea(linea, arch)
-    #Busco la posible invocacion
-    #con una expresion regular
-    invocacion = re.findall(r"^\w*\(", linea)
-  return invocacion[:-1]
+    linea = linea.replace(COMILLAS_SIMPLES, COMILLAS_DOBLES)
+    linea = linea.replace("\t", " " * TAM_TABULACION)
+    return linea
 
-def generar_lista_funciones_ordenada(arch):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Recorre el archivo buscando
-  firmas de funciones, las guarda en una
-  lista y las ordena alfabeticamente]"""
-  l_funciones = []
-  linea = arch.readline()
-  while linea:
-    if linea.startswith("def "):
-      l_funciones.append(linea)
-    linea = arch.readline()
-  l_funciones.sort(key = str.lower)
-  arch.seek(0)
-  return l_funciones
+def buscar_invocacion(dir_archivo):
+    """[Autor: Elian Foppiano]
+    [Ayuda: Devuelve la primera invocacion
+    a funcion que encuentre en el programa y
+    que se realice por fuera de cualquier bloque
+    de funcion (funcion principal del programa)]"""
+    invocacion = None
+    with open(dir_archivo) as arch:
+        while not invocacion:
+            linea = arch.readline()
+            #Salteo los comentarios multilinea
+            #para evitar falsos positivos
+            if generar_archivos_csv.empieza_comentario_multilinea(linea):
+                generar_archivos_csv.obtener_comentario_multilinea(linea, arch)
+            #Busco la posible invocacion
+            #con una expresion regular
+            invocacion = re.findall(r"^\w*\(", linea)
 
-def copiar_funcion(arch_entrada, arch_salida, funcion):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Busca la funcion recibida
-  en el archivo y la copia]"""
-  arch_entrada.seek(0)
-  linea = ""
-  while linea != funcion:
-    if generar_archivos_csv.empieza_comentario_multilinea(linea):
-      generar_archivos_csv.obtener_comentario_multilinea(linea, arch_entrada)
-    linea = arch_entrada.readline()
-  arch_salida.write(funcion)
-  linea = arch_entrada.readline()
+    return invocacion[0][:-1]
 
-  while linea.startswith((" ", "\t", "\n")):
-    if linea.strip(" ") != "\n":
-      guardar_unificado(linea, arch_salida)
-    linea = arch_entrada.readline()
+def listar_funciones_codigo(arch_entrada, principal):
+    """[Autor: Elian Foppiano]
+    [Ayuda: Crea una lista en el que cada
+    elemento es el codigo de una funcion definida
+    en arch_entrada. Devuelve la lista ordenada
+    alfabeticamente por nombre de la funcion]"""
+    funciones = []
+    linea = leer_unificado(arch_entrada)
+    while linea:
+        #Salteo los comentarios multilinea
+        #que estan por fuera de cualquier
+        #funcion, para evitar falsos positivos
+        if linea.startswith(COMILLAS_DOBLES):
+            generar_archivos_csv.obtener_comentario_multilinea(linea, arch_entrada)
+            linea = leer_unificado(arch_entrada)
+        elif linea.startswith("def "):
+            #Si la funcion es la principal,
+            #la guardo con el marcador
+            if linea[4:linea.find("(")] == principal:
+                funcion = "def $" + linea[4:]
+            else:
+                funcion = linea
+            linea = leer_unificado(arch_entrada)
+            #Mientras se siga en la funcion,
+            #copio las lineas
+            while linea.startswith((" ", "\n")):
+                funcion += linea if linea.strip() else ""
+                linea = leer_unificado(arch_entrada)
+            #Agrego la funcion a la lista
+            #de funciones
+            funciones.append(funcion)
+        #No es un comienzo de funcion
+        #ni un comentario multilinea
+        else:
+            linea = leer_unificado(arch_entrada)
+    #Ordeno las funciones segun la primera
+    #linea de cada una (firma), reemplazando
+    #el marcador en la funcion principal
+    funciones.sort(key = lambda funcion: funcion.split("\n")[0].replace("$", ""))
+    return funciones
 
 def generar_dir(dir_arch):
-  """[Autor: Elian Foppiano]"""
-  nombre_python = os.path.basename(dir_arch)
-  nombre_txt = nombre_python.replace(".py", ".txt")
-  dir_arch = os.path.join(CARPETA_FUNCIONES_ORDENADAS, nombre_txt)
-  return dir_arch
-
-def generar_archivos_ordenados(programas):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Genera los archivos con las funciones
-  ordenadas alfabeticamente y las guarda en la
-  carpeta "funciones"]"""
-  dir_modulo = programas.readline().rstrip()
-  while dir_modulo:
-    dir_copia = generar_dir(dir_modulo)
-    with open(dir_modulo) as arch_entrada, open(dir_copia, "w") as arch_salida:
-      l_funciones = generar_lista_funciones_ordenada(arch_entrada)
-      for funcion in l_funciones:
-        copiar_funcion(arch_entrada, arch_salida, funcion)
-    dir_modulo = programas.readline().rstrip()
-
-def agregar_marcador(dir_arch, funcion, marcador):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Agrego el marcador recibido
-  a la firma de la funcion definida en el
-  archivo recibido]"""
-  #Creo un archivo temporal
-  dir_arch_actualizado = generar_dir("Actualizado")
-  with open(dir_arch) as arch_viejo, open(dir_arch_actualizado, "w") as arch_nuevo:
-    linea = arch_viejo.readline()
-    #Busco la firma de la funcion
-    while linea and not linea.startswith("def ") and funcion in linea:
-      arch_nuevo.write(linea)
-      linea = arch_viejo.readline()
-    #Cuando encuentro la funcion,
-    #reemplazo su nombre en la firma
-    #y copio el resto del archivo tal cual
-    linea = "def " + marcador + linea[4:]
-    while linea:
-      arch_nuevo.write(linea)
-      linea = arch_viejo.readline()
-  #Elimino el archivo viejo
-  #y renombro el nuevo
-  os.remove(dir_arch)
-  os.rename(dir_arch_actualizado, dir_arch)
+    """[Autor: Elian Foppiano]
+    [Ayuda: Genera la ruta en la que se guardan
+    los archivos con las funciones ordenadas]"""
+    nombre_python = os.path.basename(dir_arch)
+    nombre_txt = nombre_python.replace(".py", ".txt")
+    dir_arch = os.path.join(CARPETA_FUNCIONES_ORDENADAS, nombre_txt)
+    return dir_arch
 
 def eliminar_archivos_viejos(carpeta):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Elimina los archivos viejos de
-  la carpeta recibida, para evitar que los
-  analisis previos interfieran en el merge
-  del analisis actual]"""
-  path_arch_viejos = os.listdir(carpeta)
-  for path in path_arch_viejos:
-    path_abs = os.path.join(carpeta, path)
-    os.remove(path_abs)
+    """[Autor: Elian Foppiano]
+    [Ayuda: Elimina los archivos viejos de
+    la carpeta recibida, para evitar que los
+    analisis previos interfieran en el merge
+    del analisis actual]"""
+    path_arch_viejos = os.listdir(carpeta)
+    for path in path_arch_viejos:
+        path_abs = os.path.join(carpeta, path)
+        os.remove(path_abs)
 
-def ordenar(programas):
-  """[Autor: Elian Foppiano]
-  [Ayuda: Articula el modulo para generar
-  las funciones ordenadas y marcar la principal]"""
-  eliminar_archivos_viejos(CARPETA_FUNCIONES_ORDENADAS)
-  #Genero los archivos ordenados
-  generar_archivos_ordenados(programas)
-  programas.seek(0)
-  #Busco la funcion principal, que
-  #es la funcion que se invoca en
-  #el programa principal
-  dir_programa_principal = programas.readline().rstrip()
-  programa_principal = open(dir_programa_principal)
-  funcion_principal = buscar_invocacion(programa_principal)
-  programa_principal.close()
-  #Creo la ruta del archivo principal
-  dir_principal_ordenado = generar_dir(dir_programa_principal)
-  #Le agrego el marcador a la funcion principal
-  agregar_marcador(dir_principal_ordenado, funcion_principal, MARCADOR_PRINC)
+def generar_arch_ordenados(programas):
+    """[Autor: Elian Foppiano]
+    [Ayuda: Genera los archivos con las funciones
+    ordenadas alfabeticamente y las guarda en la
+    carpeta "funciones"]"""
+    #Elimino los archivos viejos para que
+    #no interfieran en el analisis posterior
+    eliminar_archivos_viejos(CARPETA_FUNCIONES_ORDENADAS)
+    #Busco la funcion principal para
+    #poder agregarle el marcador
+    dir_programa_principal = programas.readline().rstrip()
+    principal = buscar_invocacion(dir_programa_principal)
+    programas.seek(0)
+    #Recorro la lista de programas
+    modulo = programas.readline().rstrip()
+    while modulo:
+        #Genero la ruta del archivo
+        #de reemplazo (carpeta "funciones")
+        copia = generar_dir(modulo)
+        with open(modulo) as entrada, open(copia, "w") as salida:
+            #Genero una lista de cadenas
+            #que contienen el codigo de las
+            #funciones
+            l_funciones = listar_funciones_codigo(entrada, principal)
+            #Copio las cadenas en el archivo
+            #de reemplazo
+            for funcion in l_funciones:
+                salida.write(funcion)
+        modulo = programas.readline().rstrip()
+    programas.seek(0)
 
 #----------Bloque de pruebas----------#
 if __name__ == "__main__":
 
-  programas = open("programas.txt")
-  ordenar(programas)
-  programas.close()
+    programas = open("programas.txt")
+    generar_arch_ordenados(programas)
+    programas.close()
