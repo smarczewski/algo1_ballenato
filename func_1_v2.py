@@ -251,7 +251,7 @@ def hay_descripcion(dic, archivo):
 
         funcion = linea[0]
 
-        if len(linea) > 3:
+        if linea[2]:
 
             dic[funcion]["descripcion"] = "Si"
 
@@ -260,7 +260,7 @@ def hay_descripcion(dic, archivo):
             dic[funcion]["descripcion"] = "No"
 
 
-
+        
         linea = leer_archivo(archivo)
 
 
@@ -302,8 +302,8 @@ def formato_tabla(dic, ar_salida):
     titulos = "nombre.modulo", "parametros", "lineas", "invocaciones", "return", "if", 
     "for", "while", "break", "exit", "comentarios", "descripcion", "autor"
 
-    formato_titulos = "| {:^53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |"
-    formato_fila = "\n| {:<53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^15} |"
+    formato_titulos = "| {:^53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
+    formato_fila = "\n| {:<53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
 
     ar_salida.write(formato_titulos.format("FUNCION", "PARAMETROS", "LINEAS", "INVOCACIONES", "RETURN", "IF", 
     "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS", "DESCRIPCION", "AUTOR"))
