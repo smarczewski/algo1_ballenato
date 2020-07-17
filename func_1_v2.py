@@ -19,6 +19,8 @@ asociados a ellas, especificados en el enunciado de la funcionalidad 1.
 
 
 
+
+
 def leer_archivo(archivo):
 
     """
@@ -56,7 +58,8 @@ def nombre_funcion(dic, archivo): #fuente unico
 
         funcion, modulo = linea[0], linea[2]
 
-        dic[funcion] = {"nombre.modulo":"{}.{}".format(funcion, modulo)}
+
+        dic[funcion] = {"nombre.modulo":"{}.{}".format(funcion, modulo).replace("$", "")}
 
         linea = leer_archivo(archivo)
 
@@ -125,7 +128,7 @@ def cant_lineas(dic, archivo):
 
 
 
-def cant_invocaciones(dic):
+def cant_invocaciones(dic,archivo):
 
     """
     [Autor: Camila Bartocci]
@@ -134,21 +137,19 @@ def cant_invocaciones(dic):
     contar_invocaciones, del modulo exp_reg. Utiliza fuente_unico.]
     """
 
-    with open("fuente_unico.csv") as archivo:
+    for funcion in dic:
 
-        for funcion in dic:
+        invocaciones = 0
+        linea = leer_archivo(archivo)
 
-            invocaciones = 0
-            linea = leer_archivo(archivo)
+        while linea:
 
-            while linea:
+            instrucciones = "".join(linea[3:])
+            invocaciones += exp_reg.contar_invocaciones(funcion, instrucciones)
+            linea = leer_archivo(archivo) 
 
-                instrucciones = "".join(linea[3:])
-                invocaciones += exp_reg.contar_invocaciones(funcion, instrucciones)
-                linea = leer_archivo(archivo)
-
-            dic[funcion]["invocaciones"] = invocaciones
-            archivo.seek(0)
+        dic[funcion]["invocaciones"] = invocaciones
+        archivo.seek(0)
 
 
 
@@ -190,12 +191,12 @@ def cant_estructuras(dic, archivo):
             cont_exit += len(re.findall("\\bexit\\b", elemento))
 
 
-        dic[funcion]["return"] = cont_return
-        dic[funcion]["if"] = cont_if
-        dic[funcion]["for"] = cont_for
-        dic[funcion]["while"] = cont_while
-        dic[funcion]["break"] = cont_break
-        dic[funcion]["exit"] = cont_exit
+        dic[funcion]["returns"] = cont_return
+        dic[funcion]["ifs"] = cont_if
+        dic[funcion]["fors"] = cont_for
+        dic[funcion]["whiles"] = cont_while
+        dic[funcion]["breaks"] = cont_break
+        dic[funcion]["exits"] = cont_exit
 
         cont_return = 0
         cont_if = 0
@@ -299,9 +300,7 @@ def formato_tabla(dic, ar_salida):
     Genera el archivo de salida panel_general.txt.]
     """
 
-    titulos = "nombre.modulo", "parametros", "lineas", "invocaciones", "return", "if", 
-    "for", "while", "break", "exit", "comentarios", "descripcion", "autor"
-
+    
     formato_titulos = "| {:^53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
     formato_fila = "\n| {:<53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
 
@@ -315,8 +314,8 @@ def formato_tabla(dic, ar_salida):
         #toma funcion1:{"nombre.modulo":"nombre.modulo", "parametros":n, ...}
 
         ar_salida.write(formato_fila.format(dic[func]["nombre.modulo"], dic[func]["parametros"], dic[func]["lineas"], 
-            dic[func]["invocaciones"], dic[func]["return"], dic[func]["if"], dic[func]["for"],
-            dic[func]["while"], dic[func]["break"], dic[func]["exit"], dic[func]["comentarios"],
+            dic[func]["invocaciones"], dic[func]["returns"], dic[func]["ifs"], dic[func]["fors"],
+            dic[func]["whiles"], dic[func]["breaks"], dic[func]["exits"], dic[func]["comentarios"],
             dic[func]["descripcion"], dic[func]["autor"]))
 
 
@@ -332,13 +331,15 @@ dic_datos = {}
 nombre_funcion(dic_datos, fuente_unico)
 cant_parametros(dic_datos, fuente_unico)
 cant_lineas(dic_datos, fuente_unico)
-cant_invocaciones(dic_datos)
+cant_invocaciones(dic_datos, fuente_unico)
 cant_estructuras(dic_datos, fuente_unico)
 cant_comentarios(dic_datos, comentarios)
 hay_descripcion(dic_datos, comentarios)
 autor_funcion(dic_datos, comentarios)
 
 formato_tabla(dic_datos, panel_general)
+
+
 
 fuente_unico.close()
 comentarios.close()
