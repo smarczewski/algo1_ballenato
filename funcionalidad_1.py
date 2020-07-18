@@ -333,9 +333,7 @@ def formato_tabla(dic):
 
 def genera_csv(ar_salida, dic):
 
-    max_modulo = max(len(dic[funcion]["nombre.modulo"]) for funcion in dic)
-    max_autor = max(len(dic[funcion]["autor"]) for funcion in dic)
-
+    
     ar_salida.write("FUNCION, " + "PARAMETROS, " + "LINEAS, " + "INVOCACIONES, " + "RETURN, " + "IF, " + "FOR, " + "WHILE, " + "BREAK, " +
         "EXIT, " + "COMENTARIOS, " + "DESCRIPCION, " + "AUTOR\n")
     for func in dic:
