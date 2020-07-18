@@ -29,7 +29,7 @@ def obtener_nombre_mas_largo(funciones):
     return largo + 1
 
 
-def cortar_lista_funciones(funciones):
+def cortar_lista_funciones(funciones, largo):
     """[Autor: Santiago Marczewski]
     [Ayuda: Corta la lista de funciones para facilitar el formateo de la tabla]"""
     lista_cortada = [funciones[x:x+5] for x in range(0, len(funciones), 5)]
@@ -45,7 +45,7 @@ def mostrar_tabla():
     documentacion de Python]"""
     funciones = obtener_lista_funciones(fuente_unico)
     largo = obtener_nombre_mas_largo(funciones)
-    lista_cortada = cortar_lista_funciones(funciones)
+    lista_cortada = cortar_lista_funciones(funciones, largo)
     for funcion in lista_cortada:
         print(("+" + "-"*largo)*5 + "+", sep="")
         print("|", funcion[0], " "*(largo-len(funcion[0])), "|",
