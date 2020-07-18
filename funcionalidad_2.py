@@ -38,7 +38,7 @@ def cortar_lista_funciones(funciones, largo):
     return lista_cortada
 
 
-def mostrar_tabla():
+def mostrar_tabla(fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Imprime por pantalla una tabla de las funciones de la aplicacion
     formateado de manera similar a la tabla de built-in functions de la
@@ -135,7 +135,7 @@ def imprimir_codigo(instrucciones, adicionales):
         imprimir_formateado(siguiente_instruccion)
 
 
-def mostrar_funcion(nombre, tipo):
+def mostrar_funcion(nombre, tipo, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Muestra por pantalla la descripcion de ayuda, parametros,
     modulo y autor de la funcion pasada por parametro]"""
@@ -164,7 +164,7 @@ def mostrar_funcion(nombre, tipo):
         imprimir_codigo(instrucciones, adicionales)
 
 
-def mostrar_funcion_txt(nombre, texto):
+def mostrar_funcion_txt(nombre, texto, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Envia al archivo ayuda_funciones.txt la descripcion de ayuda, parametros,
     modulo y autor de la funcion pasada por parametro]"""
@@ -186,7 +186,7 @@ def mostrar_funcion_txt(nombre, texto):
     print("--Autor: ", autor, file=texto)
 
 
-def mostrar_todo(tipo, imprimir):
+def mostrar_todo(tipo, imprimir, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Muestra por pantalla la informacion correspondiente (? o #) para todas las
     funciones de la aplicacion]"""
@@ -195,18 +195,13 @@ def mostrar_todo(tipo, imprimir):
         texto = open("ayuda_funciones.txt", "w")
         print("Información asociada a las funciones de la aplicación: \n", file=texto)
         for funcion in funciones:
-            mostrar_funcion_txt(funcion, texto)
+            mostrar_funcion_txt(funcion, texto, fuente_unico, comentarios)
         print("="*80, file=texto)
         texto.close()
     else:
         for funcion in funciones:
-            mostrar_funcion(funcion, tipo)
+            mostrar_funcion(funcion, tipo, fuente_unico, comentarios)
         print("="*80)
-
-
-def limitar_lineas(texto):  # FALTA CODEAR ESTO
-    """[Autor: Santiago Marczewski]
-    [Ayuda: Formatea el txt para que las lineas no superen los 80 caracteres]"""
 
 
 def procesar_pedido(funcion):
@@ -228,7 +223,7 @@ def procesar_pedido(funcion):
     return (nombre, tipo, imprimir)
 
 
-def validar_funcion(funcion):
+def validar_funcion(funcion, fuente_unico):
     """[Autor: Santiago Marczewski]
     [Ayuda: Verifica que la funcion sea valida]"""
     valida = True
@@ -248,24 +243,18 @@ def validar_funcion(funcion):
 def funcionalidad_2():
     """[Autor: Santiago Marczewski]
     [Ayuda: Hice lo que pude ]"""
-    mostrar_tabla()
+    fuente_unico = open("fuente_unico.csv")
+    comentarios = open("comentarios.csv")
+    mostrar_tabla(fuente_unico, comentarios)
     funcion = input("Ingrese una funcion: ")
     while funcion:
-        if validar_funcion(funcion):
+        if validar_funcion(funcion, fuente_unico):
             nombre, tipo, imprimir = procesar_pedido(funcion)
             if imprimir or nombre == "todo":
-                mostrar_todo(tipo, imprimir)
+                mostrar_todo(tipo, imprimir, fuente_unico, comentarios)
             else:
-                mostrar_funcion(nombre, tipo)
+                mostrar_funcion(nombre, tipo, fuente_unico, comentarios)
                 print("=" * 80)
         else:
             print("Ingreso invalido, intente nuevamente")
         funcion = input("Ingrese una funcion: ")
-
-
-##########################################################
-os.chdir("C:\\Users\\Acer\\Desktop\\aaaaaaaaaaaa")
-fuente_unico = open("fuente_unico.csv")
-comentarios = open("comentarios.csv")
-
-funcionalidad_2()
