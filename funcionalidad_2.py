@@ -258,3 +258,6 @@ def funcionalidad_2():
         else:
             print("Ingreso invalido, intente nuevamente")
         funcion = input("Ingrese una funcion: ")
+    fuente_unico.close()
+    comentarios.close()
+    
