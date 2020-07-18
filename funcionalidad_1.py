@@ -6,7 +6,7 @@ Almacena los datos en un diccionario que tendra la forma
 {
 "funcion_1":
 {"nombre.modulo":"funcion_1.modulo", "parametros":n0, "lineas":n1, "invocaciones":n2,
- "return":n3, "if":n4, "for":n5, "while":n6, "break":n7, "exit":n8, "comentarios":n9,
+ "returns":n3, "ifs":n4, "fors":n5, "whiles":n6, "breaks":n7, "exits":n8, "comentarios":n9,
  "descripcion":"si"/"no", "autor":"nombre apellido"}
 
  "funcion_2": {...}
@@ -292,6 +292,7 @@ def autor_funcion(dic, archivo):
 
 
 
+
 def formato_tabla(dic):
 
     """
@@ -306,9 +307,10 @@ def formato_tabla(dic):
     
     formato = "| {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} |"
     formato_titulos = "| {:^" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
-    formato_fila = "\n| {:<" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
+    formato_fila = "\n| {:<" + str(max_modulo) + "}" + formato + "{:<" + str(max_autor) + "} |"
     
-    
+    #formato_titulos = "| {:^53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
+    #formato_fila = "\n| {:<53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
 
     print(formato_titulos.format("FUNCION", "PARAMETROS", "LINEAS", "INVOCACIONES", "RETURN", "IF", 
     "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS", "DESCRIPCION", "AUTOR"))
@@ -318,6 +320,7 @@ def formato_tabla(dic):
     for func in dic:
 
         #toma funcion1:{"nombre.modulo":"nombre.modulo", "parametros":n, ...}
+        
 
         print(formato_fila.format(dic[func]["nombre.modulo"], dic[func]["parametros"], dic[func]["lineas"], 
             dic[func]["invocaciones"], dic[func]["returns"], dic[func]["ifs"], dic[func]["fors"],
@@ -325,27 +328,50 @@ def formato_tabla(dic):
             dic[func]["descripcion"], dic[func]["autor"]))
 
 
+    
+
+
+def genera_csv(ar_salida, dic):
+
+    max_modulo = max(len(dic[funcion]["nombre.modulo"]) for funcion in dic)
+    max_autor = max(len(dic[funcion]["autor"]) for funcion in dic)
+
+    ar_salida.write("FUNCION, " + "PARAMETROS, " + "LINEAS, " + "INVOCACIONES, " + "RETURN, " + "IF, " + "FOR, " + "WHILE, " + "BREAK, " +
+        "EXIT, " + "COMENTARIOS, " + "DESCRIPCION, " + "AUTOR\n")
+    for func in dic:
+
+        ar_salida.write("\n" + dic[func]["nombre.modulo"] + ", " + str(dic[func]["parametros"]) + ", " + str(dic[func]["lineas"]) + ", " +
+            str(dic[func]["invocaciones"]) + ", " + str(dic[func]["returns"]) + ", " + str(dic[func]["ifs"]) + ", " + str(dic[func]["fors"]) +
+            ", " + str(dic[func]["whiles"]) + ", " + str(dic[func]["breaks"]) + ", " + str(dic[func]["exits"]) + ", " + str(dic[func]["comentarios"]) +
+            ", " + dic[func]["descripcion"] + ", " + dic[func]["autor"])
+
+
+
+    
 
 
 #-----------------------------------------------------
-fuente_unico = open("fuente_unico.csv", "r")
-comentarios = open("comentarios.csv", "r")
-panel_general = open("panel_general.txt", "w")
+def tabla_y_csv():
 
-dic_datos = {}
-nombre_funcion(dic_datos, fuente_unico)
-cant_parametros(dic_datos, fuente_unico)
-cant_lineas(dic_datos, fuente_unico)
-cant_invocaciones(dic_datos, fuente_unico)
-cant_estructuras(dic_datos, fuente_unico)
-cant_comentarios(dic_datos, comentarios)
-hay_descripcion(dic_datos, comentarios)
-autor_funcion(dic_datos, comentarios)
+    fuente_unico = open("fuente_unico.csv", "r")
+    comentarios = open("comentarios.csv", "r")
+    panel_general = open("panel_general.csv", "w")
 
-formato_tabla(dic_datos)
+    dic_datos = {}
+    nombre_funcion(dic_datos, fuente_unico)
+    cant_parametros(dic_datos, fuente_unico)
+    cant_lineas(dic_datos, fuente_unico)
+    cant_invocaciones(dic_datos, fuente_unico)
+    cant_estructuras(dic_datos, fuente_unico)
+    cant_comentarios(dic_datos, comentarios)
+    hay_descripcion(dic_datos, comentarios)
+    autor_funcion(dic_datos, comentarios)
+
+    formato_tabla(dic_datos)
+    genera_csv(panel_general, dic_datos)
+
+    fuente_unico.close()
+    comentarios.close()
+    panel_general.close()
 
 
-
-fuente_unico.close()
-comentarios.close()
-panel_general.close()
