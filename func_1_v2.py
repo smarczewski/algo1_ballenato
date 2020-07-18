@@ -120,8 +120,8 @@ def cant_lineas(dic, archivo):
 
         funcion = linea[0]
 
-        dic[funcion]["lineas"] = len(linea) - 3
-        #cantidad de campos menos dos que pertenecen a la primera linea (nombre y parametros) y uno que es el modulo
+        dic[funcion]["lineas"] = len(linea) - 2
+        #cantidad de campos menos dos, los que pertenecen a la primera linea (nombre y parametros) y el modulo.
 
         linea = leer_archivo(archivo)
 
@@ -292,19 +292,25 @@ def autor_funcion(dic, archivo):
 
 
 
-def formato_tabla(dic, ar_salida):
+def formato_tabla(dic):
 
     """
     [Autor: Camila Bartocci]
     [Ayuda: Toma el diccionario y le da formato de tabla. 
     Genera el archivo de salida panel_general.txt.]
     """
-
     
-    formato_titulos = "| {:^53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
-    formato_fila = "\n| {:<53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
+    
+    max_modulo = max(len(dic[funcion]["nombre.modulo"]) for funcion in dic)
+    max_autor = max(len(dic[funcion]["autor"]) for funcion in dic)
+    
+    formato = "| {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} |"
+    formato_titulos = "| {:^" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
+    formato_fila = "\n| {:<" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
+    
+    
 
-    ar_salida.write(formato_titulos.format("FUNCION", "PARAMETROS", "LINEAS", "INVOCACIONES", "RETURN", "IF", 
+    print(formato_titulos.format("FUNCION", "PARAMETROS", "LINEAS", "INVOCACIONES", "RETURN", "IF", 
     "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS", "DESCRIPCION", "AUTOR"))
 
     
@@ -313,11 +319,10 @@ def formato_tabla(dic, ar_salida):
 
         #toma funcion1:{"nombre.modulo":"nombre.modulo", "parametros":n, ...}
 
-        ar_salida.write(formato_fila.format(dic[func]["nombre.modulo"], dic[func]["parametros"], dic[func]["lineas"], 
+        print(formato_fila.format(dic[func]["nombre.modulo"], dic[func]["parametros"], dic[func]["lineas"], 
             dic[func]["invocaciones"], dic[func]["returns"], dic[func]["ifs"], dic[func]["fors"],
             dic[func]["whiles"], dic[func]["breaks"], dic[func]["exits"], dic[func]["comentarios"],
             dic[func]["descripcion"], dic[func]["autor"]))
-
 
 
 
@@ -337,7 +342,7 @@ cant_comentarios(dic_datos, comentarios)
 hay_descripcion(dic_datos, comentarios)
 autor_funcion(dic_datos, comentarios)
 
-formato_tabla(dic_datos, panel_general)
+formato_tabla(dic_datos)
 
 
 
