@@ -1,9 +1,12 @@
+import os
+
+
 def leer_lineas_csv(archivo):
     linea = archivo.readline().rstrip().split(",")
     return linea
 
 
-def obtener_lista_funciones(archivo):  # funcion_unico.csv#
+def obtener_lista_funciones(archivo):
     """[Autor: Santiago Marczewski]
     [Ayuda: Obtiene una lista de nombres de las funciones en la aplicacion]"""
     archivo.seek(0)
@@ -35,11 +38,14 @@ def cortar_lista_funciones(funciones):
     return lista_cortada
 
 
-def mostrar_tabla(lista_cortada):
+def mostrar_tabla():
     """[Autor: Santiago Marczewski]
     [Ayuda: Imprime por pantalla una lista de las funciones de la aplicacion
     formateado de manera similar a la tabla de built-in functions de la
     documentacion de Python]"""
+    funciones = obtener_lista_funciones(fuente_unico)
+    largo = obtener_nombre_mas_largo(funciones)
+    lista_cortada = cortar_lista_funciones(funciones)
     for funcion in lista_cortada:
         print("-"*((largo*5)+6), sep="")
         print("|", funcion[0], " "*(largo-len(funcion[0])), "|",
@@ -77,7 +83,7 @@ def buscar_funcion(archivo, funcion):
     return linea
 
 
-def imprimir(linea):
+def imprimir_formateado(linea):
     """[Autor: Santiago Marczewski]
     Imprime una linea formateada correctamente, incluyendo sus comas
     y saltos de linea originales]"""
@@ -106,10 +112,10 @@ def imprimir_codigo(instrucciones, adicionales):
     while len(instrucciones) > 0 and len(adicionales) > 0:
         control = nro_linea(siguiente_instruccion, siguiente_coment)
         if control == 1:
-            imprimir(siguiente_instruccion)
+            imprimir_formateado(siguiente_instruccion)
             siguiente_instruccion = instrucciones.pop(0)
         elif control == 2:
-            imprimir(siguiente_coment)
+            imprimir_formateado(siguiente_coment)
             if adicionales:
                 siguiente_coment = adicionales.pop(0)
         else:
@@ -121,106 +127,145 @@ def imprimir_codigo(instrucciones, adicionales):
                 siguiente_coment = adicionales.pop(0)
 
     while adicionales:
-        imprimir(siguiente_coment)
+        imprimir_formateado(siguiente_coment)
         if adicionales:
             siguiente_coment = adicionales.pop(0)
     while instrucciones:
-        imprimir(siguiente_instruccion)
+        imprimir_formateado(siguiente_instruccion)
         siguiente_instruccion = instrucciones.pop(0)
     if siguiente_instruccion:
-        imprimir(siguiente_instruccion)
+        imprimir_formateado(siguiente_instruccion)
 
 
-def mostrar_funcion_pregunta(funcion):
+def mostrar_funcion(nombre, tipo):
     """[Autor: Santiago Marczewski]
     [Ayuda: Muestra por pantalla la descripcion de ayuda, parametros,
     modulo y autor de la funcion pasada por parametro]"""
-    info_fuente = buscar_funcion(fuente_unico, funcion)
-    info_comentarios = buscar_funcion(comentarios, funcion)
+    info_fuente = buscar_funcion(fuente_unico, nombre)
+    info_comentarios = buscar_funcion(comentarios, nombre)
     ayuda = info_comentarios[2]
     parametros = info_fuente[1]
     modulo = info_fuente[2]
     autor = info_comentarios[1]
+    if tipo == "#":
+        instrucciones = info_fuente[3:]
+        adicionales = info_comentarios[3:]
 
     print("="*80)
-    print("--Funcion :", funcion)
+    print("--Funcion :", nombre)
     if ayuda:
-        print("--", ayuda.replace("/n/", "\n").replace("/c/", ","))
+        print("--", ayuda.replace("/n/", "\n").replace("/c/", ","), sep="")
     else:
         print("--Ayuda: No hay descripcion de ayuda disponible")
     print("--Parametros: ", parametros.replace("/c/", ","))
     print("--Modulo: ", modulo)
     print("--Autor: ", autor)
+    if tipo == "#":
+        print("-"*80)
+        print("--Codigo de la funcion:")
+        imprimir_codigo(instrucciones, adicionales)
 
 
-def mostrar_funcion_asterisco(funcion):
+def mostrar_funcion_txt(nombre, texto):
     """[Autor: Santiago Marczewski]
-    [Ayuda: Muestra por pantalla la descripcion de ayuda, parametros,
-    modulo, autor y ademas el codigo completo con instrucciones
-    y comentarios adicionales de la funcion pasada por parametro]"""
-    info_fuente = buscar_funcion(fuente_unico, funcion)
-    info_comentarios = buscar_funcion(comentarios, funcion)
+    [Ayuda: Envia al archivo ayuda_funciones.txt la descripcion de ayuda, parametros,
+    modulo y autor de la funcion pasada por parametro]"""
+    info_fuente = buscar_funcion(fuente_unico, nombre)
+    info_comentarios = buscar_funcion(comentarios, nombre)
     ayuda = info_comentarios[2]
     parametros = info_fuente[1]
     modulo = info_fuente[2]
     autor = info_comentarios[1]
-    instrucciones = info_fuente[3:]
-    adicionales = info_comentarios[3:]
-
-    print("="*80)
-    print("--Funcion :", funcion)
+    print("="*80, file=texto)
+    print("--Funcion :", nombre, file=texto)
     if ayuda:
-        print("--", ayuda.replace("/n/", "\n").replace("/c/", ","))
+        print("--", ayuda.replace("/n/", "\n").replace("/c/", ","),
+              sep="", file=texto)
     else:
-        print("--Ayuda: No hay descripcion de ayuda disponible")
-    print("--Parametros: ", parametros.replace("/c/", ","))
-    print("--Modulo: ", modulo)
-    print("--Autor: ", autor)
-    print("-"*80)
-    print("Codigo de la funcion:")
-    imprimir_codigo(instrucciones, adicionales)
+        print("--Ayuda: No hay descripcion de ayuda disponible", file=texto)
+    print("--Parametros: ", parametros.replace("/c/", ","), file=texto)
+    print("--Modulo: ", modulo, file=texto)
+    print("--Autor: ", autor, file=texto)
 
 
-def mostrar_todo(funcion):
+def mostrar_todo(tipo, imprimir):
     """[Autor: Santiago Marczewski]
     [Ayuda: Muestra la informacion (? o #) para todas las funciones de la aplicacion]"""
     funciones = obtener_lista_funciones(fuente_unico)
-    if funcion == "?todo":
+    if imprimir:
+        texto = open("ayuda_funciones.txt", "w")
+        print("Información asociada a las funciones de la aplicación: \n", file=texto)
         for funcion in funciones:
-            mostrar_funcion_pregunta(funcion)
-        print("="*80)
-    if funcion == "#todo":
+            mostrar_funcion_txt(funcion, texto)
+        print("="*80, file=texto)
+        texto.close()
+    else:
         for funcion in funciones:
-            mostrar_funcion_asterisco(funcion)
+            mostrar_funcion(funcion, tipo)
         print("="*80)
+
+
+def limitar_lineas(texto): ############## FALTA CODEAR ESTO
+    """[Autor: Santiago Marczewski]
+    [Ayuda: Formatea el txt para que las lineas no superen los 80 caracteres]"""
+
+
+def procesar_pedido(funcion):
+    """[Autor: Santiago Marczewski]
+    [Ayuda: ]"""
+    nombre = ""
+    tipo = ""
+    imprimir = ""
+    if len(funcion.split()) == 1:  # Si el ingreso tiene es de una palabra
+        nombre = funcion[1:]
+        tipo = funcion[0]
+        imprimir = False
+    elif len(funcion.split()) == 2:  # Si el ingreso tiene dos palabra
+        pedido = funcion.split()
+        nombre = pedido[1][1:]
+        tipo = pedido[1][0]
+        imprimir = pedido[0]
+    return (nombre, tipo, imprimir)
 
 
 def validar_funcion(funcion):
     """[Autor: Santiago Marczewski]
     [Ayuda: Sirve para verificar que la funcion ingresada sea valida]"""
-    nombre = funcion[1:]
+    valida = True
     funciones = obtener_lista_funciones(fuente_unico)
-    valida = False
-    if nombre in funciones:
-        valida = True
-    elif nombre == "todo":
-        valida = True
-    else:
+    funciones.append("todo")
+    nombre, tipo, imprimir = procesar_pedido(funcion)
+    if nombre not in funciones:
         valida = False
+    elif tipo not in ["?", "#"]:
+        valida = False
+    elif imprimir:
+        if funcion != "imprimir ?todo":
+            valida = False
     return valida
 
 
-def pedir_funcion():
+def funcionalidad_2():
     """[Autor: Santiago Marczewski]
-    [Ayuda: Pide al usuario el ingreso de una funcion y le muestra la informacion deseada]"""
-    funcion = str(input("Ingrese una funcion :"))
-    nombre = funcion[1:]
-    tipo = funcion[0]
-    while not validar_funcion(funcion):
-        funcion = str(input("Ingreso invalido, intente nuevamente :"))
-    if nombre == "todo":
-        mostrar_todo(funcion)
-    elif tipo == "?":
-        mostrar_funcion_pregunta(nombre)
-    else:
-        mostrar_funcion_asterisco(nombre)
+    [Ayuda: :( ]"""
+    mostrar_tabla()
+    funcion = input("Ingrese una funcion: ")
+    while funcion:
+        if validar_funcion(funcion):
+            nombre, tipo, imprimir = procesar_pedido(funcion)
+            if imprimir or nombre == "todo":
+                mostrar_todo(tipo, imprimir)
+            else:
+                mostrar_funcion(nombre, tipo)
+                print("=" * 80)
+        else:
+            print("Ingreso invalido, intente nuevamente")
+        funcion = input("Ingrese una funcion: ")
+
+
+##########################################################
+os.chdir("C:\\Users\\Acer\\Desktop\\aaaaaaaaaaaa")
+fuente_unico = open("fuente_unico.csv")
+comentarios = open("comentarios.csv")
+
+funcionalidad_2()
