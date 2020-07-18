@@ -15,7 +15,7 @@ import funcionalidad_2
 import funcionalidad_3
 import funcionalidad_4
 import funcionalidad_5
-import func_1_v2
+import funcionalidad_1
 
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
 
@@ -65,7 +65,10 @@ def funcion_principal():
     while continuar:
         opcion = mostrar_menu()    
         if opcion == "1":
-            func_1_v2.princ()
+            funcionalidad_1.princ()
+            
+        elif opcion == "2":
+            funcionalidad_2.funcionalidad_2()
             
         elif opcion == "3":
             funcionalidad_3.imprimir_tabla_inv()           
