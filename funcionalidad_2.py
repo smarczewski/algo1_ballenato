@@ -26,7 +26,7 @@ def obtener_nombre_mas_largo(funciones):
     for funcion in funciones:
         if len(funcion) > largo:
             largo = len(funcion)
-    return largo
+    return largo + 1
 
 
 def cortar_lista_funciones(funciones):
@@ -40,20 +40,20 @@ def cortar_lista_funciones(funciones):
 
 def mostrar_tabla():
     """[Autor: Santiago Marczewski]
-    [Ayuda: Imprime por pantalla una lista de las funciones de la aplicacion
+    [Ayuda: Imprime por pantalla una tabla de las funciones de la aplicacion
     formateado de manera similar a la tabla de built-in functions de la
     documentacion de Python]"""
     funciones = obtener_lista_funciones(fuente_unico)
     largo = obtener_nombre_mas_largo(funciones)
     lista_cortada = cortar_lista_funciones(funciones)
     for funcion in lista_cortada:
-        print("-"*((largo*5)+6), sep="")
+        print(("+" + "-"*largo)*5 + "+", sep="")
         print("|", funcion[0], " "*(largo-len(funcion[0])), "|",
               funcion[1], " "*(largo-len(funcion[1])), "|",
               funcion[2], " "*(largo-len(funcion[2])), "|",
               funcion[3], " "*(largo-len(funcion[3])), "|",
               funcion[4], " "*(largo-len(funcion[4])), "|", sep="")
-    print("-"*((largo*5)+6), sep="")
+    print(("+" + "-"*largo)*5 + "+", sep="")
 
 
 def nro_linea(instruccion, adicional):
@@ -94,9 +94,7 @@ def imprimir_formateado(linea):
 
 def eliminar_marcador(linea):
     """[Autor: Santiago Marczewski]
-    Formatea la linea de forma tal que puedan mostrarse una al lado
-    de la otra correctamente, en el caso de instrucciones y comentarios
-    adicionales que comparten linea]"""
+    Elimina el marcador de la linea pasada por parametro]"""
     segunda_barra = linea.index("/", 1)
     linea = linea[segunda_barra + 1:]
     return linea
@@ -190,7 +188,8 @@ def mostrar_funcion_txt(nombre, texto):
 
 def mostrar_todo(tipo, imprimir):
     """[Autor: Santiago Marczewski]
-    [Ayuda: Muestra la informacion (? o #) para todas las funciones de la aplicacion]"""
+    [Ayuda: Muestra por pantalla la informacion correspondiente (? o #) para todas las
+    funciones de la aplicacion]"""
     funciones = obtener_lista_funciones(fuente_unico)
     if imprimir:
         texto = open("ayuda_funciones.txt", "w")
@@ -205,14 +204,15 @@ def mostrar_todo(tipo, imprimir):
         print("="*80)
 
 
-def limitar_lineas(texto): ############## FALTA CODEAR ESTO
+def limitar_lineas(texto):  # FALTA CODEAR ESTO
     """[Autor: Santiago Marczewski]
     [Ayuda: Formatea el txt para que las lineas no superen los 80 caracteres]"""
 
 
 def procesar_pedido(funcion):
     """[Autor: Santiago Marczewski]
-    [Ayuda: ]"""
+    [Ayuda: Procesa el pedido del usuario y devuelve el nombre de la funcion
+    solicitada, el tipo de pedido y si hay que imprimirlo a .txt]"""
     nombre = ""
     tipo = ""
     imprimir = ""
@@ -230,7 +230,7 @@ def procesar_pedido(funcion):
 
 def validar_funcion(funcion):
     """[Autor: Santiago Marczewski]
-    [Ayuda: Sirve para verificar que la funcion ingresada sea valida]"""
+    [Ayuda: Verifica que la funcion sea valida]"""
     valida = True
     funciones = obtener_lista_funciones(fuente_unico)
     funciones.append("todo")
@@ -247,7 +247,7 @@ def validar_funcion(funcion):
 
 def funcionalidad_2():
     """[Autor: Santiago Marczewski]
-    [Ayuda: :( ]"""
+    [Ayuda: Hice lo que pude ]"""
     mostrar_tabla()
     funcion = input("Ingrese una funcion: ")
     while funcion:
