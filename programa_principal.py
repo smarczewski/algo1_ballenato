@@ -11,11 +11,11 @@ import ascii_arts
 import generar_archivos_csv
 import ordenar
 import os
-import funcionalidad_1
-import funcionalidad_2
-import funcionalidad_3
-import funcionalidad_4
-import funcionalidad_5
+import panel_general_de_funciones
+import consulta_de_funciones
+import analizador_de_reutilizacion_de_codigo
+import arbol_de_invocacion
+import informacion_por_desarrollador
 
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
 
@@ -65,19 +65,19 @@ def funcion_principal():
     while continuar:
         opcion = mostrar_menu()    
         if opcion == "1":
-            funcionalidad_1.tabla_y_csv()
+            panel_general_de_funciones.tabla_y_csv()
             
         elif opcion == "2":
-            funcionalidad_2.funcionalidad_2()
+            consulta_de_funciones.funcionalidad_2()
             
         elif opcion == "3":
-            funcionalidad_3.imprimir_tabla_inv()           
+            analizador_de_reutilizacion_de_codigo.imprimir_tabla_inv()           
 
         elif opcion == "4":
-            funcionalidad_4.generar_arbol()       
+            arbol_de_invocacion.generar_arbol()       
 
         elif opcion == "5":
-            funcionalidad_5.funcionalidad()
+            informacion_por_desarrollador.funcionalidad()
         
         continuar = regreso_al_menu()
                 

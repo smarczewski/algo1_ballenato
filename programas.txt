@@ -1,9 +1,9 @@
 programa_principal.py
 generar_archivos_csv.py
-funcionalidad_1.py
-funcionalidad_2.py
-funcionalidad_3.py
-funcionalidad_4.py
-funcionalidad_5.py
+panel_general_de_funciones.py
+consulta_de_funciones.py
+analizador_de_reutilizacion_de_codigo.py
+arbol_de_invocacion.py
+informacion_por_desarrollador.py
 exp_reg.py
 ordenar.py
