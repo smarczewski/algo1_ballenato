@@ -1,7 +1,9 @@
 programa_principal.py
 generar_archivos_csv.py
-arbol_invocacion.py
+funcionalidad_1.py
+funcionalidad_2.py
 funcionalidad_3.py
-lista_funciones.py
-manejo_imports.py
+funcionalidad_4.py
+funcionalidad_5.py
+exp_reg.py
 ordenar.py
