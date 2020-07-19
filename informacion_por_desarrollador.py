@@ -5,7 +5,7 @@ Ademas se muestra por pantalla el archivo generado.
 Se extrae informacion de los archivos "fuente_unico.csv" y "comentarios.csv".
 """
 import universales
-
+import os
 
 def diccionario_por_autor(ar_fuente, ar_comentarios):
     """[Autor: Gaston Proz]
@@ -88,7 +88,7 @@ def generar_participacion(ar_fuente, ar_comentarios, ar_participacion):
     porcentaje = porcentaje_por_autor(dicc)
     funciones = total_funciones(dicc)
     formato_funciones, formato_columnas, formato_resumen_autor, formato_total, largo_total = formato_participacion(dicc)
-    ar_participacion.write("{:>40}\n\n\n".format("Informe de desarrollo por autor"))
+    ar_participacion.write("{:>40}\n\n\n".format("Informe de Desarrollo Por Autor"))
     for autor in autor_ordenado:
         ar_participacion.write("Autor: "+autor+"\n\n")
         ar_participacion.write(formato_columnas.format("Funcion","Lineas"))
@@ -117,7 +117,7 @@ def formato_participacion(dicc):
 def imprimir_participacion():
     """[Autor: Gaston Proz]
     [Ayuda: Funcion que imprime por pantalla el archivo "participacion.txt" generado]"""
-    with open("participacion.txt", "r") as texto:
+    with open(os.path.join("funcionalidades", "participacion.txt"), "r") as texto:
         for linea in texto:
             print(linea.rstrip("\n"))
 
@@ -127,10 +127,9 @@ def funcionalidad():
     """
     ar_fuente = open("fuente_unico.csv", "r")
     ar_comentarios = open("comentarios.csv", "r")
-    ar_participacion = open("participacion.txt", "w")    
+    ar_participacion = open(os.path.join("funcionalidades", "participacion.txt"), "w")    
     generar_participacion(ar_fuente, ar_comentarios, ar_participacion)
     ar_participacion.close()
     imprimir_participacion()
     ar_fuente.close()
     ar_comentarios.close()
-
