@@ -21,6 +21,9 @@ CARPETA_FUNCIONES_ORDENADAS = "funciones"
 
 
 def mostrar_menu():
+    """[Autor: Grupo Ballenato]
+    [Ayuda: Despliega el menu de opciones]
+    """
     menu = ["Menu de opciones:",
         "1. Panel general de funciones",
         "2. Consulta de funciones",
@@ -53,6 +56,8 @@ def regreso_al_menu():
     return continuar
 
 def funcion_principal():
+    """[Autor: Grupo Ballenato]
+    """
     programas = open("programas.txt")
     ordenar.generar_arch_ordenados(programas)
     generar_archivos_csv.generar_csv()
