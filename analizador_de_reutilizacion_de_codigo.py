@@ -6,7 +6,7 @@ Tambien crea un archivo "analizador.txt" que contiene la
 tabla.
 --------------------------------------------------------------------------------
 """
-
+import os
 from exp_reg import contar_invocaciones
 from universales import leer_lineas_csv
 from universales import obtener_lista_funciones
@@ -100,8 +100,9 @@ def crear_tabla_inv(archivo, ar_tabla):
 def imprimir_tabla_inv():
     """[Autor: Jean Paul Yatim]
     [Ayuda: imprime la tabla del archivo "analizador.txt"]"""
+    ruta_analizador = os.path.join("funcionalidades", "analizador.txt")
     fuente = open('fuente_unico.csv','rt')
-    analizador = open('funcionalidades/analizador.txt','w+')
+    analizador = open(ruta_analizador,'w+')
     crear_tabla_inv(fuente, analizador)
     analizador.seek(0)
     linea = analizador.readline()
