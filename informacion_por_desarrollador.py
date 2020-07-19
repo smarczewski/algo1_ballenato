@@ -9,15 +9,15 @@ def leer_linea(archivo):
     linea = archivo.readline()
     return linea.rstrip("\n").split(",") if linea else ""
 
-def diccionario_por_autor(arFuente, arComentarios):
+def diccionario_por_autor(ar_fuente, ar_comentarios):
     """[Autor: Gaston Proz]
     [Ayuda: Lee los archivos csv y retorna un diccionario con cada autor como clave.
     Dentro de cada autor contiene listas con el nombre de la funcion como primer campo, y
     cantidad de lineas de dicha funcion como segundo campo]"""
-    arFuente.seek(0)
-    arComentarios.seek(0)
-    lineaF = leer_linea(arFuente)
-    lineaC = leer_linea(arComentarios)
+    ar_fuente.seek(0)
+    ar_comentarios.seek(0)
+    lineaF = leer_linea(ar_fuente)
+    lineaC = leer_linea(ar_comentarios)
     diccionario = {}
     while lineaF != "":
         funcionF = lineaF[0]        
@@ -27,8 +27,8 @@ def diccionario_por_autor(arFuente, arComentarios):
             diccionario[autor] = [[funcionF, lineas]]
         else:            
             diccionario[autor] += [[funcionF, lineas]]
-        lineaF = leer_linea(arFuente)
-        lineaC = leer_linea(arComentarios)
+        lineaF = leer_linea(ar_fuente)
+        lineaC = leer_linea(ar_comentarios)
     return diccionario
 
 def calcular_lineas_por_autor(diccionario):
@@ -80,26 +80,44 @@ def total_funciones(diccionario):
         funciones_cant += len(diccionario[autor])
     return funciones_cant
     
-def generar_participacion(arFuente, arComentarios, arParticipacion):
+def generar_participacion(ar_fuente, ar_comentarios, ar_participacion):
     """[Autor: Gaston Proz]
     [Ayuda: Funcion que genera el archivo participacion.txt]"""
-    dicc = diccionario_por_autor(arFuente, arComentarios) 
+    dicc = diccionario_por_autor(ar_fuente, ar_comentarios) 
     autor_ordenado = autor_ordenado_por_cant_lineas(dicc)
     total_lineas = calcular_lineas_totales(dicc)
     autor_lineas = calcular_lineas_por_autor(dicc)
     porcentaje = porcentaje_por_autor(dicc)
     funciones = total_funciones(dicc)
-    arParticipacion.write("{:>40}\n\n\n".format("Informe de desarrollo por autor"))
+    formato_funciones, formato_columnas, formato_resumen_autor, formato_total, largo_total = formato_participacion(dicc)
+    ar_participacion.write("{:>40}\n\n\n".format("Informe de desarrollo por autor"))
     for autor in autor_ordenado:
-        arParticipacion.write("Autor: "+autor+"\n\n")
-        arParticipacion.write("{:>14}{:>38}\n".format("Funcion","Lineas"))
-        arParticipacion.write("{:>57}\n".format(("-")*50))
+        ar_participacion.write("Autor: "+autor+"\n\n")
+        ar_participacion.write(formato_columnas.format("Funcion","Lineas"))
+        ar_participacion.write("       {}\n".format(("-")*largo_total))
         for funcion in range(len(dicc[autor])):
-            arParticipacion.write("       {:<40}  {:>2}\n".format(dicc[autor][funcion][0].replace("$", ""), dicc[autor][funcion][1]))
+            ar_participacion.write(formato_funciones.format(dicc[autor][funcion][0].replace("$", ""), dicc[autor][funcion][1]))
             if funcion == (len(dicc[autor])-1):
-                arParticipacion.write("{:>10} Funciones - Lineas {:>21}{:4.0f}%\n\n\n\n".format(len(dicc[autor]), autor_lineas[autor], porcentaje[autor]))
-    arParticipacion.write("Total: {:>3} Funciones - Lineas {:>21}".format(funciones, total_lineas))
+                ar_participacion.write(formato_resumen_autor.format(len(dicc[autor]), autor_lineas[autor], porcentaje[autor]))
+    ar_participacion.write(formato_total.format(funciones, total_lineas))
 
+def formato_participacion(dicc):
+    """[Autor: Gaston Proz]
+    [Ayuda: Funcion que contiene los formatos usados en la tabla]
+    """
+    nombre_funciones = []
+    for autor in dicc:
+        for funcion in range(len(dicc[autor])):
+            nombre_funciones.append(dicc[autor][funcion][0])
+    largo_funciones = max(len(i) for i in nombre_funciones)    
+    espacio = "       "
+    formato_funciones = str(espacio)+"{:<"+str(largo_funciones)+"}"+str(espacio+espacio)+"{:>2}\n"
+    formato_columnas = espacio+"{}{:>"+str(largo_funciones+11)+"}\n"
+    formato_resumen_autor = espacio+"{:>3} Funciones - Lineas {:>"+str(largo_funciones-7)+"} {:3.0f}%\n\n\n\n"
+    formato_total = "Total: {:>3} Funciones - Lineas {:>"+str(largo_funciones-7)+"}"
+    largo_total = largo_funciones+21
+    
+    return formato_funciones, formato_columnas, formato_resumen_autor, formato_total, largo_total
 
 def imprimir_participacion():
     """[Autor: Gaston Proz]
@@ -112,13 +130,12 @@ def funcionalidad():
     """[Autor: Gaston Proz]
     [Ayuda: Funcion principal de la funcionalidad]
     """
-    arFuente = open("fuente_unico.csv", "r")
-    arComentarios = open("comentarios.csv", "r")
-    arParticipacion = open("participacion.txt", "w")    
-    generar_participacion(arFuente, arComentarios, arParticipacion)
-    arParticipacion.close()
+    ar_fuente = open("fuente_unico.csv", "r")
+    ar_comentarios = open("comentarios.csv", "r")
+    ar_participacion = open("participacion.txt", "w")    
+    generar_participacion(ar_fuente, ar_comentarios, ar_participacion)
+    ar_participacion.close()
     imprimir_participacion()
-    arFuente.close()
-    arComentarios.close()
-    
+    ar_fuente.close()
+    ar_comentarios.close()
 
