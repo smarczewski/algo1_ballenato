@@ -1,45 +1,40 @@
-import re
 import exp_reg
+import os
+import re
+from universales import leer_lineas_csv
+
 
 """
-Almacena los datos en un diccionario que tendra la forma
+Este módulo muestra por pantalla una tabla que contiene, por columna, los siguientes datos:
+nombre de la funcion y modulo, cant parametros, cant lineas, cant invocaciones, cant
+return, cant if, cant for, cant while, cant break, cant exit, cant comentarios, si contiene
+o no descripcion y nombre del autor. También devuelve el archivo panel_general.csv, el cual
+contiene en cada linea la información mencionada anteriormente, y en la primera linea tiene
+las etiquetas de cada dato.
+
+
+Se almacenan los datos en un diccionario que tendra la forma
+
 {
 "funcion_1":
 {"nombre.modulo":"funcion_1.modulo", "parametros":n0, "lineas":n1, "invocaciones":n2,
  "returns":n3, "ifs":n4, "fors":n5, "whiles":n6, "breaks":n7, "exits":n8, "comentarios":n9,
- "descripcion":"si"/"no", "autor":"nombre apellido"}
+ "ayuda":"si"/"no", "autor":"nombre apellido"}
 
  "funcion_2": {...}
  "funcion_n":{...} 
  }
 
-en donde cada elemento tiene como clave el nombre de la funcion, y como valor, los datos
-asociados a ellas, especificados en el enunciado de la funcionalidad 1.
+en donde cada elemento tiene como clave el nombre de la funcion, y como valor, un diccionario que
+contiene los datos asociados a ellas, especificados al principio de este comentario y en el 
+enunciado de la funcionalidad 1.
 """
 
 
 
 
 
-def leer_archivo(archivo):
-
-    """
-    [Autor: Camila Bartocci]
-
-    [Ayuda: lee linea del archivo csv pasado por parametro, y
-    devuelve una lista con lo que contiene la funcion, donde cada 
-    elemento de dicha lista es una linea de la funcion.]
-
-    """
-
-    linea = archivo.readline() #"linea" seria una funcion entera 
-
-    return linea.rstrip().split(",") if linea else "" 
-
-
-
-
-def nombre_funcion(dic, archivo): #fuente unico
+def nombre_funcion(dic, archivo):
 
     """
     [Autor: Camila Bartocci]
@@ -47,21 +42,20 @@ def nombre_funcion(dic, archivo): #fuente unico
     las funciones como clave, y en el diccionario de valor, 
     {"nombre.modulo":funcion_1.modulo}. Utiliza fuente_unico]
     """
-
     
 
     archivo.seek(0)
 
-    linea = leer_archivo(archivo)
+    linea = leer_lineas_csv(archivo)
 
-    while linea:
+    while linea[0] != "":
 
         funcion, modulo = linea[0], linea[2]
 
 
         dic[funcion] = {"nombre.modulo":"{}.{}".format(funcion, modulo).replace("$", "")}
 
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
 
 
@@ -78,9 +72,9 @@ def cant_parametros(dic, archivo):
 
     archivo.seek(0)
 
-    linea = leer_archivo(archivo)
+    linea = leer_lineas_csv(archivo)
 
-    while linea:
+    while linea[0] != "":
 
         funcion, parametros = linea[0], linea[1]
         
@@ -98,7 +92,7 @@ def cant_parametros(dic, archivo):
             dic[funcion]["parametros"] = 1
 
 
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
 
 
@@ -114,16 +108,16 @@ def cant_lineas(dic, archivo):
 
     archivo.seek(0)
 
-    linea = leer_archivo(archivo)
+    linea = leer_lineas_csv(archivo)
 
-    while linea:
+    while linea[0] != "":
 
         funcion = linea[0]
 
         dic[funcion]["lineas"] = len(linea) - 2
         #cantidad de campos menos dos, los que pertenecen a la primera linea (nombre y parametros) y el modulo.
 
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
 
 
@@ -137,16 +131,17 @@ def cant_invocaciones(dic,archivo):
     contar_invocaciones, del modulo exp_reg. Utiliza fuente_unico.]
     """
 
+
     for funcion in dic:
 
         invocaciones = 0
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
-        while linea:
+        while linea[0] != "":
 
             instrucciones = "".join(linea[3:])
             invocaciones += exp_reg.contar_invocaciones(funcion, instrucciones)
-            linea = leer_archivo(archivo) 
+            linea = leer_lineas_csv(archivo) 
 
         dic[funcion]["invocaciones"] = invocaciones
         archivo.seek(0)
@@ -167,7 +162,7 @@ def cant_estructuras(dic, archivo):
     
     archivo.seek(0)
 
-    linea = leer_archivo(archivo)
+    linea = leer_lineas_csv(archivo)
 
     cont_return = 0
     cont_if = 0 #cuenta if y elif
@@ -177,7 +172,7 @@ def cant_estructuras(dic, archivo):
     cont_exit = 0
 
 
-    while linea:
+    while linea[0] != "":
 
         funcion = linea[0]
 
@@ -205,7 +200,7 @@ def cant_estructuras(dic, archivo):
         cont_break = 0
         cont_exit = 0
 
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
 
 
@@ -221,15 +216,15 @@ def cant_comentarios(dic, archivo):
 
     archivo.seek(0)
 
-    linea = leer_archivo(archivo)
+    linea = leer_lineas_csv(archivo)
 
-    while linea:
+    while linea[0] != "":
 
         funcion = linea[0]
 
         dic[funcion]["comentarios"] = len(linea[3:])
 
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
 
 
@@ -239,30 +234,31 @@ def hay_descripcion(dic, archivo):
 
     """
     [Autor: Camila Bartocci]
-    [Ayuda: Agrega, en el diccionario de valor, "descripcion":"Si",
-    si la funcion contiene descripcion, o "descripcion":"No", en caso
+    [Ayuda: Agrega, en el diccionario de valor, "ayuda":"Si",
+    si la funcion contiene descripcion, o "ayuda":"No", en caso
     contrario, a cada funcion del diccionario principal. Utiliza comentarios.]
     """
 
+
     archivo.seek(0)
 
-    linea = leer_archivo(archivo)
+    linea = leer_lineas_csv(archivo)
 
-    while linea:
+    while linea[0] != "":
 
         funcion = linea[0]
 
         if linea[2]:
 
-            dic[funcion]["descripcion"] = "Si"
+            dic[funcion]["ayuda"] = "Si"
 
         else:
 
-            dic[funcion]["descripcion"] = "No"
+            dic[funcion]["ayuda"] = "No"
 
 
         
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
 
 
@@ -278,15 +274,15 @@ def autor_funcion(dic, archivo):
 
     archivo.seek(0)
 
-    linea = leer_archivo(archivo)
+    linea = leer_lineas_csv(archivo)
 
-    while linea:
+    while linea[0] != "":
 
         funcion = linea[0]
 
         dic[funcion]["autor"] = linea[1]
 
-        linea = leer_archivo(archivo)
+        linea = leer_lineas_csv(archivo)
 
 
 
@@ -297,23 +293,22 @@ def formato_tabla(dic):
 
     """
     [Autor: Camila Bartocci]
-    [Ayuda: Toma el diccionario y le da formato de tabla. 
-    Genera el archivo de salida panel_general.txt.]
+    [Ayuda: Toma el diccionario, ya completo, y le da
+    formato de tabla.]
     """
     
     
     max_modulo = max(len(dic[funcion]["nombre.modulo"]) for funcion in dic)
     max_autor = max(len(dic[funcion]["autor"]) for funcion in dic)
     
-    formato = "| {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} |"
+    formato = "| {:^10} | {:^6} | {:^12} | {:^6} | {:^8} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^5} |"
     formato_titulos = "| {:^" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
-    formato_fila = "\n| {:<" + str(max_modulo) + "}" + formato + "{:<" + str(max_autor) + "} |"
+    formato_fila = "\n| {:<" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
     
-    #formato_titulos = "| {:^53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
-    #formato_fila = "\n| {:<53} | {:^10} | {:^6} | {:^12} | {:^6} | {:^2} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^11} | {:^22} |"
+   
 
-    print(formato_titulos.format("FUNCION", "PARAMETROS", "LINEAS", "INVOCACIONES", "RETURN", "IF", 
-    "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS", "DESCRIPCION", "AUTOR"))
+    print(formato_titulos.format("FUNCION", "PARAMETROS", "LINEAS", "INVOCACIONES", "RETURN", "IF/ELIF", 
+    "FOR", "WHILE", "BREAK", "EXIT", "COMENTARIOS", "AYUDA", "AUTOR"))
 
     
 
@@ -325,7 +320,7 @@ def formato_tabla(dic):
         print(formato_fila.format(dic[func]["nombre.modulo"], dic[func]["parametros"], dic[func]["lineas"], 
             dic[func]["invocaciones"], dic[func]["returns"], dic[func]["ifs"], dic[func]["fors"],
             dic[func]["whiles"], dic[func]["breaks"], dic[func]["exits"], dic[func]["comentarios"],
-            dic[func]["descripcion"], dic[func]["autor"]))
+            dic[func]["ayuda"], dic[func]["autor"]))
 
 
     
@@ -333,27 +328,40 @@ def formato_tabla(dic):
 
 def genera_csv(ar_salida, dic):
 
+    """
+    [Autor: Camila Bartocci]
+    [Ayuda: Genera el archivo panel_general.csv. Toma
+    como parametros el archivo de salida y el diccionario, 
+    ya completo.]
+    """
+
     
-    ar_salida.write("FUNCION, " + "PARAMETROS, " + "LINEAS, " + "INVOCACIONES, " + "RETURN, " + "IF, " + "FOR, " + "WHILE, " + "BREAK, " +
-        "EXIT, " + "COMENTARIOS, " + "DESCRIPCION, " + "AUTOR\n")
+    ar_salida.write("FUNCION, " + "PARAMETROS, " + "LINEAS, " + "INVOCACIONES, " + "RETURN, " + "IF/ELIF, " + "FOR, " 
+        + "WHILE, " + "BREAK, " + "EXIT, " + "COMENTARIOS, " + "AYUDA, " + "AUTOR")
     for func in dic:
 
         ar_salida.write("\n" + dic[func]["nombre.modulo"] + ", " + str(dic[func]["parametros"]) + ", " + str(dic[func]["lineas"]) + ", " +
             str(dic[func]["invocaciones"]) + ", " + str(dic[func]["returns"]) + ", " + str(dic[func]["ifs"]) + ", " + str(dic[func]["fors"]) +
             ", " + str(dic[func]["whiles"]) + ", " + str(dic[func]["breaks"]) + ", " + str(dic[func]["exits"]) + ", " + str(dic[func]["comentarios"]) +
-            ", " + dic[func]["descripcion"] + ", " + dic[func]["autor"])
+            ", " + dic[func]["ayuda"] + ", " + dic[func]["autor"])
 
 
 
     
 
 
-#-----------------------------------------------------
-def tabla_y_csv():
+#--------------------------------------------------------
 
-    fuente_unico = open("fuente_unico.csv", "r")
+def genera_dic():
+
+    """
+    [Autor: Camila Bartocci]
+    [Ayuda: genera el diccionario con los datos de cada funcion]
+    """
+
     comentarios = open("comentarios.csv", "r")
-    panel_general = open("panel_general.csv", "w")
+    fuente_unico = open("fuente_unico.csv", "r")
+    
 
     dic_datos = {}
     nombre_funcion(dic_datos, fuente_unico)
@@ -365,11 +373,51 @@ def tabla_y_csv():
     hay_descripcion(dic_datos, comentarios)
     autor_funcion(dic_datos, comentarios)
 
-    formato_tabla(dic_datos)
+    comentarios.close()
+    fuente_unico.close()
+    
+
+    return dic_datos
+
+
+
+def genera_panel_csv(dic_datos):
+
+    """
+    [Autor: Camila Bartocci]
+    [Ayuda: crea el archivo panel_general.csv y lo
+    almacena en la carpeta funcionaliidades. Toma como
+    parametro el diccionario, ya completo.]
+    """
+
+    panel_general = open(os.path.join("funcionalidades", "panel_general.csv"), "w")
+
     genera_csv(panel_general, dic_datos)
 
-    fuente_unico.close()
-    comentarios.close()
     panel_general.close()
+
+
+
+def funcionalidad_panel():
+
+    """
+    [Autor: Camila Bartocci]
+    [Ayuda: articula las funciones formato_tabla y
+    genera_panel_csv para ejecutar la funcionalidad 1.]
+    """
+
+    dic = genera_dic()
+    formato_tabla(dic)
+    genera_panel_csv(dic)
+
+
+
+
+#------------------------- PRUEBA -------------------------
+
+#funcionalidad_panel()
+
+
+
 
 
