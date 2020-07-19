@@ -8,27 +8,8 @@ tabla.
 """
 
 from exp_reg import contar_invocaciones
-
-def leer_linea_csv(archivo):
-    """[Autor: Jean Paul Yatim]
-    [Ayuda: A pertir de una linea de un .csv, devuelve una
-    lista de todos los valores que esten separados por ",".]"""
-    linea = archivo.readline()
-    linea_archivo = linea.rstrip()
-    return linea_archivo.split(',')
-
-def listar_funciones(fuente_unico):
-    """[Autor: Jean Paul Yatim]
-    [Ayuda: Crea una lista con los nombres de todas las
-    funciones del programa.]"""
-    fuente_unico.seek(0)
-    linea = leer_linea_csv(fuente_unico)
-    funciones = []
-    while linea[0] != "":
-        funciones.append(linea[0])
-        linea = leer_linea_csv(fuente_unico)
-    fuente_unico.seek(0)
-    return funciones
+from universales import leer_lineas_csv
+from universales import obtener_lista_funciones
 
 def encontrar_invocaciones(linea, funciones):
     """[Autor: Jean Paul Yatim]
@@ -55,13 +36,13 @@ def reunir_invocaciones(archivo):
     Ej: Si la funcion A invoca a B 3 veces, C invoca a D 2 veces
     y a E 1 vez y F no invoca a nadie, el diccionario seria:
     {A:{B:3}, C:{D:2, E:1}, F:{}}]"""
-    funciones = listar_funciones(archivo)
-    linea = leer_linea_csv(archivo)
+    funciones = obtener_lista_funciones()
+    linea = leer_lineas_csv(archivo)
     funcs_llamadas = {}
     while linea[0] != "":
         func_llama = linea[0]        
         funcs_llamadas[func_llama] = encontrar_invocaciones(linea, funciones)
-        linea = leer_linea_csv(archivo)
+        linea = leer_lineas_csv(archivo)
     return funciones, funcs_llamadas
 
 def formato_filas_inv(funcs_llamadas, funcs, x, filas, total_inv):
@@ -120,7 +101,7 @@ def imprimir_tabla_inv():
     """[Autor: Jean Paul Yatim]
     [Ayuda: imprime la tabla del archivo "analizador.txt"]"""
     fuente = open('fuente_unico.csv','rt')
-    analizador = open('analizador.txt','w+')
+    analizador = open('funcionalidades/analizador.txt','w+')
     crear_tabla_inv(fuente, analizador)
     analizador.seek(0)
     linea = analizador.readline()
@@ -133,5 +114,5 @@ def imprimir_tabla_inv():
     analizador.close()
 
 #------Prueba--------#
-    
+
 #imprimir_tabla_inv()
