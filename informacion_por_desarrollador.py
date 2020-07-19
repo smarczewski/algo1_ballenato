@@ -4,10 +4,8 @@ participacion de cada integrante y genera el archivo "participacion.txt" con la 
 Ademas se muestra por pantalla el archivo generado.
 Se extrae informacion de los archivos "fuente_unico.csv" y "comentarios.csv".
 """
+import universales
 
-def leer_linea(archivo):
-    linea = archivo.readline()
-    return linea.rstrip("\n").split(",") if linea else ""
 
 def diccionario_por_autor(ar_fuente, ar_comentarios):
     """[Autor: Gaston Proz]
@@ -16,10 +14,10 @@ def diccionario_por_autor(ar_fuente, ar_comentarios):
     cantidad de lineas de dicha funcion como segundo campo]"""
     ar_fuente.seek(0)
     ar_comentarios.seek(0)
-    lineaF = leer_linea(ar_fuente)
-    lineaC = leer_linea(ar_comentarios)
+    lineaF = universales.leer_lineas_csv(ar_fuente)
+    lineaC = universales.leer_lineas_csv(ar_comentarios)
     diccionario = {}
-    while lineaF != "":
+    while lineaF[0] != "":
         funcionF = lineaF[0]        
         autor = lineaC[1]
         lineas = len(lineaF[3:])       
@@ -27,8 +25,8 @@ def diccionario_por_autor(ar_fuente, ar_comentarios):
             diccionario[autor] = [[funcionF, lineas]]
         else:            
             diccionario[autor] += [[funcionF, lineas]]
-        lineaF = leer_linea(ar_fuente)
-        lineaC = leer_linea(ar_comentarios)
+        lineaF = universales.leer_lineas_csv(ar_fuente)
+        lineaC = universales.leer_lineas_csv(ar_comentarios)
     return diccionario
 
 def calcular_lineas_por_autor(diccionario):
@@ -103,19 +101,16 @@ def generar_participacion(ar_fuente, ar_comentarios, ar_participacion):
 
 def formato_participacion(dicc):
     """[Autor: Gaston Proz]
-    [Ayuda: Funcion que contiene los formatos usados en la tabla]
+    [Ayuda: Funcion que contiene los formatos usados en la tabla de participacion]
     """
-    nombre_funciones = []
-    for autor in dicc:
-        for funcion in range(len(dicc[autor])):
-            nombre_funciones.append(dicc[autor][funcion][0])
+    nombre_funciones = universales.obtener_lista_funciones()   
     largo_funciones = max(len(i) for i in nombre_funciones)    
     espacio = "       "
-    formato_funciones = str(espacio)+"{:<"+str(largo_funciones)+"}"+str(espacio+espacio)+"{:>2}\n"
+    formato_funciones = espacio+"{:<"+str(largo_funciones)+"}"+(espacio*2)+"{:>2}\n"
     formato_columnas = espacio+"{}{:>"+str(largo_funciones+11)+"}\n"
-    formato_resumen_autor = espacio+"{:>3} Funciones - Lineas {:>"+str(largo_funciones-7)+"} {:3.0f}%\n\n\n\n"
-    formato_total = "Total: {:>3} Funciones - Lineas {:>"+str(largo_funciones-7)+"}"
-    largo_total = largo_funciones+21
+    formato_resumen_autor = espacio+"{:>3} Funciones - Lineas {:>"+str(largo_funciones-len(espacio))+"} {:3.0f}%\n\n\n\n"
+    formato_total = "Total: {:>3} Funciones - Lineas {:>"+str(largo_funciones-len(espacio))+"}"
+    largo_total = largo_funciones+len(espacio*3)
     
     return formato_funciones, formato_columnas, formato_resumen_autor, formato_total, largo_total
 

@@ -5,5 +5,6 @@ consulta_de_funciones.py
 analizador_de_reutilizacion_de_codigo.py
 arbol_de_invocacion.py
 informacion_por_desarrollador.py
+universales.py
 exp_reg.py
 ordenar.py
