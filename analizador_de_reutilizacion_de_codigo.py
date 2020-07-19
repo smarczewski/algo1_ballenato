@@ -7,7 +7,7 @@ tabla.
 --------------------------------------------------------------------------------
 """
 
-import exp_reg
+from exp_reg import contar_invocaciones
 
 def leer_linea_csv(archivo):
     """[Autor: Jean Paul Yatim]
@@ -38,7 +38,7 @@ def encontrar_invocaciones(linea, funciones):
     veces_llamado = {}
     for func_llamada in funciones:
         for codigo in linea[3:]:
-            cant_inv = exp_reg.contar_invocaciones(func_llamada, codigo)
+            cant_inv = contar_invocaciones(func_llamada, codigo)
             if cant_inv > 0 and func_llamada not in veces_llamado:
                 veces_llamado[func_llamada] = cant_inv
             elif cant_inv > 0 and func_llamada in veces_llamado:
@@ -67,7 +67,7 @@ def reunir_invocaciones(archivo):
 def formato_filas_inv(funcs_llamadas, funcs, x, filas, total_inv):
     """[Autor: Jean Paul Yatim]
     [Ayuda: crea el formato de cada fila de la tabla, indicando:
-    "x" si la función de la fila es invocada porla funciónde la
+    "x" si la función de la fila es invocada por la función de la
     columna; n si la funcion de la fila invoca a la de la columna
     n veces; y si ninguna invoca a ninguna, deja un espacio en
     blanco]"""
@@ -92,25 +92,28 @@ def crear_tabla_inv(archivo, ar_tabla):
     invocada.
     La tabla es copiada al archivo "analizador.txt"]"""
     funcs, funcs_llamadas = reunir_invocaciones(archivo)
+    fun_larga = max(funcs, key = len)
+    largo = len(fun_larga) + 4
+    ancho_columna = "|{:<" + str(largo) + "}|"
     columnas = len(funcs)
     n_columnas = ""
     for n in range(1,columnas+1): n_columnas += "{:^3}|".format(n)
-    ar_tabla.write("-"*42 + "----"*columnas + "\n")
-    ar_tabla.write("|{:<40}|".format("FUNCIONES") + n_columnas + "\n")
-    ar_tabla.write("|" + "-"*40 + "|---"*columnas + "|\n")
+    ar_tabla.write("-"*(largo+2) + "----"*columnas + "\n")
+    ar_tabla.write(ancho_columna.format("FUNCIONES") + n_columnas + "\n")
+    ar_tabla.write("|" + "-"*largo + "|---"*columnas + "|\n")
     total_inv = {}
     for f in funcs: total_inv[f] = 0
     filas = ""
     for x in range(1,columnas+1):
         filas, total_inv = formato_filas_inv(funcs_llamadas, funcs, x, filas, total_inv)
         n_funcion = "{}-{}".format(x, funcs[x-1])
-        ar_tabla.write("|{:<40}|".format(n_funcion.replace("$","")) + filas+"\n")
-        ar_tabla.write("|" + "-"*40 + "|---"*columnas + "|\n")
+        ar_tabla.write(ancho_columna.format(n_funcion.replace("$","")) + filas+"\n")
+        ar_tabla.write("|" + "-"*largo + "|---"*columnas + "|\n")
         filas = ""
     total = ""
     for tot in total_inv: total += "{:^3}|".format(total_inv[tot])
-    ar_tabla.write("|{:<40}|".format("Total Invocaciones") + total + "\n")
-    ar_tabla.write("-"*42 + "----"*columnas + "\n")
+    ar_tabla.write(ancho_columna.format("Total Invocaciones") + total + "\n")
+    ar_tabla.write("-"*(largo+2) + "----"*columnas + "\n")
 
 
 def imprimir_tabla_inv():
