@@ -1,23 +1,5 @@
-import os
-
-
-def leer_lineas_csv(archivo):
-    linea = archivo.readline().rstrip().split(",")
-    return linea
-
-
-def obtener_lista_funciones2(archivo):
-    """[Autor: Santiago Marczewski]
-    [Ayuda: Obtiene una lista de nombres de las funciones en la aplicacion]"""
-    archivo.seek(0)
-    funciones = []
-    linea = leer_lineas_csv(archivo)
-    while linea[0]:
-        funciones.append(linea[0])
-        linea = leer_lineas_csv(archivo)
-    archivo.seek(0)
-    return funciones
-
+from universales import leer_lineas_csv
+from universales import obtener_lista_funciones
 
 def obtener_nombre_mas_largo(funciones):
     """[Autor: Santiago Marczewski]
@@ -43,7 +25,7 @@ def mostrar_tabla(fuente_unico, comentarios):
     [Ayuda: Imprime por pantalla una tabla de las funciones de la aplicacion
     formateado de manera similar a la tabla de built-in functions de la
     documentacion de Python]"""
-    funciones = obtener_lista_funciones2(fuente_unico)
+    funciones = obtener_lista_funciones()
     largo = obtener_nombre_mas_largo(funciones)
     lista_cortada = cortar_lista_funciones(funciones, largo)
     for funcion in lista_cortada:
@@ -190,7 +172,7 @@ def mostrar_todo(tipo, imprimir, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Muestra por pantalla la informacion correspondiente (? o #) para todas las
     funciones de la aplicacion]"""
-    funciones = obtener_lista_funciones2(fuente_unico)
+    funciones = obtener_lista_funciones()
     if imprimir:
         texto = open("ayuda_funciones.txt", "w")
         print("Información asociada a las funciones de la aplicación: \n", file=texto)
@@ -227,7 +209,7 @@ def validar_funcion(funcion, fuente_unico):
     """[Autor: Santiago Marczewski]
     [Ayuda: Verifica que la funcion sea valida]"""
     valida = True
-    funciones = obtener_lista_funciones2(fuente_unico)
+    funciones = obtener_lista_funciones()
     funciones.append("todo")
     nombre, tipo, imprimir = procesar_pedido(funcion)
     if nombre not in funciones:
