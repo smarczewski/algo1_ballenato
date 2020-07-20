@@ -5,7 +5,7 @@ Modulo en el que se definen funciones relacionadas a expresiones regulares
 import re
 
 def eliminar_cadenas(texto):
-  """[Autor: Elian Foppiano]
+  """[Autor: Elian Daniel Foppiano]
   [Ayuda: Elimina las cadenas del texto recibido]"""
 
   """En esta funcion se uso en primer lugar una
@@ -19,7 +19,7 @@ def eliminar_cadenas(texto):
   return texto
 
 def eliminar_coment_linea(linea):
-  """[Autor: Elian Foppiano]
+  """[Autor: Elian Daniel Foppiano]
   [Ayuda: Elimina los comentarios que se encuentran
   en la misma linea que una instruccion.
   Ej: variable = 5 #Comentario]"""
@@ -42,7 +42,7 @@ def eliminar_coment_linea(linea):
   return linea_sin_coment
 
 def obtener_coment_linea(linea):
-  """[Autor: Elian Foppiano]
+  """[Autor: Elian Daniel Foppiano]
   [Ayuda: Devuelve el comentario de linea
   que puede producirse en una instruccion]"""
   
@@ -50,7 +50,7 @@ def obtener_coment_linea(linea):
   return linea.replace(linea_sin_coment, "")
 
 def contar_invocaciones(funcion, linea):
-  """[Autor: Elian Foppiano]
+  """[Autor: Elian Daniel Foppiano]
   [Ayuda: Cuenta la cantidad de veces que una funcion
   se invoca en una linea de codigo recibida]"""
 
@@ -67,7 +67,7 @@ def contar_invocaciones(funcion, linea):
   return len(invocaciones)
 
 def buscar_lista_invocaciones(l_funciones, linea):
-  """[Autor: Elian Foppiano]
+  """[Autor: Elian Daniel Foppiano]
   [Ayuda: Busca las funciones en una linea recibida
   y devuelve una lista con las funciones que se
   encontraron, ordenada por orden de aparicion,

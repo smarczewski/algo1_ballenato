@@ -36,7 +36,7 @@ PATH_FUENTE_UNICO = "fuente_unico.csv"
 
 
 def generar_dic_cantidad_lineas():
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Genera un diccionario cuyas
     claves son los nombres de las funciones
     definidas en el programa, y los valores son
@@ -57,7 +57,7 @@ def generar_dic_cantidad_lineas():
 
 
 def generar_dic_invocaciones():
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Genera genera el diccionario
     principal de funciones e invocaciones]"""
 
@@ -81,7 +81,7 @@ def generar_dic_invocaciones():
     return dic_funciones
 
 def reemplazar_valor(lista, original, reemplazo):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Reemplaza un valor dado de una lista
     por otro]"""
 
@@ -94,7 +94,7 @@ def reemplazar_valor(lista, original, reemplazo):
     return l_reemplazo
 
 def eliminar_recursividad(dic_funciones, dic_lineas):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Soluciona el problema de las
     funciones recursivas modificando
     el diccionario de tal manera que se
@@ -118,7 +118,7 @@ def eliminar_recursividad(dic_funciones, dic_lineas):
         dic_funciones[reemplazo] = []
 
 def buscar_principal():
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Busca la funcion principal por su marcador]"""
 
     """Por las hipotesis iniciales, siempre debe existir
@@ -130,7 +130,7 @@ def buscar_principal():
     return l_funciones[i]
 
 def imprimir_arbol(funcion, dic_funciones, dic_lineas, espacio_acum = -1):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Funcion recursiva que se
     encarga de interpretar el diccionario
     de funciones e imprimirlo apropiadamente]"""
@@ -171,7 +171,7 @@ def imprimir_arbol(funcion, dic_funciones, dic_lineas, espacio_acum = -1):
         print()
 
 def generar_arbol():
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Funcion principal del modulo.
     Articula el modulo para generar el arbol
     de invocacion solicitado]"""

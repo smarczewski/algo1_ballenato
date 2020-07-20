@@ -17,7 +17,7 @@ COMILLAS_SIMPLES = chr(39) * 3
 TAM_TABULACION = 4
 
 def leer_unificado(arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Lee una linea del archivo y la
     devuelve convirtiendo las comillas triples 
     simples en comillas triples dobles y las
@@ -38,7 +38,7 @@ def leer_unificado(arch):
     return linea
 
 def buscar_invocacion(dir_archivo):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Devuelve la primera invocacion
     a funcion que encuentre en el programa y
     que se realice por fuera de cualquier bloque
@@ -67,7 +67,7 @@ def buscar_invocacion(dir_archivo):
     return invocacion[0][:-1]
 
 def listar_funciones_codigo(arch_entrada, principal):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Crea una lista en el que cada
     elemento es el codigo de una funcion definida
     en arch_entrada. Devuelve la lista ordenada
@@ -110,7 +110,7 @@ def listar_funciones_codigo(arch_entrada, principal):
     return funciones
 
 def generar_dir(dir_arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Genera la ruta en la que se guardan
     los archivos con las funciones ordenadas]"""
 
@@ -120,7 +120,7 @@ def generar_dir(dir_arch):
     return dir_arch
 
 def eliminar_archivos_viejos(carpeta):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Elimina los archivos viejos de
     la carpeta recibida, para evitar que los
     analisis previos interfieran en el merge
@@ -132,7 +132,7 @@ def eliminar_archivos_viejos(carpeta):
         os.remove(path_abs)
 
 def generar_arch_ordenados(programas):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Genera los archivos con las funciones
     ordenadas alfabeticamente y las guarda en la
     carpeta "funciones"]"""

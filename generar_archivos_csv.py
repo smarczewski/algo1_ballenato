@@ -20,7 +20,7 @@ import exp_reg
 from universales import obtener_comentario_multilinea
 
 def leer_centinela(arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Lee una linea del archivo y
     la devuelve si no se llego al final del
     archivo. De lo contrario, devuelve el centinela
@@ -30,7 +30,7 @@ def leer_centinela(arch):
     return linea.rstrip() if linea else CENTINELA
 
 def guardar_nombre_funcion(firma, arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Recibe la firma de una funcion y guarda
     su nombre]"""
 
@@ -38,7 +38,7 @@ def guardar_nombre_funcion(firma, arch):
     arch.write(nombre_funcion)
 
 def guardar_campo(dato, arch, formateado = True, nro_linea = None):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda un dato en en archivo .csv recibido.
     Si el campo debe estar formateado, se utilizan los marcadores
     necesarios para almacenar la informacion relacionada al tamaño
@@ -54,7 +54,7 @@ def guardar_campo(dato, arch, formateado = True, nro_linea = None):
             arch.write(f",{dato}")
 
 def guardar_parametros(firma, arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Recibe la firma de una funcion y la guarda
     en un archivo]"""
 
@@ -63,7 +63,7 @@ def guardar_parametros(firma, arch):
     return parametros
 
 def obtener_nombre_arch(arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Devuelve el nombre del archivo recibido, sin
     la extension]"""
 
@@ -72,7 +72,7 @@ def obtener_nombre_arch(arch):
     return nombre
 
 def guardar_instrucciones(linea, arch_entrada, fuente_unico):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda las instrucciones de la funcion
     (campos adicionales de fuente_unico.csv)]"""
 
@@ -98,7 +98,7 @@ def guardar_instrucciones(linea, arch_entrada, fuente_unico):
     return linea
 
 def guardar_fuente_unico(firma_funcion, arch_entrada, fuente_unico):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda todo lo referido al codigo fuente de la funcion
     en fuente_unico.csv]"""
 
@@ -122,7 +122,7 @@ def guardar_fuente_unico(firma_funcion, arch_entrada, fuente_unico):
     return linea
 
 def obtener_comentario_ayuda(linea_inicio, arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Recorre el archivo hasta que se termina el
     comentario de ayuda, y lo devuelve apropiadamente,
     con los saltos de linea adaptados al .csv]"""
@@ -145,7 +145,7 @@ def obtener_comentario_ayuda(linea_inicio, arch):
     return autor.replace("[Autor: ", ""), ayuda.replace("[", "")
 
 def guardar_comentarios_adicionales(linea, arch_entrada, arch_comentarios):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda los comentarios extra de
     una funcion. Devuelve la posicion en la que
     el archivo encontro la siguiente funcion, o el
@@ -171,7 +171,7 @@ def guardar_comentarios_adicionales(linea, arch_entrada, arch_comentarios):
     return linea
 
 def guardar_comentarios(firma_funcion, arch_entrada, arch_comentarios):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda todo lo referido a los comentarios
     de la funcion en comentarios.csv, y devuelve la linea
     en la que se encontro una nueva firma de funcion, o el
@@ -202,7 +202,7 @@ def guardar_comentarios(firma_funcion, arch_entrada, arch_comentarios):
     return linea
 
 def merge(l_archivos, modo):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Funcion principal del modulo.
     Aplica el algoritmo de mezcla a los archivos ordenados.
     La informacion que guarda depende del modo (fuente_unico
@@ -245,7 +245,7 @@ def merge(l_archivos, modo):
     arch_salida.close()
 
 def generar_csv():
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Funcion que articula el modulo para
     generar los archivos .csv]"""
     l_archivos = []
