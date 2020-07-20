@@ -79,7 +79,7 @@ def cant_parametros(dic, archivo):
         funcion, parametros = linea[0], linea[1]
         
 
-        if parametros == "":
+        if parametros == "()":
 
             dic[funcion]["parametros"] = 0
 
@@ -130,7 +130,8 @@ def cant_invocaciones(dic,archivo):
     cada funcion del diccionario principal. Hace uso de la funcion
     contar_invocaciones, del modulo exp_reg. Utiliza fuente_unico.]
     """
-
+    
+    archivo.seek(0)
 
     for funcion in dic:
 
