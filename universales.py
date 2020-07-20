@@ -22,7 +22,7 @@ def obtener_lista_funciones():
         return funciones
 
 def obtener_comentario_multilinea(linea, arch):
-    """[Autor: Elian Foppiano]
+    """[Autor: Elian Daniel Foppiano]
     [Ayuda: Recorre el archivo recibido hasta que encuentra
     el final del comentario multilinea y lo devuelve formateado.]"""
 
