@@ -114,8 +114,8 @@ def cant_lineas(dic, archivo):
 
         funcion = linea[0]
 
-        dic[funcion]["lineas"] = len(linea) - 2
-        #cantidad de campos menos dos, los que pertenecen a la primera linea (nombre y parametros) y el modulo.
+        dic[funcion]["lineas"] = len(linea) - 3
+
 
         linea = leer_lineas_csv(archivo)
 
