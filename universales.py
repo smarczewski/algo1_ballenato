@@ -2,7 +2,7 @@ COMILLAS_DOBLES = chr(34) * 3
 COMILLAS_SIMPLES = chr(39) * 3
 SALTO_LINEA = "/n/"
 
-def leer_lineas_csv(archivo): #ESTE ANDA PARA TODO MENOS LA 1 Y 5
+def leer_lineas_csv(archivo):
     """[Autor: Grupo Ballenato]
     [Ayuda: A pertir de una linea de un .csv, devuelve una
     lista de todos los valores que esten separados por ",".]"""
@@ -25,6 +25,12 @@ def obtener_comentario_multilinea(linea, arch):
     """[Autor: Elian Foppiano]
     [Ayuda: Recorre el archivo recibido hasta que encuentra
     el final del comentario multilinea y lo devuelve formateado.]"""
+
+    """Tengo que considerar la posibilidad de que existan comentarios
+    con comillas simples, ya que esta funcion la uso tambien en el
+    modulo ordenar, donde aun no todos los archivos se encuentran
+    formateados"""
+    #Verifico que la linea 
     if linea.rstrip().endswith((COMILLAS_DOBLES, COMILLAS_SIMPLES))\
         and linea.strip() not in (COMILLAS_DOBLES, COMILLAS_SIMPLES):
         comentario = linea.strip() + SALTO_LINEA
@@ -36,12 +42,3 @@ def obtener_comentario_multilinea(linea, arch):
             linea = arch.readline().rstrip()
         comentario += linea + SALTO_LINEA
     return comentario
-
-def empieza_comentario_multilinea(linea):
-    """[Autor: Elian Foppiano]"""
-    if linea.lstrip(" ").startswith(COMILLAS_DOBLES):
-        devolver = True
-    else:
-        devolver = False
-    return devolver
-
