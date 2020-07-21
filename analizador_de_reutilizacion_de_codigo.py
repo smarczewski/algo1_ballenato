@@ -11,19 +11,26 @@ from exp_reg import contar_invocaciones
 from universales import leer_lineas_csv
 from universales import obtener_lista_funciones
 
-def encontrar_invocaciones(linea, funciones):
+def encontrar_invocaciones(funciones, veces_llamado, codigo):
     """[Autor: Jean Paul Yatim]
     [Ayuda: Crea un diccionario para una funcion, con las
     claves siendo las funciones que son invocadas por ella
     y sus valores la cantidad de veces que es invocada]"""
-    veces_llamado = {}
     for func_llamada in funciones:
-        for codigo in linea[3:]:
-            cant_inv = contar_invocaciones(func_llamada, codigo)
-            if cant_inv > 0 and func_llamada not in veces_llamado:
-                veces_llamado[func_llamada] = cant_inv
-            elif cant_inv > 0 and func_llamada in veces_llamado:
-                veces_llamado[func_llamada] += cant_inv
+        cant_inv = contar_invocaciones(func_llamada, codigo)
+        if cant_inv > 0 and func_llamada not in veces_llamado:
+            veces_llamado[func_llamada] = cant_inv
+        elif cant_inv > 0 and func_llamada in veces_llamado:
+            veces_llamado[func_llamada] += cant_inv
+    return veces_llamado
+def buscar_en_linea_con_parentesis(linea, funciones):
+    """[Autor: Jean Paul Yatim]
+    [Ayuda: Solo se fija si hay invocación en aquellas lineas
+    de código donde haya un "(".]"""
+    veces_llamado = {}
+    for codigo in linea[3:]:
+        if "(" in codigo:
+            veces_llamado = encontrar_invocaciones(funciones, veces_llamado, codigo)
     return veces_llamado
 
 def reunir_invocaciones(archivo):
@@ -41,7 +48,7 @@ def reunir_invocaciones(archivo):
     funcs_llamadas = {}
     while linea[0] != "":
         func_llama = linea[0]        
-        funcs_llamadas[func_llama] = encontrar_invocaciones(linea, funciones)
+        funcs_llamadas[func_llama] = buscar_en_linea_con_parentesis(linea, funciones)
         linea = leer_lineas_csv(archivo)
     return funciones, funcs_llamadas
 
