@@ -32,8 +32,6 @@ cantidad de lineas de codigo que tiene la funcion.
 import re
 import exp_reg
 from universales import leer_lineas_csv, obtener_lista_funciones
-PATH_FUENTE_UNICO = "fuente_unico.csv"
-
 
 def generar_dic_cantidad_lineas():
     """[Autor: Elian Daniel Foppiano]
@@ -43,7 +41,7 @@ def generar_dic_cantidad_lineas():
     la cantidad de lineas de codigo que tienen]"""
 
     dic_lineas = {}
-    fuente_unico = open(PATH_FUENTE_UNICO)
+    fuente_unico = open("fuente_unico.csv")
     datos = leer_lineas_csv(fuente_unico)
     #Recorro la informacion de cada funcion
     while datos[0] != "":
@@ -63,7 +61,7 @@ def generar_dic_invocaciones():
 
     dic_funciones = {}
     l_funciones = obtener_lista_funciones()
-    fuente_unico = open(PATH_FUENTE_UNICO)
+    fuente_unico = open("fuente_unico.csv")
 
     datos = leer_lineas_csv(fuente_unico)
     while datos[0] != "":

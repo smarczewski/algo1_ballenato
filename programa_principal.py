@@ -70,7 +70,7 @@ def funcion_principal():
     while continuar:
         opcion = mostrar_menu()    
         if opcion == "1":
-            panel_general_de_funciones.tabla_y_csv()
+            panel_general_de_funciones.funcionalidad_panel()
             
         elif opcion == "2":
             consulta_de_funciones.funcionalidad_2()

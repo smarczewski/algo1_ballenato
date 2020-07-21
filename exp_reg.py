@@ -14,15 +14,9 @@ def eliminar_cadenas(texto):
     y cerrarse, pero el codigo era dificil de leer.
     Al utilizar las expresiones regulares es mucho
     mas sencillo y gana legibilidad"""
-    texto = re.sub('".*?"', '', texto)
-    texto = re.sub("'.*?'", '', texto)
+    texto = re.sub('"[^"]+"', "", texto)
+    texto = re.sub("'[^']+'", "", texto)
     return texto
-
-def eliminar_coment_linea(linea):
-    """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Elimina los comentarios que se encuentran
-    en la misma linea que una instruccion.
-    Ej: variable = 5 #Comentario]"""
 
 def eliminar_coment_linea(linea):
     """[Autor: Elian Daniel Foppiano]

@@ -4,11 +4,9 @@ de acuerdo a las pautas establecidas por el TP y las hipotesis de
 trabajo consensuadas por el equipo.
 """
 
-#Constantes que se utilizan a lo largo
+#Variables que se utilizan a lo largo
 #del programa
 CARPETA_FUNCIONES_ORDENADAS = "funciones"
-PATH_FUENTE_UNICO = "fuente_unico.csv"
-PATH_COMENTARIOS = "comentarios.csv"
 CENTINELA = chr(255)
 COMA = "/c/"
 SALTO_LINEA = "/n/"
@@ -40,14 +38,15 @@ def guardar_nombre_funcion(firma, arch):
 def guardar_campo(dato, arch, formateado = True, nro_linea = None):
     """[Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda un dato en en archivo .csv recibido.
-    Si el campo debe estar formateado, se utilizan los marcadores
-    necesarios para almacenar la informacion relacionada al tamaño
-    de la indentacion y el numero de linea en el que se encuentra el
-    dato, de acuerdo a las pautas consensuadas por el equipo]"""
+    Si el campo debe estar formateado, se utiliza el marcador
+    que almacena el numero de linea en el que se encontro el
+    dato]"""
 
+    #Reemplazo las comas para que no interfieran
+    #en la lectura de los .csv
     dato = dato.replace(",", COMA)
     #Solo guardo campos no vacios
-    if dato.strip() != "":
+    if dato.strip():
         if formateado:
             arch.write(f",/{nro_linea}/{dato}")
         else:
@@ -55,199 +54,141 @@ def guardar_campo(dato, arch, formateado = True, nro_linea = None):
 
 def guardar_parametros(firma, arch):
     """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Recibe la firma de una funcion y la guarda
-    en un archivo]"""
+    [Ayuda: Recibe la firma de una funcion y guarda
+    sus parametros formales]"""
 
     parametros = firma[firma.find("("): firma.find(")") + 1]
-    guardar_campo(parametros, arch, formateado = False)
-    return parametros
+    guardar_campo(parametros, arch, False)
 
-def obtener_nombre_arch(arch):
+def guardar_nombre_modulo(arch, arch_salida):
     """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Devuelve el nombre del archivo recibido, sin
+    [Ayuda: Recibe un archivo y guarda su nombre sin
     la extension]"""
 
-    nombre = os.path.basename(arch.name)
-    nombre = nombre[:nombre.index(".")]
-    return nombre
+    nombre_modulo = os.path.basename(arch.name)
+    nombre_modulo = nombre_modulo[:nombre_modulo.index(".")]
+    guardar_campo(nombre_modulo, arch_salida, False)
 
-def guardar_instrucciones(linea, arch_entrada, fuente_unico):
+def obtener_comentario_marcador(comentario, marcador, eliminar_marcador):
     """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Guarda las instrucciones de la funcion
-    (campos adicionales de fuente_unico.csv)]"""
+    [Ayuda: Busca un bloque de texto delimitado por un
+    marcador formado por corchetes y una palabra clave.
+    Por ejemplo, la informacion sobre el autor]"""
 
-    nro_linea = 0
-    #Mientras no llegue al final del archivo ni encuentre
-    #otra funcion
-    while linea != CENTINELA and not linea.startswith("def "):
-        #Salteo los comentarios multilinea
-        if linea.lstrip().startswith(COMILLAS_DOBLES):
-            obtener_comentario_multilinea(linea, arch_entrada)
-        #Si no es un comentario de linea (comentario
-        #que empieza con "#"), es una instruccion
-        elif not linea.lstrip().startswith("#"):
-            #Elimino el comentario que puede haber
-            #en la misma linea que una instruccion
-            instruccion_sin_coment = exp_reg.eliminar_coment_linea(linea)
-            guardar_campo(instruccion_sin_coment, fuente_unico, True, nro_linea)
-        nro_linea += 1
-        linea = leer_centinela(arch_entrada)
+    informacion = ""
+    pos_inicio = comentario.find(marcador)
+    if pos_inicio != -1:
+        pos_final = comentario.find("]", pos_inicio)
+        informacion = comentario[pos_inicio: pos_final]
+    if eliminar_marcador:
+        informacion = informacion.replace(marcador, "")
+    return informacion
 
-    #Devuelvo la linea en la que se encontro
-    #el final del archivo o una nueva funcion
-    return linea
-
-def guardar_fuente_unico(firma_funcion, arch_entrada, fuente_unico):
+def guardar_comentario_ayuda(linea_inicio, arch, comentarios):
     """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Guarda todo lo referido al codigo fuente de la funcion
-    en fuente_unico.csv]"""
+    [Ayuda: Guarda la informacion del autor y ayuda de
+    la funcion. Si no la encuentra, guarda campos
+    por defecto. Devuelve la linea en la que termina el
+    comentario inicial]"""
+
+    if linea_inicio.lstrip().startswith(COMILLAS_DOBLES):
+        comentario_ayuda = obtener_comentario_multilinea(linea_inicio, arch)
+        autor = obtener_comentario_marcador(comentario_ayuda, "[Autor: ", True)
+        ayuda = obtener_comentario_marcador(comentario_ayuda, "[Ayuda: ", False)
+
+        if not autor: autor = "Desconocido"
+        guardar_campo(autor, comentarios, False)
+        if ayuda:
+            guardar_campo(ayuda.replace("[", ""), comentarios, False)
+        else:
+            comentarios.write(",")
+        linea_fin_comentario = leer_centinela(arch)
+    else: #No se encontro un comentario inicial
+        guardar_campo("Desconocido", comentarios, False)
+        comentarios.write(",")
+        #Si no encontro el comentario de ayuda,
+        #devuelve la misma linea
+        linea_fin_comentario = linea_inicio
+    return linea_fin_comentario
+
+def guardar_datos_funcion(firma_funcion, arch_entrada, fuente_unico, comentarios):
+    """[Autor: Elian Daniel Foppiano]
+    [Ayuda: Recibe una funcion y guarda su informacion en
+    fuente_unico.csv y comentarios.csv]"""
 
     guardar_nombre_funcion(firma_funcion, fuente_unico)
+    guardar_nombre_funcion(firma_funcion, comentarios)
     guardar_parametros(firma_funcion, fuente_unico)
-    nombre_modulo = obtener_nombre_arch(arch_entrada)
-    guardar_campo(nombre_modulo, fuente_unico, False)
+    guardar_nombre_modulo(arch_entrada, fuente_unico)
+    #Guardo los datos del comentario inicial, si existe
     linea = leer_centinela(arch_entrada)
-    """Si la linea siguiente a la firma empieza un
-    comentario multilinea, lo salteo para que no
-    cuente en la enumeracion posterior de las lineas
-    ya que el comentario inicial es tratado de forma
-    especial"""
-    if linea.lstrip().startswith(COMILLAS_DOBLES):
-        obtener_comentario_multilinea(linea, arch_entrada)
-        linea = leer_centinela(arch_entrada)
-    linea = guardar_instrucciones(linea, arch_entrada, fuente_unico)
-
-    #Devuelvo la linea en la que se encontro
-    #el final del archivo o una nueva funcion
-    return linea
-
-def obtener_comentario_ayuda(linea_inicio, arch):
-    """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Recorre el archivo hasta que se termina el
-    comentario de ayuda, y lo devuelve apropiadamente,
-    con los saltos de linea adaptados al .csv]"""
-
-    comentario_ayuda = obtener_comentario_multilinea(linea_inicio, arch)
-    marcador_autor = comentario_ayuda.find("[Autor: ")
-    marcador_ayuda = comentario_ayuda.find("[Ayuda: ")
-    #Verifico si se encontraron los marcadores
-    if marcador_autor != -1:
-        fin_autor = comentario_ayuda.index("]", marcador_autor)
-        autor = comentario_ayuda[marcador_autor: fin_autor]
-    else:
-        autor = "Desconocido"
-    if marcador_ayuda != -1:
-        fin_ayuda = comentario_ayuda.index("]", marcador_ayuda)
-        ayuda = comentario_ayuda[marcador_ayuda: fin_ayuda]
-    else:
-        ayuda = ""
-    #Devuelvo la informacion eliminando el marcador
-    return autor.replace("[Autor: ", ""), ayuda.replace("[", "")
-
-def guardar_comentarios_adicionales(linea, arch_entrada, arch_comentarios):
-    """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Guarda los comentarios extra de
-    una funcion. Devuelve la posicion en la que
-    el archivo encontro la siguiente funcion, o el
-    final del archivo]"""
-
-    #Debo mantener registro del orden en que
-    #aparece cada linea, para su posterior
-    #procesamiento en la funcionalidad 2
+    linea = guardar_comentario_ayuda(linea, arch_entrada, comentarios)
+    #Variable que lleva el registro de los bloques de lineas
+    #recorridos en la funcion (un comentario multilinea cuenta
+    #como un unico bloque de lineas)
     nro_linea = 0
+    #Mientras no llegue al final del archivo y no encuentre
+    #otra funcion
     while linea != CENTINELA and not linea.startswith("def "):
-        #Empieza comentario multilinea
+        #Guardo los comentarios multilinea en comentarios.csv
         if linea.lstrip().startswith(COMILLAS_DOBLES):
-            comentario = obtener_comentario_multilinea(linea, arch_entrada)
-        #Empieza comentario de una linea
+            campo = obtener_comentario_multilinea(linea, arch_entrada)
+            guardar_campo(campo, comentarios, True, nro_linea)
+        #Igual para los comentarios de una linea
         elif linea.lstrip().startswith("#"):
-            comentario = linea.rstrip()
-        else: #Es una instruccion, pero puede tener comentario
+            guardar_campo(linea, comentarios, True, nro_linea)
+        #Si no es un comentario, es una instruccion
+        else:
+            #Puede contener un comentario al lado
+            instruccion = exp_reg.eliminar_coment_linea(linea)
             comentario = exp_reg.obtener_coment_linea(linea)
-        #Guardo el comentario formateado, si es que habia alguno
-        guardar_campo(comentario, arch_comentarios, True, nro_linea)
-        linea = leer_centinela(arch_entrada)
+            guardar_campo(instruccion, fuente_unico, True, nro_linea)
+            guardar_campo(comentario, comentarios, True, nro_linea)
         nro_linea += 1
-    return linea
-
-def guardar_comentarios(firma_funcion, arch_entrada, arch_comentarios):
-    """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Guarda todo lo referido a los comentarios
-    de la funcion en comentarios.csv, y devuelve la linea
-    en la que se encontro una nueva firma de funcion, o el
-    final del programa]"""
-
-    guardar_nombre_funcion(firma_funcion, arch_comentarios)
-    linea = leer_centinela(arch_entrada)
-    #Si empieza un comentario multilinea,
-    #es el comentario inicial (donde pueden
-    #aparecer los marcadores de autor y ayuda)
-    if linea.lstrip().startswith(COMILLAS_DOBLES):
-        autor, ayuda = obtener_comentario_ayuda(linea, arch_entrada)
         linea = leer_centinela(arch_entrada)
-    #Si no hay comentario multilinea,
-    #no hay comentario inicial y, por
-    #lo tanto, no hay autor ni ayuda
-    else:
-        autor, ayuda = "Desconocido", ""
-    guardar_campo(autor, arch_comentarios, False)
-    #Si no hay ayuda, guardo un campo vacio
-    if ayuda == "":
-        arch_comentarios.write(",")
-    else:
-        guardar_campo(ayuda, arch_comentarios, False)
-    #Guardo los comentarios adicionales que podrian
-    #aparecer
-    linea = guardar_comentarios_adicionales(linea, arch_entrada, arch_comentarios)
+    #Devuelvo la linea en la que el ciclo encontro
+    #el final de archivo o la firma de otra funcion
     return linea
 
-def merge(l_archivos, modo):
+def merge(l_archivos):
     """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Funcion principal del modulo.
-    Aplica el algoritmo de mezcla a los archivos ordenados.
-    La informacion que guarda depende del modo (fuente_unico
-    o comentarios)]"""
+    [Ayuda: Recibe una lista de archivos y aplica el algoritmo
+    de mezcla para crear fuente_unico.csv y comentarios.csv]"""
 
-    #Reinicio la posicion de los archivos
-    for arch in l_archivos:
-        arch.seek(0)
-
-    if modo == "fuente_unico":
-        arch_salida = open(PATH_FUENTE_UNICO, "w")
-    else: #modo == "comentarios"
-        arch_salida = open(PATH_COMENTARIOS, "w")
+    """
+    El algoritmo busca la funcion con el menor nombre
+    entre la lista de funciones a las que apuntan los archivos.
+    Como los archivos estan ordenados, es el menor nombre entre
+    todos los archivos. Guarda la funcion y calcula el menor
+    con las nuevas funciones, y repite el proceso.
+    """
+    fuente_unico = open("fuente_unico.csv", "w")
+    comentarios = open("comentarios.csv", "w")
 
     #Lee por primera vez las firmas de las funciones
     firmas = [leer_centinela(arch) for arch in l_archivos]
-    """Calcula la firma con el menor nombre
-    No puedo usar min() ya que el marcador
-    de la funcion principal interfiere en la logica
-    de la funcion"""
+    #Calcula la firma con el menor nombre
     menor = min(firmas, key = lambda firma: firma.replace("$", ""))
     #Mientras no se llegue al final de todos los archivos
     while menor != CENTINELA:
         #Calculo el indice de la menor funcion, que es el mismo
         #al indice de la lista de archivos en el que se encuentra
         i = firmas.index(menor)
-        if modo == "fuente_unico":
-            """Guardo lo referido fuente_unico.csv y me quedo con la
-            siguiente funcion de la "pila de funciones ordenadas"
-            que conforma el archivo ordenado"""
-            firmas[i] = guardar_fuente_unico(firmas[i], l_archivos[i], arch_salida)
-        else: #modo == "comentarios"
-            """Guardo lo referido a comentarios.csv y me quedo con la
-            siguiente funcion de la "pila de funciones ordenadas"
-            que conforma el archivo ordenado"""
-            firmas[i] = guardar_comentarios(firmas[i], l_archivos[i], arch_salida)
-        arch_salida.write("\n")
+        #firmas[i] tendra la firma de la siguiente
+        #funcion del archivo correspondiente
+        firmas[i] = guardar_datos_funcion(firmas[i], l_archivos[i], fuente_unico, comentarios)
+        fuente_unico.write("\n")
+        comentarios.write("\n")
         #Calcula la firma con el menor nombre para repetir el proceso
         menor = min(firmas, key = lambda firma: firma.replace("$", ""))
-    arch_salida.close()
+    fuente_unico.close()
+    comentarios.close()
 
 def generar_csv():
     """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Funcion que articula el modulo para
-    generar los archivos .csv]"""
+    [Ayuda: Funcion que genera los archivos fuente_unico.csv y
+    comentarios.csv]"""
+
     l_archivos = []
     l_modulos = os.listdir(CARPETA_FUNCIONES_ORDENADAS)
     #Abro todos los archivos de la carpeta "funciones"
@@ -258,8 +199,7 @@ def generar_csv():
     
     #Aplico el algoritmo de mezcla para
     #crear fuente_unico.csv y comentarios.csv
-    merge(l_archivos, "fuente_unico")
-    merge(l_archivos, "comentarios")
-
+    merge(l_archivos)
+    #Cierro los archivos
     for arch in l_archivos:
         arch.close()

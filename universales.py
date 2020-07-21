@@ -30,15 +30,18 @@ def obtener_comentario_multilinea(linea, arch):
     con comillas simples, ya que esta funcion la uso tambien en el
     modulo ordenar, donde aun no todos los archivos se encuentran
     formateados"""
-    #Verifico que la linea 
-    if linea.rstrip().endswith((COMILLAS_DOBLES, COMILLAS_SIMPLES))\
-        and linea.strip() not in (COMILLAS_DOBLES, COMILLAS_SIMPLES):
-        comentario = linea.strip() + SALTO_LINEA
-    else:
+    
+    #Si el comentario empieza y termina en la misma linea
+    if linea.count(COMILLAS_DOBLES) == 2 or linea.count(COMILLAS_SIMPLES) == 2:
+        comentario = linea.rstrip()
+    else: #El comentario tiene mas de una linea
+        #Cambio el salto de linea por el marcador especial
         comentario = linea.rstrip() + SALTO_LINEA
         linea = arch.readline().rstrip()
+        #Mientras no llegue al final del comentario
         while not linea.endswith((COMILLAS_DOBLES, COMILLAS_SIMPLES)):
             comentario += linea + SALTO_LINEA
             linea = arch.readline().rstrip()
-        comentario += linea + SALTO_LINEA
+        comentario += linea
+        
     return comentario

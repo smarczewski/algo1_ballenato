@@ -4,8 +4,6 @@ funciones alfabeticamente, y las guarda en la carpeta "funciones".
 """
 
 import os
-#Lo importo para reutilizar
-#algunas funciones
 from universales import obtener_comentario_multilinea
 import re
 
@@ -94,7 +92,7 @@ def listar_funciones_codigo(arch_entrada, principal):
             #copio las lineas
             while linea.startswith((" ", "\n")):
                 #Guardo la linea si no esta en blanco
-                funcion += linea if linea.strip() else ""
+                if linea.strip(): funcion += linea
                 linea = leer_unificado(arch_entrada)
             #Agrego la funcion a la lista
             #de funciones
@@ -121,10 +119,8 @@ def generar_dir(dir_arch):
 
 def eliminar_archivos_viejos(carpeta):
     """[Autor: Elian Daniel Foppiano]
-    [Ayuda: Elimina los archivos viejos de
-    la carpeta recibida, para evitar que los
-    analisis previos interfieran en el merge
-    del analisis actual]"""
+    [Ayuda: Elimina los archivos de
+    la carpeta recibida.]"""
 
     path_arch_viejos = os.listdir(carpeta)
     for path in path_arch_viejos:
@@ -160,4 +156,3 @@ def generar_arch_ordenados(programas):
             for funcion in l_funciones:
                 salida.write(funcion)
         modulo = programas.readline().rstrip()
-    programas.seek(0)
