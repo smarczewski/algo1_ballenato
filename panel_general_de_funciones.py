@@ -1,4 +1,4 @@
-import exp_reg
+from exp_reg import contar_invocaciones
 import os
 import re
 from universales import leer_lineas_csv
@@ -141,7 +141,7 @@ def cant_invocaciones(dic,archivo):
         while linea[0] != "":
 
             instrucciones = "".join(linea[3:])
-            invocaciones += exp_reg.contar_invocaciones(funcion, instrucciones)
+            invocaciones += contar_invocaciones(funcion, instrucciones)
             linea = leer_lineas_csv(archivo) 
 
         dic[funcion]["invocaciones"] = invocaciones
@@ -327,37 +327,13 @@ def formato_tabla(dic):
     
 
 
-def genera_csv(ar_salida, dic):
-
-    """
-    [Autor: Camila Bartocci]
-    [Ayuda: Genera el archivo panel_general.csv. Toma
-    como parametros el archivo de salida y el diccionario, 
-    ya completo.]
-    """
-
     
-    ar_salida.write("FUNCION, " + "PARAMETROS, " + "LINEAS, " + "INVOCACIONES, " + "RETURN, " + "IF/ELIF, " + "FOR, " 
-        + "WHILE, " + "BREAK, " + "EXIT, " + "COMENTARIOS, " + "AYUDA, " + "AUTOR")
-    for func in dic:
-
-        ar_salida.write("\n" + dic[func]["nombre.modulo"] + ", " + str(dic[func]["parametros"]) + ", " + str(dic[func]["lineas"]) + ", " +
-            str(dic[func]["invocaciones"]) + ", " + str(dic[func]["returns"]) + ", " + str(dic[func]["ifs"]) + ", " + str(dic[func]["fors"]) +
-            ", " + str(dic[func]["whiles"]) + ", " + str(dic[func]["breaks"]) + ", " + str(dic[func]["exits"]) + ", " + str(dic[func]["comentarios"]) +
-            ", " + dic[func]["ayuda"] + ", " + dic[func]["autor"])
-
-
-
-    
-
-
-#--------------------------------------------------------
 
 def genera_dic():
 
     """
     [Autor: Camila Bartocci]
-    [Ayuda: genera el diccionario con los datos de cada funcion]
+    [Ayuda: genera el diccionario con los datos, invocando cada funcion.]
     """
 
     comentarios = open("comentarios.csv", "r")
@@ -382,20 +358,35 @@ def genera_dic():
 
 
 
-def genera_panel_csv(dic_datos):
+
+def genera_panel_csv(dic):
 
     """
     [Autor: Camila Bartocci]
-    [Ayuda: crea el archivo panel_general.csv y lo
-    almacena en la carpeta funcionaliidades. Toma como
-    parametro el diccionario, ya completo.]
+    [Ayuda: Genera el archivo panel_general.csv. La primera
+    línea del archivo contiene las etiquetas de los datos
+    guardados en cada campo, y en las demas lineas estan los
+    datos por funcion. Toma como parametro el diccionario, 
+    ya cargado.]
     """
+
 
     panel_general = open(os.path.join("funcionalidades", "panel_general.csv"), "w")
 
-    genera_csv(panel_general, dic_datos)
+        
+    panel_general.write("FUNCION, " + "PARAMETROS, " + "LINEAS, " + "INVOCACIONES, " + "RETURN, " + "IF/ELIF, " + "FOR, " 
+        + "WHILE, " + "BREAK, " + "EXIT, " + "COMENTARIOS, " + "AYUDA, " + "AUTOR")
+    for func in dic:
+
+        panel_general.write("\n" + dic[func]["nombre.modulo"] + ", " + str(dic[func]["parametros"]) + ", " + str(dic[func]["lineas"]) + ", " +
+            str(dic[func]["invocaciones"]) + ", " + str(dic[func]["returns"]) + ", " + str(dic[func]["ifs"]) + ", " + str(dic[func]["fors"]) +
+            ", " + str(dic[func]["whiles"]) + ", " + str(dic[func]["breaks"]) + ", " + str(dic[func]["exits"]) + ", " + str(dic[func]["comentarios"]) +
+            ", " + dic[func]["ayuda"] + ", " + dic[func]["autor"])
+
 
     panel_general.close()
+
+
 
 
 
