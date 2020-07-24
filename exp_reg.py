@@ -46,7 +46,10 @@ def obtener_coment_linea(linea):
 def contar_invocaciones(funcion, linea, func):
     """[Autor: Elian Daniel Foppiano]
     [Ayuda: Cuenta la cantidad de veces que una funcion
-    se invoca en una linea de codigo recibida]"""
+    se invoca en una linea de codigo recibida si el
+    tercer parametro es True, o la cantidad de veces
+    que aparece una estructura si el tercer parametro
+    es False]"""
 
     """Esta funcion fue creada ya que muchas de las
     funcionalidades requerian contar especificamente
@@ -54,7 +57,10 @@ def contar_invocaciones(funcion, linea, func):
     instruccion. Por lo que al buscar la funcion se
     pide que luego del nombre, exista un parentesis
     abierto, para evitar que la expresion regular
-    encuentre el nombre de variables"""
+    encuentre el nombre de variables. Posteriormente,
+    se modifico para que permitiera contar estructuras,
+    para poder ser reutilizada en la funcionalidad 1,
+    en este caso sin pedirle el parentesis abierto."""
 
     if func: #si se pone True, cuenta invocaciones
         exp = r"\b" + funcion + r"\("
