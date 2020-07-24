@@ -17,7 +17,7 @@ def encontrar_invocaciones(funciones, veces_llamado, codigo):
     claves siendo las funciones que son invocadas por ella
     y sus valores la cantidad de veces que es invocada]"""
     for func_llamada in funciones:
-        cant_inv = contar_invocaciones(func_llamada, codigo)
+        cant_inv = contar_invocaciones(func_llamada, codigo, True)
         if cant_inv > 0 and func_llamada not in veces_llamado:
             veces_llamado[func_llamada] = cant_inv
         elif cant_inv > 0 and func_llamada in veces_llamado:
@@ -69,6 +69,47 @@ def formato_filas_inv(funcs_llamadas, funcs, x, filas, total_inv):
             filas += "{:^3}|".format("")
     return filas, total_inv
 
+def crear_top_tabla_inv(ar_tabla, ancho_columna, columnas,\
+                        separador, separador_bordes):
+    """[Autor: Jean Paul Yatim]
+    [Ayuda: Crea e imprime en un archivo la primer fila de la tabla
+    de invocaciones.]"""
+    n_columnas = ""
+    for n in range(1,columnas+1):
+        n_columnas += "{:^3}|".format(n)
+    ar_tabla.write(separador_bordes)
+    ar_tabla.write(ancho_columna.format("FUNCIONES") + n_columnas + "\n")
+    ar_tabla.write(separador)
+
+def crear_cuerpo_tabla_inv(ar_tabla, funcs, funcs_llamadas,\
+                           ancho_columna, columnas, separador):
+    """[Autor: Jean Paul Yatim]
+    [Ayuda: Crea e imprime en un archivo el cuerpo de la tabla de
+    invocaciones.]"""
+    total_inv = {}
+    for f in funcs:
+        total_inv[f] = 0
+    filas = ""
+    for x in range(1,columnas+1):
+        filas, total_inv = formato_filas_inv(funcs_llamadas, funcs,\
+                                             x, filas, total_inv)
+        n_funcion = "{}-{}".format(x, funcs[x-1])
+        ar_tabla.write(ancho_columna.format(n_funcion.replace("$","")) + filas+"\n")
+        ar_tabla.write(separador)
+        filas = ""
+    return total_inv
+
+def crear_final_tabla_inv(ar_tabla, total_inv,\
+                          ancho_columna,separador_bordes):
+    """[Autor: Jean Paul Yatim]
+    [Ayuda: Crea e imprime en un archivo la última fila de la tabla de
+    invocaciones.]"""
+    total = ""
+    for tot in total_inv:
+        total += "{:^3}|".format(total_inv[tot])
+    ar_tabla.write(ancho_columna.format("Total Invocaciones") + total + "\n")
+    ar_tabla.write(separador_bordes)
+
 def crear_tabla_inv(archivo, ar_tabla):
     """[Autor: Jean Paul Yatim]
     [Ayuda: crea una tabla con informacion sobre las invocaciones
@@ -80,30 +121,19 @@ def crear_tabla_inv(archivo, ar_tabla):
     invocada.
     La tabla es copiada al archivo "analizador.txt"]"""
     funcs, funcs_llamadas = reunir_invocaciones(archivo)
-    fun_larga = max(funcs, key = len)
-    largo = len(fun_larga) + 4
+    largo = len(max(funcs, key = len)) + 4
     ancho_columna = "|{:<" + str(largo) + "}|"
     columnas = len(funcs)
-    n_columnas = ""
-    for n in range(1,columnas+1): n_columnas += "{:^3}|".format(n)
-    ar_tabla.write("-"*(largo+2) + "----"*columnas + "\n")
-    ar_tabla.write(ancho_columna.format("FUNCIONES") + n_columnas + "\n")
-    ar_tabla.write("|" + "-"*largo + "|---"*columnas + "|\n")
-    total_inv = {}
-    for f in funcs: total_inv[f] = 0
-    filas = ""
-    for x in range(1,columnas+1):
-        filas, total_inv = formato_filas_inv(funcs_llamadas, funcs, x, filas, total_inv)
-        n_funcion = "{}-{}".format(x, funcs[x-1])
-        ar_tabla.write(ancho_columna.format(n_funcion.replace("$","")) + filas+"\n")
-        ar_tabla.write("|" + "-"*largo + "|---"*columnas + "|\n")
-        filas = ""
-    total = ""
-    for tot in total_inv: total += "{:^3}|".format(total_inv[tot])
-    ar_tabla.write(ancho_columna.format("Total Invocaciones") + total + "\n")
-    ar_tabla.write("-"*(largo+2) + "----"*columnas + "\n")
-
-
+    separador_bordes = "-"*(largo+2) + "----"*columnas + "\n"
+    separador = "|" + "-"*largo + "|---"*columnas + "|\n"
+    
+    crear_top_tabla_inv(ar_tabla, ancho_columna, columnas,\
+                        separador, separador_bordes)
+    total_inv = crear_cuerpo_tabla_inv(ar_tabla, funcs, funcs_llamadas,\
+                                       ancho_columna, columnas, separador)
+    crear_final_tabla_inv(ar_tabla, total_inv,\
+                          ancho_columna, separador_bordes)
+    
 def imprimir_tabla_inv():
     """[Autor: Jean Paul Yatim]
     [Ayuda: imprime la tabla del archivo "analizador.txt"]"""
