@@ -43,7 +43,7 @@ def obtener_coment_linea(linea):
     linea_sin_coment = eliminar_coment_linea(linea)
     return linea.replace(linea_sin_coment, "")
 
-def contar_invocaciones(funcion, linea):
+def contar_invocaciones(funcion, linea, func):
     """[Autor: Elian Daniel Foppiano]
     [Ayuda: Cuenta la cantidad de veces que una funcion
     se invoca en una linea de codigo recibida]"""
@@ -55,10 +55,15 @@ def contar_invocaciones(funcion, linea):
     pide que luego del nombre, exista un parentesis
     abierto, para evitar que la expresion regular
     encuentre el nombre de variables"""
-    exp = r"\b" + funcion + r"\("
+
+    if func: #si se pone True, cuenta invocaciones
+        exp = r"\b" + funcion + r"\("
+    else: #si se pone False, cuenta estructuras
+        exp = r"\b" + funcion + "\\b"
+        
     """Elimino las cadenas para evitar falsos positivos"""
-    invocaciones = re.findall(exp, eliminar_cadenas(linea))
-    return len(invocaciones)
+    devuelve = re.findall(exp, eliminar_cadenas(linea))
+    return len(devuelve)
 
 def buscar_lista_invocaciones(l_funciones, linea):
     """[Autor: Elian Daniel Foppiano]
@@ -86,3 +91,5 @@ def buscar_lista_invocaciones(l_funciones, linea):
     invocaciones = re.findall(exp_final, eliminar_cadenas(linea))
     #Devuelvo la lista eliminando el parentesis final
     return [invocacion[:-1] for invocacion in invocaciones]
+
+

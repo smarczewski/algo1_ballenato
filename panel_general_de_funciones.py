@@ -18,7 +18,7 @@ Se almacenan los datos en un diccionario que tendra la forma
 {
 "funcion_1":
 {"nombre.modulo":"funcion_1.modulo", "parametros":n0, "lineas":n1, "invocaciones":n2,
- "returns":n3, "ifs":n4, "fors":n5, "whiles":n6, "breaks":n7, "exits":n8, "comentarios":n9,
+ "return":n3, "if":n4, "for":n5, "while":n6, "break":n7, "exit":n8, "comentarios":n9,
  "ayuda":"si"/"no", "autor":"nombre apellido"}
 
  "funcion_2": {...}
@@ -141,7 +141,7 @@ def cant_invocaciones(dic,archivo):
         while linea[0] != "":
 
             instrucciones = "".join(linea[3:])
-            invocaciones += contar_invocaciones(funcion, instrucciones)
+            invocaciones += contar_invocaciones(funcion, instrucciones, True)
             linea = leer_lineas_csv(archivo) 
 
         dic[funcion]["invocaciones"] = invocaciones
@@ -157,52 +157,30 @@ def cant_estructuras(dic, archivo):
     [Ayuda: Agrega, en el diccionario de valor, las siguientes
     estructuras: return, if/elif, for, while, break, exit, con la
     forma estructura:n, a cada funcion del diccionario principal.
-    Utiliza fuente_unico.]
+    Hace uso de la funcion contar_invocaciones. Utiliza fuente_unico.]
     """
 
     
     archivo.seek(0)
+    
+    estructuras = ["return", "if", "elif", "for", "while", "break", "exit"]
 
     linea = leer_lineas_csv(archivo)
-
-    cont_return = 0
-    cont_if = 0 #cuenta if y elif
-    cont_for = 0
-    cont_while = 0
-    cont_break = 0
-    cont_exit = 0
-
-
+    
+    
     while linea[0] != "":
-
+        
         funcion = linea[0]
-
-        for elemento in linea:
-
-            cont_return += len(re.findall("\\breturn\\b", elemento))
-            cont_if += len(re.findall("\\bif\\b", elemento)) + len(re.findall("\\belif\\b", elemento))
-            cont_for += len(re.findall("\\bfor\\b", elemento))
-            cont_while += len(re.findall("\\bwhile\\b", elemento))
-            cont_break += len(re.findall("\\bbreak\\b", elemento))
-            cont_exit += len(re.findall("\\bexit\\b", elemento))
-
-
-        dic[funcion]["returns"] = cont_return
-        dic[funcion]["ifs"] = cont_if
-        dic[funcion]["fors"] = cont_for
-        dic[funcion]["whiles"] = cont_while
-        dic[funcion]["breaks"] = cont_break
-        dic[funcion]["exits"] = cont_exit
-
-        cont_return = 0
-        cont_if = 0
-        cont_for = 0
-        cont_while = 0
-        cont_break = 0
-        cont_exit = 0
-
+        instrucciones = "".join(linea[3:])
+        
+        for estructura in estructuras:
+            
+            if estructura != 'elif':
+                dic[funcion][estructura] = (contar_invocaciones(estructura, instrucciones, False))
+            else:
+                dic[funcion]["if"] += (contar_invocaciones(estructura, instrucciones, False))
+            
         linea = leer_lineas_csv(archivo)
-
 
 
 
@@ -319,8 +297,8 @@ def formato_tabla(dic):
         
 
         print(formato_fila.format(dic[func]["nombre.modulo"], dic[func]["parametros"], dic[func]["lineas"], 
-            dic[func]["invocaciones"], dic[func]["returns"], dic[func]["ifs"], dic[func]["fors"],
-            dic[func]["whiles"], dic[func]["breaks"], dic[func]["exits"], dic[func]["comentarios"],
+            dic[func]["invocaciones"], dic[func]["return"], dic[func]["if"], dic[func]["for"],
+            dic[func]["while"], dic[func]["break"], dic[func]["exit"], dic[func]["comentarios"],
             dic[func]["ayuda"], dic[func]["autor"]))
 
 
@@ -379,8 +357,8 @@ def genera_panel_csv(dic):
     for func in dic:
 
         panel_general.write("\n" + dic[func]["nombre.modulo"] + ", " + str(dic[func]["parametros"]) + ", " + str(dic[func]["lineas"]) + ", " +
-            str(dic[func]["invocaciones"]) + ", " + str(dic[func]["returns"]) + ", " + str(dic[func]["ifs"]) + ", " + str(dic[func]["fors"]) +
-            ", " + str(dic[func]["whiles"]) + ", " + str(dic[func]["breaks"]) + ", " + str(dic[func]["exits"]) + ", " + str(dic[func]["comentarios"]) +
+            str(dic[func]["invocaciones"]) + ", " + str(dic[func]["return"]) + ", " + str(dic[func]["if"]) + ", " + str(dic[func]["for"]) +
+            ", " + str(dic[func]["while"]) + ", " + str(dic[func]["break"]) + ", " + str(dic[func]["exit"]) + ", " + str(dic[func]["comentarios"]) +
             ", " + dic[func]["ayuda"] + ", " + dic[func]["autor"])
 
 
