@@ -52,13 +52,25 @@ def guardar_campo(dato, arch, formateado = True, nro_linea = None):
         else:
             arch.write(f",{dato}")
 
-def guardar_parametros(firma, arch):
+def guardar_parametros(firma, arch_entrada, arch_salida):
     """[Autor: Elian Daniel Foppiano]
     [Ayuda: Recibe la firma de una funcion y guarda
     sus parametros formales]"""
 
-    parametros = firma[firma.find("("): firma.find(")") + 1]
-    guardar_campo(parametros, arch, False)
+    #La lista de parametros termina en la primera linea
+    if ")" in firma:
+        parametros = firma[firma.find("("): firma.find(")") + 1]
+    else: #Los parametros continuan en la siguiente linea
+        parametros = firma[firma.find("("):].rstrip()
+        linea = arch_entrada.readline().strip()
+        while ")" not in linea:
+            parametros += " " + linea
+            linea = arch_entrada.readline().strip()
+        parametros += " " + linea[: linea.find(")") + 1]
+        #Elimino el caracter de continuacion de linea
+        parametros = parametros.replace("\\", "")
+
+    guardar_campo(parametros, arch_salida, False)
 
 def guardar_nombre_modulo(arch, arch_salida):
     """[Autor: Elian Daniel Foppiano]
@@ -118,7 +130,7 @@ def guardar_datos_funcion(firma_funcion, arch_entrada, fuente_unico, comentarios
 
     guardar_nombre_funcion(firma_funcion, fuente_unico)
     guardar_nombre_funcion(firma_funcion, comentarios)
-    guardar_parametros(firma_funcion, fuente_unico)
+    guardar_parametros(firma_funcion, arch_entrada, fuente_unico)
     guardar_nombre_modulo(arch_entrada, fuente_unico)
     #Guardo los datos del comentario inicial, si existe
     linea = leer_centinela(arch_entrada)
