@@ -4,7 +4,7 @@ SALTO_LINEA = "/n/"
 
 def leer_lineas_csv(archivo):
     """[Autor: Grupo Ballenato]
-    [Ayuda: A pertir de una linea de un .csv, devuelve una
+    [Ayuda: A partir de una linea de un .csv, devuelve una
     lista de todos los valores que esten separados por ",".]"""
     linea = archivo.readline().rstrip().split(",")
     return linea

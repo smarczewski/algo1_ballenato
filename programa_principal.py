@@ -33,42 +33,15 @@ def mostrar_menu():
 
     for linea in menu:
         print(linea)
-    opcion = input("Opcion: ")    
 
-    return opcion
 
-def regreso_al_menu():
-    """[Autor: Gaston Proz]
-    [Ayuda: Funcion que regresa al menu anterior]
-    """    
-    eleccion = input("\n\n¿Desea volver al menu anterior? si/no:\n ")
-    continuar = True
-    valido = False
-    while not valido:
-        if eleccion.lower().lstrip() == "no":
-            continuar = False
-            valido = True
-        elif eleccion.lower().lstrip() == "si":
-            print("\n"*100)            
-            valido = True
-        else:
-            eleccion = input("Respuesta invalida, intente otra vez:\n")
-    return continuar
-
-def funcion_principal():
+def menu_principal():
     """[Autor: Grupo Ballenato]
-    """
-    programas = open("programas.txt")
-    ordenar.generar_arch_ordenados(programas)
-    generar_archivos_csv.generar_csv()
-    programas.close()
-    print(ascii_arts.titulo)
-    print(ascii_arts.ballena)
-    input("Presione Enter para continuar... ")
-    print("\n"*100)    
-    continuar = True
-    while continuar:
-        opcion = mostrar_menu()    
+    [Ayuda: Permite elegir entre las distintas funcionalidades]"""
+    mostrar_menu()
+    opcion = input("Opcion (presione Enter para salir): ")
+    print("-" * 150)
+    while opcion:
         if opcion == "1":
             panel_general_de_funciones.funcionalidad_panel()
             
@@ -83,9 +56,29 @@ def funcion_principal():
 
         elif opcion == "5":
             informacion_por_desarrollador.funcionalidad()
+        else:
+            print("Opcion incorrecta")
+        if "1" <= opcion <= "5":
+            print("-" * 150)
+            mostrar_menu()
+        opcion = input("Opcion (presione Enter para salir): ")
+        print("-" * 150)
         
-        continuar = regreso_al_menu()
-                
+
+def funcion_principal():
+    """[Autor: Grupo Ballenato]
+    """
+    programas = open("programas.txt")
+    ordenar.generar_arch_ordenados(programas)
+    generar_archivos_csv.generar_csv()
+    programas.close()
+    print(ascii_arts.titulo)
+    print(ascii_arts.ballena)
+    input("Presione Enter para continuar... ")
+    print("\n" * 100)    
+    menu_principal()
+
+
 
            
 
