@@ -17,7 +17,7 @@ def mostrar_tabla():
     [Ayuda: Imprime por pantalla una tabla de las funciones de la aplicacion
     formateado de manera similar a la tabla de built-in functions de la
     documentacion de Python]"""
-    funciones = obtener_lista_funciones()
+    funciones = obtener_lista_funciones(False)
     largo = len(max(funciones, key=len)) + 1
     lista_cortada = cortar_lista_funciones(funciones, largo)
     for funcion in lista_cortada:
@@ -145,7 +145,7 @@ def mostrar_funcion(nombre, tipo, fuente_unico, comentarios):
     if parametros != "()":
         print("--Parametros: ", parametros.replace("/c/", ","))
     else:
-         print("--Parametros: No existen parametros")
+        print("--Parametros: No existen parametros")
     print("--Modulo: ", modulo)
     print("--Autor: ", autor)
     if tipo == "#":
@@ -173,7 +173,7 @@ def mostrar_funcion_txt(nombre, texto, fuente_unico, comentarios):
     if parametros != "()":
         print("--Parametros: ", parametros.replace("/c/", ","), file=texto)
     else:
-         print("--Parametros: No existen parametros", file=texto)
+        print("--Parametros: No existen parametros", file=texto)
     print("--Modulo: ", modulo, file=texto)
     print("--Autor: ", autor, file=texto)
 
@@ -182,7 +182,7 @@ def mostrar_todo(tipo, imprimir, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Muestra por pantalla la informacion correspondiente (? o #) para todas las
     funciones de la aplicacion]"""
-    funciones = obtener_lista_funciones()
+    funciones = obtener_lista_funciones(False)
     if imprimir:
         texto = open(os.path.join("funcionalidades",
                                   "ayuda_funciones.txt"), "w")
@@ -220,7 +220,7 @@ def validar_funcion(funcion):
     """[Autor: Santiago Marczewski]
     [Ayuda: Verifica que la funcion sea valida]"""
     valida = True
-    funciones = obtener_lista_funciones()
+    funciones = obtener_lista_funciones(False)
     funciones.append("todo")
     nombre, tipo, imprimir = procesar_pedido(funcion)
     if nombre not in funciones:
