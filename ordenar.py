@@ -42,6 +42,10 @@ def leer_unificado(arch):
     de no ser asi, la funcion lo soluciona
     """
     linea = arch.readline()
+    #Si no es una linea en blanco, le agrego
+    #el salto de linea al final si no tiene (linea final)
+    if linea:
+        linea = linea.rstrip() + "\n"
     linea = linea.replace(COMILLAS_SIMPLES, COMILLAS_DOBLES)
     linea = linea.replace("\t", " " * TAM_TABULACION)
     return linea
