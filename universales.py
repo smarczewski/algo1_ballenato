@@ -17,9 +17,12 @@ def obtener_lista_funciones():
         funciones = []
         linea = leer_lineas_csv(archivo)
         while linea[0]:
-            funciones.append(linea[0])
+            if linea[0].startswith("$"):
+                funciones.append(linea[0][1:])
+            else:
+                funciones.append(linea[0])
             linea = leer_lineas_csv(archivo)
-        return funciones
+    return funciones
 
 def obtener_comentario_multilinea(linea, arch):
     """[Autor: Elian Daniel Foppiano]
