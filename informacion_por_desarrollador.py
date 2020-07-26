@@ -14,9 +14,22 @@ import os
 
 def diccionario_por_autor(ar_fuente, ar_comentarios):
     """[Autor: Gaston Proz]
-    [Ayuda: Lee los archivos csv y retorna un diccionario con cada autor como clave.
-    Como valor de cada autor contiene listas de tuplas con la firma de la funcion como primer campo, y
-    cantidad de lineas de dicha funcion como segundo campo]"""
+    [Ayuda: Lee archivos .csv, retorna un diccionario con autores como
+    clave y la firma de la funcion, junto con su cantidad de lineas
+    como valores]"""
+    """
+    Parametros
+    -----------
+    ar_fuente : archivo, modo lectura
+    
+    ar_comentarios : archivo, modo lectura
+    Returns
+    -------
+    dict
+            Diccionario que contiene a cada autor de la aplicacion como clave,
+            y como valor una lista de tuplas con la firma de la funcion como
+            primer campo y cantidad de lineas de dicha funcion como segundo campo.
+    """
     ar_fuente.seek(0)
     ar_comentarios.seek(0)
     linea_f = universales.leer_lineas_csv(ar_fuente)
@@ -40,6 +53,17 @@ def calcular_lineas_por_autor(diccionario):
     [Ayuda: Recibe un diccionario que contiene funciones por autor y
     la cantidad de lineas de cada una, devuelve otro diccionario con autor como claves,
     y como valor las lineas totales de cada autor]"""
+    """
+    Parametros
+    ----------
+    diccionario : dict
+            Diccionario principal
+    Returns
+    -------
+    dict
+            Diccionario que contiene a cada autor como clave, y
+            sus lineas de codigo totales como valor
+    """
     lineas_por_autor = {}
     #Itera los autores del diccionario principal
     for autor in diccionario:
@@ -57,6 +81,18 @@ def calcular_lineas_totales(diccionario):
     """[Autor: Gaston Proz]
     [Ayuda: Recibe un diccionario con autores como claves y las lineas totales de cada uno,
     y devuelve un entero con el total de lineas de todos los autores]"""
+    """
+    Parametros
+    ----------
+    diccionario : dict
+            Diccionario que indica las lineas de
+            cada autor
+    Returns
+    -------
+    int
+            Entero que indica el total de lineas
+            realizadas por todos los autores
+    """
     lineas_totales = 0
     #Suma en un acumulador las lineas de cada autor
     datos = calcular_lineas_por_autor(diccionario)
@@ -64,12 +100,26 @@ def calcular_lineas_totales(diccionario):
         lineas_totales += datos[autor]
     return lineas_totales
 
-def autor_ordenado_por_cant_lineas(diccionario, ordenado = False):
+def autor_ordenado_por_cant_lineas(diccionario):
     """[Autor: Gaston Proz]
     [Ayuda: Recibe un diccionario con las lineas totales de cada autor,
     y las ordena de forma descendente por cantidad de lineas totales]"""
+    """
+    Parametros
+    ----------
+    diccionario : dict
+                Diccionario que indica las lineas de
+                cada autor
+    Returns
+    -------
+    dict
+                Diccionario ordenado de forma descendente
+                por lineas de autor
+    """
+                  
     lista = list(diccionario.items())        
     #Ordenamiento por burbujeo optimizado
+    ordenado = False
     i = 0
     while (i < (len(lista)-1) and not ordenado):
         ordenado = True
@@ -81,12 +131,26 @@ def autor_ordenado_por_cant_lineas(diccionario, ordenado = False):
 
     return dict(lista)
 
-def porcentaje_por_autor(diccionario):
+def porcentaje_por_autor(autor_lineas, total):
     """[Autor: Gaston Proz]
-    [Ayuda: Funcion que calcula el porcentaje de participacion de cada autor, devuelve
+    [Ayuda: Calcula el porcentaje de participacion de cada autor, devuelve
     un diccionario con autores como claves, y el porcentaje como valor]"""
-    total = calcular_lineas_totales(diccionario)
-    autor_lineas = calcular_lineas_por_autor(diccionario)
+    """
+    Parametros
+    ----------
+    autor_lineas : dict
+                Diccionario que indica las lineas
+                de cada autor
+    total : int
+                Entero que indica la cantidad de lineas
+                totales de todos los autores
+    Returns
+    -------
+    dict
+                Diccionario que contiene los porcentajes
+                de participacion de cada autor
+    """
+    
     porcentajes = {}
     #A medida que itera, calcula los porcentajes
     #y lo agrega al diccionario
@@ -97,22 +161,65 @@ def porcentaje_por_autor(diccionario):
 def total_funciones(diccionario):
     """[Autor: Gaston Proz]
     [Ayuda: Calcula el total de funciones realizadas por todos los autores]"""
+    """
+    Parametros
+    ----------
+    diccionario : dict
+                Diccionario principal
+    Returns
+    -------
+    dict
+                Diccionario que indica la cantidad de funciones
+                realizadas por cada autor
+    """
     funciones_cant = 0
     #Suma en un acumulador la cantidad de funciones
     for autor in diccionario:
         funciones_cant += len(diccionario[autor])
     return funciones_cant
+
+def formato_participacion():
+    """[Autor: Gaston Proz]
+    [Ayuda: Contiene los formatos usados en la tabla de participacion,
+    tomando en cuenta el largo del nombre de las funciones]
+    """
+    """
+    Returns
+    -------
+    str
+            Bloque de texto que contiene el formato usado en la tabla
+    """
+    nombre_funciones = universales.obtener_lista_funciones(False)   
+    largo_funciones = max(len(funcion) for funcion in nombre_funciones)    
+    espacio = "       "
+    formato_funciones = espacio+"{:<"+str(largo_funciones)+"}"+(espacio*2)+"{:>2}\n"
+    formato_columnas = espacio+"{}{:>"+str(largo_funciones+11)+"}\n"
+    formato_resumen_autor = espacio+"{:>3} Funciones - Lineas {:>"+str(largo_funciones - len(espacio))+"} {:3.0f}%\n\n\n\n"
+    formato_total = "Total: {:>3} Funciones - Lineas {:>"+str(largo_funciones-len(espacio))+"}"
+    largo_total = largo_funciones+len(espacio*3)
+    
+    return formato_funciones, formato_columnas, formato_resumen_autor, formato_total, largo_total
     
 def generar_participacion(ar_fuente, ar_comentarios, ar_participacion):
     """[Autor: Gaston Proz]
     [Ayuda: Genera el archivo participacion.txt]"""
+    """
+    Parametros
+    ----------
+    ar_fuente : archivo, modo lectura
+    
+    ar_comentarios : archivo, modo lectura
+    
+    ar_participacion : archivo, modo escritura
+    """
+    
     dicc = diccionario_por_autor(ar_fuente, ar_comentarios) #Contiene el diccionario principal
     #A partir de aqui se usa la variable dicc cuando sea necesario
     #para evitar volver a leer los archivos csv en cada llamado
     autor_lineas = calcular_lineas_por_autor(dicc)
     autor_ordenado = autor_ordenado_por_cant_lineas(autor_lineas)
     total_lineas = calcular_lineas_totales(dicc)    
-    porcentaje = porcentaje_por_autor(dicc)
+    porcentaje = porcentaje_por_autor(autor_lineas, total_lineas)
     funciones = total_funciones(dicc)
     formato_funciones, formato_columnas, formato_resumen_autor, formato_total, largo_total = formato_participacion()
     ar_participacion.write("{:>40}\n\n\n".format("Informe de Desarrollo Por Autor"))
@@ -129,22 +236,6 @@ def generar_participacion(ar_fuente, ar_comentarios, ar_participacion):
                 ar_participacion.write(formato_resumen_autor.format(len(dicc[autor]), autor_lineas[autor], porcentaje[autor]))
     #Una vez que recorrio a todos los autores, se muestra el resumen general
     ar_participacion.write(formato_total.format(funciones, total_lineas))
-
-def formato_participacion():
-    """[Autor: Gaston Proz]
-    [Ayuda: Contiene los formatos usados en la tabla de participacion,
-    tomando en cuenta el nombre de las funciones]
-    """
-    nombre_funciones = universales.obtener_lista_funciones()   
-    largo_funciones = max(len(i) for i in nombre_funciones)    
-    espacio = "       "
-    formato_funciones = espacio+"{:<"+str(largo_funciones)+"}"+(espacio*2)+"{:>2}\n"
-    formato_columnas = espacio+"{}{:>"+str(largo_funciones+11)+"}\n"
-    formato_resumen_autor = espacio+"{:>3} Funciones - Lineas {:>"+str(largo_funciones - len(espacio))+"} {:3.0f}%\n\n\n\n"
-    formato_total = "Total: {:>3} Funciones - Lineas {:>"+str(largo_funciones-len(espacio))+"}"
-    largo_total = largo_funciones+len(espacio*3)
-    
-    return formato_funciones, formato_columnas, formato_resumen_autor, formato_total, largo_total
 
 def imprimir_participacion():
     """[Autor: Gaston Proz]
