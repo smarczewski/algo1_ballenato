@@ -7,7 +7,7 @@ import re
 def eliminar_cadenas(texto):
     """
     [Autor: Elian Daniel Foppiano]
-    [Ayuda: Elimina las cadenas del texto recibido
+    [Ayuda: Elimina las cadenas del texto recibido.]
 
     Parametros
     ----------
@@ -16,7 +16,7 @@ def eliminar_cadenas(texto):
     Returns
     -------
     str
-            Texto sin cadenas]
+            Texto sin cadenas
     """
 
     texto = re.sub('"[^"]*"', "", texto)
@@ -27,7 +27,7 @@ def eliminar_coment_linea(linea):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Elimina los comentarios que se encuentran en la misma
-    linea que una instruccion. Ej: variable = 5 #Comentario
+    linea que una instruccion. Ej: variable = 5 #Comentario.]
 
     Parametros
     ----------
@@ -38,7 +38,7 @@ def eliminar_coment_linea(linea):
     Returns
     -------
     str
-            Instruccion sin comentarios de linea]
+            Instruccion sin comentarios de linea
     """
 
     cadena = False #Indica si esta dentro de una cadena o no
@@ -56,7 +56,7 @@ def obtener_coment_linea(linea):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Devuelve el comentario de linea que puede producirse en
-    una instruccion.
+    una instruccion.]
 
     Parametros
     ----------
@@ -68,7 +68,7 @@ def obtener_coment_linea(linea):
     -------
     str
             Comentario de linea que se encuentra en la instruccion.
-            Si no encuentra ninguno, devuelve un str vacio]
+            Si no encuentra ninguno, devuelve un str vacio
     """
     
     linea_sin_coment = eliminar_coment_linea(linea)
@@ -78,7 +78,7 @@ def contar_invocaciones(funcion, linea, func):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Cuenta la cantidad de veces que una funcion se invoca en
-    una linea de codigo recibida.
+    una linea de codigo recibida.]
 
     Parametros
     ----------
@@ -95,7 +95,7 @@ def contar_invocaciones(funcion, linea, func):
     Returns
     -------
     int
-            Cantidad de veces que funcion se encontro en linea]
+            Cantidad de veces que funcion se encontro en linea
     """
 
     """
@@ -123,7 +123,7 @@ def buscador_invocaciones(l_funciones):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Genera una expresion regular que sirve para buscar las
-    funciones recibidas.
+    funciones recibidas.]
 
     Parametros
     ----------
@@ -135,7 +135,7 @@ def buscador_invocaciones(l_funciones):
     -------
     str
             Expresion regular que identifica la invocacion de las
-            funciones]
+            funciones
     """
 
     """

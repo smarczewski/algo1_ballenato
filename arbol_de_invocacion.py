@@ -38,12 +38,13 @@ def generar_dic_cantidad_lineas():
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Genera un diccionario cuyas claves son los nombres de las
     funciones definidas en el programa, y los valores son la cantidad
-    de lineas de codigo que tienen.
-
+    de lineas de codigo que tienen.]
+    """
+    """
     Returns
     -------
     dict
-            Almacena pares funcion - cant_lineas]
+            Almacena pares funcion - cant_lineas
     """
 
     dic_lineas = {}
@@ -64,12 +65,13 @@ def generar_dic_invocaciones():
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Genera genera el diccionario principal de funciones e
-    invocaciones.
-
+    invocaciones.]
+    """
+    """
     Returns
     -------
     dict
-            Almacena pares funcion - (invoc_1, invoc_2, ...)]
+            Almacena pares funcion - (invoc_1, invoc_2, ...)
     """
 
     dic_funciones = {}
@@ -97,8 +99,9 @@ def generar_dic_invocaciones():
 def reemplazar_valor(lista, original, reemplazo):
     """
     [Autor: Elian Daniel Foppiano]
-    [Ayuda: Reemplaza un valor dado de una lista por otro.
-
+    [Ayuda: Reemplaza un valor dado de una lista por otro.]
+    """
+    """
     Parametros
     ----------
     lista : lista de str
@@ -110,7 +113,7 @@ def reemplazar_valor(lista, original, reemplazo):
     Returns
     -------
     lista de str
-            Lista con los valores solicitados reemplazados]
+            Lista con los valores solicitados reemplazados
     """
 
     l_reemplazo = []
@@ -125,14 +128,15 @@ def eliminar_recursividad(dic_funciones, dic_lineas):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Soluciona el problema de las funciones recursivas al
-    imprimir el arbol de invocacion.
-
+    imprimir el arbol de invocacion.]
+    """
+    """
     Parametros
     ----------
     dic_funciones : dict
             Almacena pares funcion - (invoc_1, invoc_2, ...)
     dic_lineas : dict
-            Almacena pares funcion - cant_lineas]
+            Almacena pares funcion - cant_lineas
     """
 
     """
@@ -169,12 +173,13 @@ def eliminar_recursividad(dic_funciones, dic_lineas):
 def buscar_principal():
     """
     [Autor: Elian Daniel Foppiano]
-    [Ayuda: Busca la funcion principal por su marcador.
-
+    [Ayuda: Busca la funcion principal por su marcador.]
+    """
+    """
     Returns
     -------
     str
-            Nombre de la funcion principal, con el marcador "$"]
+            Nombre de la funcion principal, con el marcador "$"
     """
 
     
@@ -189,8 +194,9 @@ def buscar_principal():
 def imprimir_arbol(funcion, dic_funciones, dic_lineas, espacio_acum = -1):
     """
     [Autor: Elian Daniel Foppiano]
-    [Ayuda: Imprime una rama del arbol de funciones e invocaciones.
-
+    [Ayuda: Imprime una rama del arbol de funciones e invocaciones.]
+    """
+    """
     Parametros
     ----------
     funcion : str
@@ -202,7 +208,7 @@ def imprimir_arbol(funcion, dic_funciones, dic_lineas, espacio_acum = -1):
             Almacena pares funcion - cant_lineas
     espacio_acum : int, opcional
             Indentacion con la cual se debe imprimir la rama de la
-            funcion (-1 por defecto)]
+            funcion (-1 por defecto)
     """
 
     #Si no es la principal, imprimo

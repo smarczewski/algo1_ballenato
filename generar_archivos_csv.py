@@ -20,8 +20,9 @@ def leer_centinela(arch):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Lee una linea del archivo y la devuelve si no se llego al
     final del archivo. De lo contrario, devuelve el centinela que
-    indica el final de archivo.
-
+    indica el final de archivo.]
+    """
+    """
     Parametros
     ----------
     arch : archivo, modo lectura
@@ -30,7 +31,7 @@ def leer_centinela(arch):
     -------
     str
             Siguiente linea de arch, o chr(255) si se llego al final
-            del archivo]
+            del archivo
     """
 
     linea = arch.readline()
@@ -39,14 +40,15 @@ def leer_centinela(arch):
 def guardar_nombre_funcion(firma, arch):
     """
     [Autor: Elian Daniel Foppiano]
-    [Ayuda: Recibe la firma de una funcion y guarda su nombre.
-
+    [Ayuda: Recibe la firma de una funcion y guarda su nombre.]
+    """
+    """
     Parametros
     ----------
     firma : str
             Firma de una funcion
     arch : archivo, modo sobreescritura
-            Donde se guarda la firma de la funcion]
+            Donde se guarda la firma de la funcion
     """
 
     nombre_funcion = firma[4: firma.index("(")]
@@ -57,8 +59,9 @@ def guardar_campo(dato, arch, formateado = True, nro_linea = None):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda un dato en en archivo .csv recibido.
     Si el campo debe estar formateado, se utiliza el marcador que
-    almacena el numero de linea en el que se encontro el dato.
-
+    almacena el numero de linea en el que se encontro el dato.]
+    """
+    """
     Parametros
     ----------
     dato : str
@@ -70,7 +73,7 @@ def guardar_campo(dato, arch, formateado = True, nro_linea = None):
     nro_linea : int, opcional
             Numero que se agrega al formato del dato. (None por 
             defecto). Solo se debe especificar en caso de que
-            formateado sea True]
+            formateado sea True
     """
 
     #Reemplazo las comas para que no interfieran
@@ -87,8 +90,9 @@ def guardar_parametros(firma, arch_entrada, arch_salida):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Recibe la firma de una funcion y guarda sus parametros
-    formales.
-
+    formales.]
+    """
+    """
     Parametros
     ----------
     firma : str
@@ -96,7 +100,7 @@ def guardar_parametros(firma, arch_entrada, arch_salida):
     arch_entrada : archivo, modo lectura
             Apunta a la linea siguiente a la firma de la funcion
     arch_salida : archivo, modo sobreescritura
-            Donde se deben guardar los parametros]
+            Donde se deben guardar los parametros
     """
 
     #La lista de parametros termina en la primera linea
@@ -118,14 +122,15 @@ def guardar_parametros(firma, arch_entrada, arch_salida):
 def guardar_nombre_modulo(arch, arch_salida):
     """
     [Autor: Elian Daniel Foppiano]
-    [Ayuda: Recibe un archivo y guarda su nombre sin la extension.
-
+    [Ayuda: Recibe un archivo y guarda su nombre sin la extension.]
+    """
+    """
     Parametros
     ----------
     arch : archivo, cualquier modo
             Archivo del cual se quiere guardar el nombre
     arch_salida : archivo, modo sobreescritura
-            Donde se guarda el nombre de arch]
+            Donde se guarda el nombre de arch
     """
 
     nombre_modulo = os.path.basename(arch.name)
@@ -137,8 +142,9 @@ def obtener_comentario_marcador(comentario, marcador, eliminar_marcador):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Busca un bloque de texto delimitado por un marcador
-    formado por corchetes y una palabra clave.
-    
+    formado por corchetes y una palabra clave.]
+    """
+    """    
     Parametros
     ----------
     comentario : str
@@ -154,7 +160,7 @@ def obtener_comentario_marcador(comentario, marcador, eliminar_marcador):
     str
             Bloque de texto que comienza por el marcador y termina
             en el proximo corchete abierto. Si no se encuentra el
-            marcador, devuelve un str vacio]
+            marcador, devuelve un str vacio
     """
 
     informacion = ""
@@ -171,8 +177,9 @@ def guardar_comentario_ayuda(linea_inicio, arch, comentarios):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda la informacion del autor y ayuda de la funcion. Si
     no la encuentra, guarda campos por defecto. Devuelve la linea en
-    la que termina el comentario inicial.
-
+    la que termina el comentario inicial.]
+    """
+    """
     Parametros
     ----------
     linea_inicio : str
@@ -186,7 +193,7 @@ def guardar_comentario_ayuda(linea_inicio, arch, comentarios):
     -------
     str
             Linea siguiente al fin del comentario de ayuda. Si no hay
-            comentario de ayuda, devuelve linea_inicio]
+            comentario de ayuda, devuelve linea_inicio
     """
 
     if linea_inicio.lstrip().startswith(COMILLAS_DOBLES):
@@ -213,8 +220,9 @@ def guardar_datos_funcion(firma_funcion, arch_entrada, fuente_unico, comentarios
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Recibe una funcion y guarda su informacion en
-    fuente_unico.csv y comentarios.csv
-
+    fuente_unico.csv y comentarios.csv.]
+    """
+    """
     Parametros
     ----------
     firma_funcion : str
@@ -233,7 +241,7 @@ def guardar_datos_funcion(firma_funcion, arch_entrada, fuente_unico, comentarios
     -------
     str
             Linea en la cual se encontro la siguiente funcion del
-            archivo. Si se llego al final del mismo, devuelve chr(255)]
+            archivo. Si se llego al final del mismo, devuelve chr(255)
 
     """
 
@@ -275,11 +283,12 @@ def merge(l_archivos):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Recibe una lista de archivos y aplica el algoritmo de
-    mezcla para crear fuente_unico.csv y comentarios.csv
-
+    mezcla para crear fuente_unico.csv y comentarios.csv.]
+    """
+    """
     Parametros
     ----------
-    l_archivos : lista de archivos, modo lectura]
+    l_archivos : lista de archivos, modo lectura
     """
 
     """

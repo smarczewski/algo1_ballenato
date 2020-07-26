@@ -18,8 +18,9 @@ def leer_unificado(arch):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Lee una linea del archivo y la devuelve convirtiendo las
     comillas triples simples en comillas triples dobles y las
-    tabulaciones por 4 espacios.
-
+    tabulaciones por 4 espacios.]
+    """
+    """
     Parametros
     ----------
     arch : archivo, modo lectura
@@ -27,7 +28,7 @@ def leer_unificado(arch):
     Returns
     -------
     str
-        Siguiente linea de arch, con los caracteres convertidos]
+        Siguiente linea de arch, con los caracteres convertidos
     """
 
     """
@@ -55,8 +56,9 @@ def buscar_invocacion(dir_archivo):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Devuelve la primera invocacion a funcion que encuentre en
     el programa y que se realice por fuera de cualquier bloque de 
-    funcion (funcion principal del programa)
-
+    funcion (funcion principal del programa)]
+    """
+    """
     Precondiciones
     --------------
     El archivo al que hace referencia dir_arch debe contener al menos
@@ -72,7 +74,7 @@ def buscar_invocacion(dir_archivo):
     -------
     str
             Nombre de la primera funcion que se invoca en el bloque
-            principal del programa]
+            principal del programa
     """
 
     """
@@ -105,8 +107,9 @@ def listar_funciones_codigo(arch_entrada, principal):
     [Ayuda: Crea una lista en el que cada elemento es el codigo de una
     funcion definida en arch_entrada. Devuelve la lista ordenada
     alfabeticamente por nombre de la funcion. Si la funcion principal
-    se encuentra en arch_entrada, se le agrega el marcador principal
-
+    se encuentra en arch_entrada, se le agrega el marcador principal.]
+    """
+    """
     Parametros
     ----------
     arch_entrada : archivo, modo lectura
@@ -119,7 +122,7 @@ def listar_funciones_codigo(arch_entrada, principal):
     lista de str
             Cada str contiene la firma y codigo de una funcion. La
             lista esta ordenada alfabeticamente por los nombres de las
-            funciones]
+            funciones
     """
 
     funciones = []
@@ -161,8 +164,9 @@ def generar_dir(dir_arch, carpeta, extension):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Recibe la ruta de acceso de un programa y devuelve la ruta
     de un archivo del mismo nombre que se encuentra en la carpeta
-    indicada, con la extension recibida como parametro.
-
+    indicada, con la extension recibida como parametro.]
+    """
+    """
     Parametros
     ----------
     dir_arch : str
@@ -175,7 +179,7 @@ def generar_dir(dir_arch, carpeta, extension):
     Returns
     -------
     str
-            Ruta del archivo que se encuentra en la carpeta indicada]
+            Ruta del archivo que se encuentra en la carpeta indicada
     """
 
     nombre_python = os.path.basename(dir_arch)
@@ -188,13 +192,14 @@ def generar_dir(dir_arch, carpeta, extension):
 def eliminar_archivos_viejos(carpeta):
     """
     [Autor: Elian Daniel Foppiano]
-    [Ayuda: Elimina los archivos de la carpeta recibida.
-
+    [Ayuda: Elimina los archivos de la carpeta recibida.]
+    """
+    """
     Parametros
     ----------
     carpeta : str
             Ruta de la carpeta de la cual se quieren eliminar los
-            archivos]
+            archivos
     """
 
     path_arch_viejos = os.listdir(carpeta)
@@ -206,13 +211,14 @@ def generar_arch_ordenados(programas):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Genera los archivos con las funciones ordenadas
-    alfabeticamente y las guarda en la carpeta "funciones".
-
+    alfabeticamente y las guarda en la carpeta "funciones".]
+    """
+    """
     Parametros
     ----------
     programas : archivo, modo lectura
             Contiene las rutas de los programas de la aplicacion que
-            se quiere ordenar]
+            se quiere ordenar
     """
 
     #Elimino los archivos viejos para que
