@@ -1,6 +1,5 @@
 from exp_reg import contar_invocaciones
 import os
-import re
 from universales import leer_lineas_csv
 
 
@@ -200,8 +199,23 @@ def cant_comentarios(dic, archivo):
     while linea[0] != "":
 
         funcion = linea[0]
+        cant_lineas = 0
+        comillas_dobles = chr(34) *3
 
-        dic[funcion]["comentarios"] = len(linea[3:])
+        for campo in linea[3:]: 
+        # considero a partir del cuarto campo porque los anteriores no tienen comentarios
+
+            if comillas_dobles in campo:
+            # si es un comentario multilinea, cuento cada linea del comentario
+
+                cant_lineas += campo.count("/n/") + 1
+
+            else:
+
+                cant_lineas += 1
+
+                
+        dic[funcion]["comentarios"] = cant_lineas
 
         linea = leer_lineas_csv(archivo)
 
@@ -386,8 +400,3 @@ def funcionalidad_panel():
 #------------------------- PRUEBA -------------------------
 
 #funcionalidad_panel()
-
-
-
-
-
