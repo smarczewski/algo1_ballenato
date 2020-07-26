@@ -73,7 +73,7 @@ def generar_dic_invocaciones():
     """
 
     dic_funciones = {}
-    l_funciones = obtener_lista_funciones()
+    l_funciones = obtener_lista_funciones(True)
     exp_busqueda_funciones = exp_reg.buscador_invocaciones(l_funciones)
     fuente_unico = open("fuente_unico.csv")
 
