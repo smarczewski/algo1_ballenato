@@ -25,10 +25,6 @@ def encontrar_invocaciones(funciones, veces_llamado, codigo):
             funciones que son invocadas y cuantas veces
     - cádigo : str
             línea de código
-    Returns:
-    --------
-    - veces_llamado : dict
-            funciones que son invocadas y cuantas veces
     """
     # para cada función en el programa
     for func_llamada in funciones:
@@ -42,7 +38,6 @@ def encontrar_invocaciones(funciones, veces_llamado, codigo):
         elif cant_inv > 0 and func_llamada in veces_llamado:
             # le suma la cantidad de invocaciones
             veces_llamado[func_llamada] += cant_inv
-    return veces_llamado
 
 def buscar_en_linea_con_parentesis(linea, funciones):
     """[Autor: Jean Paul Yatim]
@@ -66,7 +61,7 @@ def buscar_en_linea_con_parentesis(linea, funciones):
         # si hay por lo menos un "("
         if "(" in codigo:
             # devuelve un diccionario con las funciones invocadas
-            veces_llamado = encontrar_invocaciones(funciones, veces_llamado, codigo)
+            encontrar_invocaciones(funciones, veces_llamado, codigo)
     return veces_llamado
 
 def reunir_invocaciones(archivo):
@@ -76,9 +71,10 @@ def reunir_invocaciones(archivo):
     diccionario, que tiene como clave a aquellas funciones que
     invoque (si es que invoca a alguna), y como valor, la cantidad
     de veces que la invoca.
-    Ej: Si la funcion A invoca a B 3 veces, C invoca a D 2 veces
-    y a E 1 vez y F no invoca a nadie, el diccionario sería:
-    {A:{B:3}, C:{D:2, E:1}, F:{}}]"""
+    Ej: Si la función "A" invoca a "B" 3 veces, "B" invoca a
+    "C" 2 veces y a "D" 1 vez y ni "C" ni "D" invocan a nadie,
+    el diccionario queda como:
+    {A: {B:3}, B: {C:2, D:1}, C: {}, D: {}}]"""
     """
     Parámetro:
     ----------
@@ -129,8 +125,6 @@ def formato_filas_inv(funcs_llamadas, funcs, x, total_inv):
     --------
     - filas : str
             formato de una fila en particular
-    - total_inv : dict
-            totales de invocaciones de cada función (actualizado)
     """
     filas = ""
     # para cada función en el programa (cada columna)
@@ -149,7 +143,7 @@ def formato_filas_inv(funcs_llamadas, funcs, x, total_inv):
         else:
             # deja la celda vacía
             filas += "{:^3}|".format("")
-    return filas, total_inv
+    return filas
 
 def crear_top_tabla_inv(ar_tabla, ancho_columna, columnas,\
                         separador, separador_bordes):
@@ -214,7 +208,7 @@ def crear_cuerpo_tabla_inv(ar_tabla, funcs, funcs_llamadas,\
     for x in range(1,columnas+1):
         # devuelve el formato de esa fila a partir de la segunda columna
         # y el total de invocaciones de las columnas (actualizado)
-        filas, total_inv = formato_filas_inv(funcs_llamadas, funcs, x, total_inv)
+        filas = formato_filas_inv(funcs_llamadas, funcs, x, total_inv)
         # crea el formato de la primer columna
         n_funcion = "{}-{}".format(x, funcs[x-1])
         # escribe ambos formatos, uno al lado del otro
