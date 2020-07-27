@@ -364,8 +364,8 @@ def formato_tabla(dic):
     formato = "| {:^10} | {:^6} | {:^12} | {:^6} | {:^8} | {:^3} | {:^5} | {:^5} | {:^4} | {:^11} | {:^5} |"
     # se utilizan constantes para la longitud del formato de las demas columnas
 
-    formato_titulos = "| {:^" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
-    formato_fila = "\n| {:<" + str(max_modulo) + "}" + formato + "{:^" + str(max_autor) + "} |"
+    formato_titulos = "| {:^" + str(max_modulo) + "}" + formato + " {:^" + str(max_autor) + "} |"
+    formato_fila = "\n| {:<" + str(max_modulo) + "}" + formato + " {:^" + str(max_autor) + "} |"
     
    
 
@@ -429,7 +429,6 @@ def genera_dic():
 
 
 
-
 def genera_panel_csv(dic):
 
     """
@@ -471,7 +470,7 @@ def genera_panel_csv(dic):
         # toma cada funcion y escribe sus datos, separados por comas, en el csv
 
     panel_general.close()
-
+    
 
 
 def funcionalidad_panel():
@@ -485,5 +484,4 @@ def funcionalidad_panel():
     dic = genera_dic()
     formato_tabla(dic)
     genera_panel_csv(dic)
-
-
+    
