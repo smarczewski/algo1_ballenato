@@ -17,7 +17,6 @@ import analizador_de_reutilizacion_de_codigo
 import arbol_de_invocacion
 import informacion_por_desarrollador
 
-CARPETA_FUNCIONES_ORDENADAS = "funciones"
 
 
 def mostrar_menu():
