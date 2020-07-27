@@ -117,7 +117,7 @@ def autor_ordenado_por_cant_lineas(diccionario):
                 por lineas de autor
     """
                   
-    lista = list(diccionario.items())        
+    lista = list(diccionario.items())
     #Ordenamiento por burbujeo optimizado
     ordenado = False
     i = 0
@@ -128,7 +128,8 @@ def autor_ordenado_por_cant_lineas(diccionario):
             if lista[j][1] <= lista[j+1][1]:
                 lista[j], lista[j+1] = lista[j+1], lista[j]
                 ordenado = False
-
+        i += 1
+       
     return dict(lista)
 
 def porcentaje_por_autor(autor_lineas, total):

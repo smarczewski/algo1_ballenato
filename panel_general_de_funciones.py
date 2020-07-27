@@ -487,4 +487,3 @@ def funcionalidad_panel():
     genera_panel_csv(dic)
 
 
-funcionalidad_panel()
