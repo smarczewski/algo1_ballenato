@@ -1,3 +1,13 @@
+"""
+Modulo que imprime una tabla de todas las funcionalidades de la aplicacion y le
+pide al usuario el ingreso de un pedido que se ajuste al formato solicitado en
+la consigna del pdf, esto le permite obtener la informacion que desee sobre una
+funcion en especifico, sobre todas o solicitar la creacion de un archivo txt
+con la informacion de ayuda asociada de todas las funciones limitada a 80
+caracteres por linea
+"""
+
+
 import os
 from universales import leer_lineas_csv
 from universales import obtener_lista_funciones
@@ -38,34 +48,27 @@ def mostrar_tabla():
     print(("+" + "-"*largo)*5 + "+", sep="")
 
 
+def nro_linea(linea):
+    """[Autor: Santiago Marczewski]
+    [Ayuda: Recibe una linea, lee su marcador y devuelve en que linea debe ir]"""
+    numero_linea = int(linea[1:linea.index("/", 1)])
+    return numero_linea
+
+
 def comparador_marcadores(instruccion, adicional):
     """[Autor: Santiago Marczewski]
-    [Ayuda: Toma una instruccion y un comentario adicional y determina
-    si estan la misma linea.]"""
+    [Ayuda: Determina si una instruccion esta antes(1), despues(2)
+    o en la misma linea(0) que un comentario adicional, comparando sus marcadores]"""
     nro_linea_instruccion = nro_linea(instruccion)
     nro_linea_adicional = nro_linea(adicional)
-    # Si los dos van en la misma linea devuelve True, sino False
-    if nro_linea_instruccion == nro_linea_adicional:
-        devolver = True
-    else:
-        devolver = False
+
+    if nro_linea_instruccion < nro_linea_adicional: #Si la instruccion va antes
+        devolver = 1
+    elif nro_linea_instruccion > nro_linea_adicional: #Si el comentario va antes
+        devolver = 2
+    else: #Si ambos van en la misma linea
+        devolver = 0
     return devolver
-
-
-def buscar_funcion(archivo, funcion):
-    """[Autor: Santiago Marczewski]
-    [Ayuda: Busca una funcion por su nombre en el archivo pasado por parametro y
-    devuelve toda la linea que le corresponde del csv.]"""
-    archivo.seek(0)
-    nombre_funcion = ""
-    #Comparamos la funcion que buscamos con el primer campo de fuente_unico
-    while nombre_funcion != funcion:
-        linea = leer_lineas_csv(archivo)
-        if linea[0].startswith("$"):
-            nombre_funcion = linea[0][1:]
-        else:
-            nombre_funcion = linea[0]
-    return linea
 
 
 def eliminar_marcador(linea):
@@ -94,42 +97,36 @@ def imprimir_codigo(instrucciones, adicionales):
     """[Autor: Santiago Marczewski]
     [Ayuda: Toma las instrucciones y los comentarios adicionales e imprime el bloque de codigo
     correspondiente tal como aparece en el codigo de la aplicacion]"""
-    codigo_entero = []
-    #Hacemos dos for anidados para iterar por las instrucciones y comentarios
-    for instruccion in instrucciones:
-        for comentario in adicionales:
-            #Si la instruccion y el comentario van en la misma linea
-            if comparador_marcadores(instruccion, comentario) == True:
-                #Unimos la instruccion con el comentarios sin marcador
-                #Reemplazamos la linea vieja por la nueva
-                #Eliminamos el comentario que ya agregamos a la nueva linea
-                instruccion_nueva = instruccion + eliminar_marcador(comentario)   
-                instrucciones.append(instruccion_nueva)
-                instrucciones.remove(instruccion)
-                adicionales.remove(comentario)
-    #Unimos las instrucciones y comentarios del bloque de codigo
-    codigo_entero = instrucciones + adicionales
-    #Ordenamos el bloque de codigo por el marcador de linea
-    codigo_entero.sort(key=nro_linea)
-    #Imprimimos el bloque formateado
-    for lineas in codigo_entero:
-        imprimir_formateado(lineas)
-
-
-def nro_linea(linea):
-    """[Autor: Santiago Marczewski]
-    [Ayuda: Recibe una linea, lee su marcador y devuelve en que linea debe ir]"""
-    numero_linea = int(linea[1:linea.index("/", 1)])
-    return numero_linea
+    #Inicializamos los contadores de ambas listas
+    i = j = 0
+    #Mientras todavia queden lineas sin leer de ambas listas
+    while i < len(instrucciones) and j < len(adicionales):
+        #comparamos las lineas, imprimimos y aumentamos el contador segun corresponda
+        control = comparador_marcadores(instrucciones[i], adicionales[j])
+        if control == 1:
+            imprimir_formateado(instrucciones[i])
+            i += 1
+        elif control == 2:
+            imprimir_formateado(adicionales[j])
+            j += 1
+        else: #En caso de que vayan en la misma linea, le quitamos el marcador al comentario antes
+            imprimir_formateado(instrucciones[i] + " " + eliminar_marcador(adicionales[j]))
+            i += 1
+            j += 1
+    #Si quedan instrucciones sin leer
+    while i < len(instrucciones):
+        imprimir_formateado(instrucciones[i])
+        i += 1
+    #Si quedan comentarios sin leer
+    while j < len(adicionales):
+        imprimir_formateado(adicionales[j])
+        j += 1
 
 
 def limitar_largo_linea(texto_a_limitar, texto):
     """[Autor: Santiago Marczewski]
     [Ayuda: Recibe las lineas de la descripcion de ayuda y las devuelve
     formateadas y limitadas a 80 caracteres para la creacion del txt]"""
-    #Esta no es la version final de esta funcion
-    #Encontre errores con la que si va y que no corta las palabras
-    #Me queda pendiente subir la final, pero subo esta por si quieren ir leyendo codigo
     texto_a_limitar = " ".join(texto_a_limitar.strip().split())
     texto_a_limitar = [texto_a_limitar[x:x+80]
                         for x in range(0, len(texto_a_limitar), 80)]
@@ -137,10 +134,38 @@ def limitar_largo_linea(texto_a_limitar, texto):
         print(lineas, file=texto)
         
         
+def buscar_funcion(archivo, funcion):
+    """[Autor: Santiago Marczewski]
+    [Ayuda: Busca una funcion por su nombre en el archivo pasado por parametro y
+    devuelve toda la linea que le corresponde del csv.]"""
+    archivo.seek(0)
+    nombre_funcion = ""
+    #Comparamos la funcion que buscamos con el primer campo de fuente_unico
+    while nombre_funcion != funcion:
+        linea = leer_lineas_csv(archivo)
+        if linea[0].startswith("$"):
+            nombre_funcion = linea[0][1:]
+        else:
+            nombre_funcion = linea[0]
+    return linea
+
+
 def mostrar_funcion(nombre, tipo, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Toma una funcion y el tipo de pedido y muestra por pantalla la descripcion de ayuda, parametros,
     modulo y autor de la funcion, tomando los datos de los archivos csv pasados por parametro]"""
+    """
+    Parametros
+    ----------
+    nombre : str
+            Nombre de la funcion que se quiere ver
+    tipo : str
+            Es uno de los caracteres que indica el tipo de pedido (? o #)
+    fuente_unico : archivo csv
+            Archivo con parte de la informacion de cada funcion
+    comentarios : archivo csv
+            Archivo con parte de la informacion de cada funcion
+    """
     #Tomamos los datos necesarios
     info_fuente = buscar_funcion(fuente_unico, nombre)
     info_comentarios = buscar_funcion(comentarios, nombre)
@@ -175,6 +200,18 @@ def mostrar_funcion_txt(nombre, texto, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Toma una funcion y el tipo de pedido y envia al archivo ayuda_funciones.txt la descripcion de ayuda,
     parametros, modulo y autor de la funcion, tomando los datos de los archivos csv pasados por parametro]"""
+    """
+    Parametros
+    ----------
+    nombre : str
+            Nombre de la funcion que se quiere ver
+    texto : archivo txt
+            Archivo de texto al que se quiere imprimir la informacion
+    fuente_unico : archivo csv
+            Archivo con parte de la informacion de cada funcion
+    comentarios : archivo csv
+            Archivo con parte de la informacion de cada funcion
+    """
     #Tomamos los datos necesarios
     info_fuente = buscar_funcion(fuente_unico, nombre)
     info_comentarios = buscar_funcion(comentarios, nombre)
@@ -205,6 +242,18 @@ def mostrar_todo(tipo, imprimir, fuente_unico, comentarios):
     """[Autor: Santiago Marczewski]
     [Ayuda: Toma una funcion y el tipo de pedido y muestra por pantalla la informacion correspondiente (? o #)
     para todas las funciones de la aplicacion, tomando datos de los archivos csv pasados por parametro]"""
+    """
+    Parametros
+    ----------
+    tipo : str
+            Es uno de los caracteres que indica el tipo de pedido (? o #)
+    imprimir : bool
+            Booleano que indica si hay que imprimir a txt o no
+    fuente_unico : archivo csv
+            Archivo con parte de la informacion de cada funcion
+    comentarios : archivo csv
+            Archivo con parte de la informacion de cada funcion
+    """
     funciones = obtener_lista_funciones(False)
     #Si se pide imprimir al txt
     if imprimir:
