@@ -28,14 +28,11 @@ def obtener_lista_funciones(marcador):
 
 
 def obtener_comentario_multilinea(linea, arch):
-    """[Autor: Elian Daniel Foppiano]
+    """
+    [Autor: Elian Daniel Foppiano]
     [Ayuda: Recorre el archivo recibido hasta que encuentra
-    el final del comentario multilinea y lo devuelve formateado.]"""
-
-    """Tengo que considerar la posibilidad de que existan comentarios
-    con comillas simples, ya que esta funcion la uso tambien en el
-    modulo ordenar, donde aun no todos los archivos se encuentran
-    formateados"""
+    el final del comentario multilinea y lo devuelve formateado.]
+    """
 
     # Si el comentario empieza y termina en la misma linea
     if linea.count(COMILLAS_DOBLES) == 2 or linea.count(COMILLAS_SIMPLES) == 2:

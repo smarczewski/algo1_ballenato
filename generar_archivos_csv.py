@@ -54,7 +54,7 @@ def guardar_nombre_funcion(firma, arch):
     nombre_funcion = firma[4: firma.index("(")]
     arch.write(nombre_funcion)
 
-def guardar_campo(dato, arch, formateado = True, nro_linea = None):
+def guardar_campo(dato, arch, formateado, nro_linea = None):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Guarda un dato en en archivo .csv recibido.
@@ -67,9 +67,9 @@ def guardar_campo(dato, arch, formateado = True, nro_linea = None):
     dato : str
             Dato que se quiere guardar en arch
     arch : archivo, modo sobreescritura
-    formateado : bool, opcional
+    formateado : bool
             Indica si el dato debe guardarse con el formato especial
-            o no (True por defecto)
+            o no
     nro_linea : int, opcional
             Numero que se agrega al formato del dato. (None por 
             defecto). Solo se debe especificar en caso de que
@@ -211,7 +211,7 @@ def guardar_comentario_ayuda(linea_inicio, arch, comentarios):
     else: #No se encontro un comentario inicial
         guardar_campo("Desconocido", comentarios, False)
         comentarios.write(",")
-        #Si no encontro el comentario de ayuda,
+        #Si no encontro el comentario inicial,
         #devuelve la misma linea
         linea_fin_comentario = linea_inicio
     return linea_fin_comentario

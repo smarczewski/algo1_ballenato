@@ -85,18 +85,24 @@ def buscar_invocacion(dir_archivo):
     """
     invocacion = None
     with open(dir_archivo) as arch:
-        while not invocacion:
-            linea = arch.readline()
+        linea = arch.readline()
+        while linea and not invocacion:
             #Salteo los comentarios multilinea
             #para evitar falsos positivos
             if linea.startswith((COMILLAS_SIMPLES, COMILLAS_DOBLES)):
                 obtener_comentario_multilinea(linea, arch)
-            """Busco la posible invocacion
+            """
+            Busco la posible invocacion
             con una expresion regular.
             Debe ser una palabra que no este
             precedida por espacios en blanco, y
-            seguida de un parentesis abierto"""
+            seguida de un parentesis abierto
+            """
             invocacion = re.findall(r"^\w*\(", linea)
+            linea = arch.readline()
+    #Me aseguro de que se encontro la funcion principal,
+    #de lo contrario, el programa termina
+    assert invocacion != [], "Error: No se encontro una funcion principal."
     #Devuelvo la invocacion sin el parentesis final
     invocacion = invocacion[0][:-1]
     return invocacion

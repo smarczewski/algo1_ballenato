@@ -8,7 +8,8 @@ def eliminar_cadenas(texto):
     """
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Elimina las cadenas del texto recibido.]
-
+    """
+    """
     Parametros
     ----------
     texto : str
@@ -28,7 +29,8 @@ def eliminar_coment_linea(linea):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Elimina los comentarios que se encuentran en la misma
     linea que una instruccion. Ej: variable = 5 #Comentario.]
-
+    """
+    """
     Parametros
     ----------
     linea : str
@@ -57,7 +59,8 @@ def obtener_coment_linea(linea):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Devuelve el comentario de linea que puede producirse en
     una instruccion.]
-
+    """
+    """
     Parametros
     ----------
     linea : str
@@ -79,7 +82,8 @@ def contar_invocaciones(funcion, linea, func):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Cuenta la cantidad de veces que una funcion se invoca en
     una linea de codigo recibida.]
-
+    """
+    """
     Parametros
     ----------
     funcion : str
@@ -113,7 +117,7 @@ def contar_invocaciones(funcion, linea, func):
     if func: #si se pone True, cuenta invocaciones
         exp = r"\b" + funcion + r"\("
     else: #si se pone False, cuenta estructuras
-        exp = r"\b" + funcion + "\\b"
+        exp = r"\b" + funcion + r"\b"
         
     #Elimino las cadenas para evitar falsos positivos
     devuelve = re.findall(exp, eliminar_cadenas(linea))
@@ -124,7 +128,8 @@ def buscador_invocaciones(l_funciones):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Genera una expresion regular que sirve para buscar las
     funciones recibidas.]
-
+    """
+    """
     Parametros
     ----------
     l_funciones : lista de str
