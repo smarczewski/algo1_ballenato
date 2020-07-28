@@ -129,16 +129,16 @@ def formato_filas_inv(funcs_llamadas, funcs, x, total_inv):
     filas = ""
     # para cada función en el programa (cada columna)
     for func_llama in funcs_llamadas:
-        # si la función de la columna invoca a la de la fila
-        if funcs[x-1] in funcs_llamadas[func_llama]:
-            # rellena la celda de la tabla con un "x"
-            filas += "{:^3}|".format("x")
         # si la función de la fila invoca a la de la columna
-        elif func_llama in funcs_llamadas[funcs[x-1]]:
+        if func_llama in funcs_llamadas[funcs[x-1]]:
             # rellena la celda de la tabla con la cantidad de veces
             filas += "{:^3}|".format(funcs_llamadas[funcs[x-1]][func_llama])
             # suma la cantidad de veces al total de invocaciones
             total_inv[func_llama] += funcs_llamadas[funcs[x-1]][func_llama]
+        # si la función de la columna invoca a la de la fila
+        elif funcs[x-1] in funcs_llamadas[func_llama]:
+            # rellena la celda de la tabla con un "x"
+            filas += "{:^3}|".format("x")
         # si no hay invocación entre las funciones
         else:
             # deja la celda vacía
