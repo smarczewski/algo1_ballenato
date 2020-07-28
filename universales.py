@@ -15,6 +15,19 @@ def obtener_lista_funciones(marcador):
     """[Autor: Grupo Ballenato]
     [Ayuda: Genera una lista con las funciones
     definidas en el programa]"""
+    """
+    Parametros
+    ----------
+    marcador : bool
+            Indica si el marcador principal "$" debe eliminarse del
+            nombre de la funcion principal o no
+
+    Returns
+    -------
+    lista de str
+            Nombres de las funciones definidas en el programa
+    """
+
     with open("fuente_unico.csv") as archivo:
         funciones = []
         linea = leer_lineas_csv(archivo)
@@ -32,6 +45,20 @@ def obtener_comentario_multilinea(linea, arch):
     [Autor: Elian Daniel Foppiano]
     [Ayuda: Recorre el archivo recibido hasta que encuentra
     el final del comentario multilinea y lo devuelve formateado.]
+    """
+    """
+    Parametros
+    ----------
+    linea : str
+            Donde empieza el comentario multilinea
+    arch : archivo, modo lectura
+            Donde puede continuar el comentario multilinea
+
+    Returns
+    -------
+    str
+            Comentario multilinea con los saltos de linea reemplazados
+            por el marcador "/n/"
     """
 
     # Si el comentario empieza y termina en la misma linea
