@@ -123,15 +123,46 @@ def imprimir_codigo(instrucciones, adicionales):
         j += 1
 
 
+def sumar_largo_lista(lista):
+    """[Autor: Santiago Marczewski]
+    [Ayuda: Recibe una lista de palabras y devuelve una lista de cuantas se
+    pueden poner por linea para no sobrepasar los 80 caracteres]"""
+    largo_linea = []
+    contador = 0 #Cuenta la cantidad de palabras
+    contador_largo = 0 #Cuenta la cantidad de caracteres + espacios blancos
+    for palabra in lista:
+        #Si al sumar la siguiente palabra no sobrepasamos los 80 caracteres
+        if contador_largo + (len(palabra) + 1) < 80:
+            contador += 1
+            contador_largo += (len(palabra) + 1)
+        #Si al sumar la siguiente palabra sobrepasamos los 80 caracteres
+        else:
+            largo_linea.append(contador)
+            contador = 0 #Reiniciamos el contador
+            contador += 1
+            contador_largo = 0 #Reiniciamos el contador
+            contador_largo += (len(palabra) + 1)
+    largo_linea.append(contador) #Agregamos el largo de la ultima linea
+    return largo_linea
+            
+        
 def limitar_largo_linea(texto_a_limitar, texto):
     """[Autor: Santiago Marczewski]
     [Ayuda: Recibe las lineas de la descripcion de ayuda y las devuelve
     formateadas y limitadas a 80 caracteres para la creacion del txt]"""
-    texto_a_limitar = " ".join(texto_a_limitar.strip().split())
-    texto_a_limitar = [texto_a_limitar[x:x+80]
-                        for x in range(0, len(texto_a_limitar), 80)]
-    for lineas in texto_a_limitar:
-        print(lineas, file=texto)
+    #Transformamos nuestro string en un lista y borramos espacios de mas
+    texto_a_limitar = texto_a_limitar.strip().split()
+    #Obtenemos en cuantas palabras hay que separar nuestra lista
+    largo_linea = sumar_largo_lista(texto_a_limitar)
+    total = 0 #Cuenta hasta donde ya cortamos
+    lineas_80 = [] #Lista cortada
+    #El ciclo for se ejecuta segun cuantos cortes hay que hacer
+    for i in range(len(largo_linea)):
+        corte = texto_a_limitar[total : total + largo_linea[i]]
+        lineas_80.append(corte)
+        total += largo_linea[i]
+    for linea in lineas_80: #Unimos e imprimimos las lineas
+        print(" ".join(linea), file=texto)
         
         
 def buscar_funcion(archivo, funcion):
